@@ -1,7 +1,6 @@
 package br.com.dbc.vemser.cinedev.repository;
 
 import br.com.dbc.vemser.cinedev.entity.Cliente;
-import br.com.dbc.vemser.cinedev.entity.Filme;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import org.springframework.stereotype.Repository;
 
