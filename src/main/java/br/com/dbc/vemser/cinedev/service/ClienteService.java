@@ -43,4 +43,28 @@ public class ClienteService {
             throw new RegraDeNegocioException("Cliente já cadastrado com os mesmos dados");
         }
     }
+
+    public Cliente listarClientePeloId(Integer idCliente) throws BancoDeDadosException, RegraDeNegocioException {
+        Optional<Cliente> clienteOptional = clienteRepository.listarClientePorId(idCliente);
+
+        if (clienteOptional.isEmpty()) {
+            throw new RegraDeNegocioException("Cliente não cadastrado");
+        }
+
+        return clienteOptional.get();
+    }
+
+    public ClienteDTO atualizarCliente(Integer idCliente, ClienteCreateDTO clienteCreateDTO) throws BancoDeDadosException, RegraDeNegocioException {
+        listarClientePeloId(idCliente);
+
+        Cliente cliente = objectMapper.convertValue(clienteCreateDTO, Cliente.class);
+        Cliente clienteAtualizado = clienteRepository.editar(idCliente, cliente);
+
+        return objectMapper.convertValue(clienteAtualizado, ClienteDTO.class);
+    }
+
+    public void deletarCliente(Integer idCliente) throws BancoDeDadosException, RegraDeNegocioException {
+        listarClientePeloId(idCliente);
+        clienteRepository.remover(idCliente);
+    }
 }

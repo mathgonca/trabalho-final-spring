@@ -32,4 +32,15 @@ public class ClienteController {
             throws BancoDeDadosException, RegraDeNegocioException {
         return new ResponseEntity<>(clienteService.cadastrarCliente(clienteCreateDTO), HttpStatus.OK);
     }
+
+    @PutMapping("/{idCliente}")
+    public ResponseEntity<ClienteDTO> atualizarCliente(@PathVariable Integer idCliente,
+                                                       @Valid @RequestBody ClienteCreateDTO clienteCreateDTO) throws BancoDeDadosException, RegraDeNegocioException {
+        return new ResponseEntity<>(clienteService.atualizarCliente(idCliente, clienteCreateDTO), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{idCliente}")
+    public void deletarCliente(@PathVariable Integer idCliente) throws BancoDeDadosException, RegraDeNegocioException {
+        clienteService.deletarCliente(idCliente);
+    }
 }
