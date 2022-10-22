@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.cinedev.repository;
 
 import br.com.dbc.vemser.cinedev.entity.Cliente;
+import br.com.dbc.vemser.cinedev.entity.Filme;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import org.springframework.stereotype.Repository;
 
@@ -77,9 +78,10 @@ public class ClienteRepository implements Repositorio<Integer, Cliente> {
     }
 
     @Override
-    public boolean editar(Integer id, Cliente cliente) throws Exception {
-        return false;
+    public Cliente editar(Integer id, Cliente cliente) throws Exception {
+        return null;
     }
+
 
     @Override
     public List<Cliente> listar() throws BancoDeDadosException {
