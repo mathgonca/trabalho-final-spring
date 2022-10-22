@@ -1,6 +1,8 @@
 package br.com.dbc.vemser.cinedev.controller;
 
 
+import br.com.dbc.vemser.cinedev.dto.FilmeCreateDTO;
+import br.com.dbc.vemser.cinedev.dto.FilmeDTO;
 import br.com.dbc.vemser.cinedev.entity.Cliente;
 import br.com.dbc.vemser.cinedev.entity.Filme;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
@@ -26,8 +28,13 @@ public class FilmeController {
     private final FilmeService filmeService;
 
     @GetMapping
-    public List<Filme> listarFilmes() throws  BancoDeDadosException {
+    public List<FilmeDTO> listarFilmes() throws  BancoDeDadosException {
         return filmeService.listarTodosFilmes();
+    }
+
+    @GetMapping("/{idFilme}")
+    public FilmeDTO listarByIdFilme(@PathVariable("idFilme") Integer idFilme) throws BancoDeDadosException, RegraDeNegocioException {
+        return filmeService.findById(idFilme);
     }
     @GetMapping("/horario/cinema/{idFilme}/{idCinema}")
     public List<LocalDateTime> listarFilmePorHorario(@PathVariable("idFilme") Integer idFilme, @PathVariable("idCinema") Integer idCinema) throws  BancoDeDadosException {
@@ -35,13 +42,13 @@ public class FilmeController {
     }
 
     @PostMapping
-    public ResponseEntity<Filme> cadastrarFilme(@Valid @RequestBody Filme filme) throws BancoDeDadosException,
+    public ResponseEntity<FilmeDTO> cadastrarFilme(@Valid @RequestBody FilmeCreateDTO filme) throws BancoDeDadosException,
             RegraDeNegocioException {
         return new ResponseEntity<>(filmeService.adicionarFilme(filme), HttpStatus.OK);
     }
 
     @PutMapping("/{idFilme}")
-    public ResponseEntity<Filme> editarFilme(@PathVariable("idFilme") Integer id, @Valid @RequestBody Filme filmeAtualizar) throws BancoDeDadosException{
+    public ResponseEntity<FilmeDTO> editarFilme(@PathVariable("idFilme") Integer id, @Valid @RequestBody FilmeCreateDTO filmeAtualizar) throws BancoDeDadosException, RegraDeNegocioException {
         return new ResponseEntity<>(filmeService.editarFilme(id, filmeAtualizar), HttpStatus.OK);
     }
 
