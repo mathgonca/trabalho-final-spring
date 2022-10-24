@@ -1,6 +1,5 @@
 package br.com.dbc.vemser.cinedev.entity;
 
-import br.com.dbc.vemser.cinedev.dto.CinemaCreateDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +11,7 @@ import javax.validation.Valid;
 @Setter
 @AllArgsConstructor
 @ToString
-public class Cinema extends @Valid CinemaCreateDto {
+public class Cinema  {
 
     private Integer idCinema;
     private String nome;
