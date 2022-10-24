@@ -1,0 +1,68 @@
+package br.com.dbc.vemser.cinedev.service;
+
+import br.com.dbc.vemser.cinedev.dto.CinemaCreateDto;
+import br.com.dbc.vemser.cinedev.dto.CinemaDTO;
+import br.com.dbc.vemser.cinedev.entity.Cinema;
+import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
+import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
+import br.com.dbc.vemser.cinedev.repository.CinemaRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@RequiredArgsConstructor
+@Service
+public class CinemaService {
+
+    private final CinemaRepository cinemaRepository;
+    private final ObjectMapper objectMapper;
+
+    public List<CinemaDTO> listarCinema() throws BancoDeDadosException {
+        List<Cinema> cinemaList = cinemaRepository.listar();
+        return cinemaList.stream()
+                .map(cinema -> objectMapper.convertValue(cinema, CinemaDTO.class))
+                .toList();
+    }
+
+public CinemaDTO adicionarCinema(CinemaCreateDto cinemaCreateDto) throws BancoDeDadosException, RegraDeNegocioException {
+    String cinemaCadastroNOME = cinemaCreateDto.getNome();
+    Optional<Cinema> cinemaPorNOME = cinemaRepository.listarCinemaId(Integer.parseInt(cinemaCadastroNOME));
+
+
+    if (cinemaPorNOME.isEmpty()){
+        Cinema cinema = objectMapper.convertValue(cinemaCreateDto, Cinema.class);
+        Cinema cinemaCadastrado = cinemaRepository.adicionar(cinema);
+
+        return objectMapper.convertValue(cinemaCadastrado, CinemaDTO.class);
+    } else {
+        throw new RegraDeNegocioException("Cinema já cadastrado com os mesmos dados");
+    }
+}
+
+    public Cinema listarCinema(Integer idCinema) throws BancoDeDadosException, RegraDeNegocioException {
+        Optional<Cinema> cinemaOptional = cinemaRepository.listarCinemaId(idCinema);
+
+        if (cinemaOptional.isEmpty()) {
+            throw new RegraDeNegocioException("cinema não cadastrado");
+        }
+
+        return cinemaOptional.get();
+    }
+
+    public CinemaDTO atualizarCinema(Integer idCinema, CinemaCreateDto cinemaCreateDto) throws BancoDeDadosException, RegraDeNegocioException {
+        listarCinema(idCinema);
+
+        Cinema cinema = objectMapper.convertValue(cinemaCreateDto, Cinema.class);
+        Cinema cinemaAtualizado = cinemaRepository.editar(idCinema, cinema);
+
+        return objectMapper.convertValue(cinemaAtualizado, CinemaDTO.class);
+    }
+
+    public void deletarCinema(Integer idCinema) throws BancoDeDadosException, RegraDeNegocioException {
+        listarCinema(idCinema);
+        cinemaRepository.remover(idCinema);
+    }
+}
