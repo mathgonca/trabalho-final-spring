@@ -143,21 +143,21 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
     @Override
     public List<Filme> listar() throws BancoDeDadosException {
         List<Filme> listaFilmes = new ArrayList<>();
-        Connection conexao = null;
+        Connection con = null;
         try {
-            conexao = conexaoBancoDeDados.getConnection();
-            Statement stat = conexao.createStatement();
+            con = conexaoBancoDeDados.getConnection();
+            Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM FILME";
+            String sql = "SELECT * FROM FILME ORDER BY ID_FILME";
 
-            ResultSet ret = stat.executeQuery(sql);
-            while (ret.next()) {
+            ResultSet res = stmt.executeQuery(sql);
+            while (res.next()) {
                 Filme filme = new Filme();
-                filme.setIdFilme(ret.getInt("ID_FILME"));
-                filme.setNome(ret.getString("NOME"));
-                filme.setIdioma(Idioma.valueOf(ret.getString("IDIOMA")));
-                filme.setClassificacaoEtaria(ret.getInt("CLASSIFICACAO"));
-                filme.setDuracao(ret.getInt("DURACAO"));
+                filme.setIdFilme(res.getInt("ID_FILME"));
+                filme.setNome(res.getString("NOME"));
+                filme.setIdioma(Idioma.valueOf(res.getString("IDIOMA")));
+                filme.setClassificacaoEtaria(res.getInt("CLASSIFICACAO"));
+                filme.setDuracao(res.getInt("DURACAO"));
                 listaFilmes.add(filme);
             }
 
@@ -165,8 +165,8 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
             throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
-                if (conexao != null) {
-                    conexao.close();
+                if (con != null) {
+                    con.close();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
