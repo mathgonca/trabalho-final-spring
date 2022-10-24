@@ -1,6 +1,6 @@
 package br.com.dbc.vemser.cinedev.controller;
 
-import br.com.dbc.vemser.cinedev.dto.CinemaCreateDto;
+import br.com.dbc.vemser.cinedev.dto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
@@ -28,9 +28,9 @@ public class CinemaController {
     }
 
     @PostMapping
-    public ResponseEntity<CinemaDTO> adicionarCinema(@Valid @RequestBody CinemaCreateDto cinemaCreateDto)
+    public ResponseEntity<CinemaDTO> adicionarCinema(@Valid @RequestBody CinemaCreateDTO cinemaCreateDTO)
             throws BancoDeDadosException, RegraDeNegocioException {
-        return new ResponseEntity<>(cinemaService.adicionarCinema(cinemaCreateDto), HttpStatus.OK);
+        return new ResponseEntity<>(cinemaService.adicionarCinema(cinemaCreateDTO), HttpStatus.OK);
     }
 
     @DeleteMapping("/{idCinema}")

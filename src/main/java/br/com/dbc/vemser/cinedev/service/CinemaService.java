@@ -1,6 +1,6 @@
 package br.com.dbc.vemser.cinedev.service;
 
-import br.com.dbc.vemser.cinedev.dto.CinemaCreateDto;
+import br.com.dbc.vemser.cinedev.dto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.entity.Cinema;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
@@ -27,13 +27,13 @@ public class CinemaService {
                 .toList();
     }
 
-public CinemaDTO adicionarCinema(CinemaCreateDto cinemaCreateDto) throws BancoDeDadosException, RegraDeNegocioException {
-    String cinemaCadastroNOME = cinemaCreateDto.getNome();
+public CinemaDTO adicionarCinema(CinemaCreateDTO cinemaCreateDTO) throws BancoDeDadosException, RegraDeNegocioException {
+    String cinemaCadastroNOME = cinemaCreateDTO.getNome();
     Optional<Cinema> cinemaPorNOME = cinemaRepository.listarCinemaId(Integer.parseInt(cinemaCadastroNOME));
 
 
     if (cinemaPorNOME.isEmpty()){
-        Cinema cinema = objectMapper.convertValue(cinemaCreateDto, Cinema.class);
+        Cinema cinema = objectMapper.convertValue(cinemaCreateDTO, Cinema.class);
         Cinema cinemaCadastrado = cinemaRepository.adicionar(cinema);
 
         return objectMapper.convertValue(cinemaCadastrado, CinemaDTO.class);
@@ -52,10 +52,10 @@ public CinemaDTO adicionarCinema(CinemaCreateDto cinemaCreateDto) throws BancoDe
         return cinemaOptional.get();
     }
 
-    public CinemaDTO atualizarCinema(Integer idCinema, CinemaCreateDto cinemaCreateDto) throws BancoDeDadosException, RegraDeNegocioException {
+    public CinemaDTO atualizarCinema(Integer idCinema, CinemaCreateDTO cinemaCreateDTO) throws BancoDeDadosException, RegraDeNegocioException {
         listarCinema(idCinema);
 
-        Cinema cinema = objectMapper.convertValue(cinemaCreateDto, Cinema.class);
+        Cinema cinema = objectMapper.convertValue(cinemaCreateDTO, Cinema.class);
         Cinema cinemaAtualizado = cinemaRepository.editar(idCinema, cinema);
 
         return objectMapper.convertValue(cinemaAtualizado, CinemaDTO.class);
