@@ -1,15 +1,13 @@
 package br.com.dbc.vemser.cinedev.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.Valid;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class Cinema  {
 
@@ -17,9 +15,5 @@ public class Cinema  {
     private String nome;
     private String estado;
     private String cidade;
-
-    public Cinema() {
-
-    }
 
 }

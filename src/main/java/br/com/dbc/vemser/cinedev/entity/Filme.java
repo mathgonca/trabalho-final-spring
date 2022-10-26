@@ -12,15 +12,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Filme {
+
     private Integer idFilme;
-
     private String nome;
-
     private Idioma idioma;
-
     private int classificacaoEtaria;
-
     private int duracao;
-
 
 }

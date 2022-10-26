@@ -6,6 +6,8 @@ import br.com.dbc.vemser.cinedev.entity.Cliente;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.ClienteRepository;
+import br.com.dbc.vemser.cinedev.service.emails.EmailService;
+import br.com.dbc.vemser.cinedev.service.emails.TipoEmails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import java.util.Optional;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final EmailService emailService;
     private final ObjectMapper objectMapper;
 
     public List<ClienteDTO> listarTodosClientes() throws BancoDeDadosException {
@@ -37,8 +40,10 @@ public class ClienteService {
         if (clientePorCPF.isEmpty() && clientePorEmail.isEmpty()) {
             Cliente cliente = objectMapper.convertValue(clienteCreateDTO, Cliente.class);
             Cliente clienteCadastrado = clienteRepository.adicionar(cliente);
+            ClienteDTO clienteDTO = objectMapper.convertValue(clienteCadastrado, ClienteDTO.class);
+            emailService.sendEmail(clienteDTO, TipoEmails.CREATE);
+            return clienteDTO;
 
-            return objectMapper.convertValue(clienteCadastrado, ClienteDTO.class);
         } else {
             throw new RegraDeNegocioException("Cliente já cadastrado com os mesmos dados");
         }
@@ -59,12 +64,16 @@ public class ClienteService {
 
         Cliente cliente = objectMapper.convertValue(clienteCreateDTO, Cliente.class);
         Cliente clienteAtualizado = clienteRepository.editar(idCliente, cliente);
+        ClienteDTO clienteDTO = objectMapper.convertValue(clienteAtualizado, ClienteDTO.class);
+        emailService.sendEmail(clienteDTO, TipoEmails.UPDATE);
+        return clienteDTO;
 
-        return objectMapper.convertValue(clienteAtualizado, ClienteDTO.class);
     }
 
     public void deletarCliente(Integer idCliente) throws BancoDeDadosException, RegraDeNegocioException {
-        listarClientePeloId(idCliente);
+       Cliente cliente = listarClientePeloId(idCliente);
+       ClienteDTO clienteDTO = objectMapper.convertValue(cliente,ClienteDTO.class);
+        emailService.sendEmail(clienteDTO, TipoEmails.DELETE);
         clienteRepository.remover(idCliente);
     }
 }

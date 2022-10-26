@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 public class Ingresso {
     private Integer idIngresso;
     private int idFilme;
-
     private int idCinema;
     private int idCliente;
     @NotNull
@@ -27,8 +26,6 @@ public class Ingresso {
     private LocalDateTime dataHora;
     @NotNull
     private Disponibilidade disponibilidade;
-
-
 
     @Override
     public String toString() {

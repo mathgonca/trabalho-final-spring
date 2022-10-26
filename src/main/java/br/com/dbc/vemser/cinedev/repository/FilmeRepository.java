@@ -14,37 +14,25 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class FilmeRepository implements Repositorio<Integer, Filme> {
-
     private final ConexaoBancoDeDados conexaoBancoDeDados;
-
     @Override
     public Integer getProximoId(Connection connection) throws SQLException {
-
         String sql = "SELECT SEQ_ID_FILME.nextval mysequence from DUAL";
-
         Statement stmt = connection.createStatement();
         ResultSet res = stmt.executeQuery(sql);
-
         if (res.next()) {
             return res.getInt("mysequence");
         }
-
         return null;
     }
-
-
-
 
     @Override
     public Filme adicionar(Filme filme) throws BancoDeDadosException {
         Connection conexao = null;
-
         try {
             conexao = conexaoBancoDeDados.getConnection();
-
             Integer chaveId = this.getProximoId(conexao);
             filme.setIdFilme(chaveId);
-
             String sql = "INSERT INTO FILME (ID_FILME, NOME, IDIOMA, CLASSIFICACAO, DURACAO)\n" +
                     "VALUES (?, ?, ?, ?, ?)\n";
             PreparedStatement pst = conexao.prepareStatement(sql);
@@ -53,7 +41,6 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
             pst.setString(3, filme.getIdioma().getIdioma());
             pst.setInt(4, filme.getClassificacaoEtaria());
             pst.setInt(5, filme.getDuracao());
-
             int ret = pst.executeUpdate();
             if (ret == 0) {
                 System.out.println("Não foi possivel realizar o cadastramento!");
@@ -71,15 +58,12 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
                 e.printStackTrace();
             }
         }
-
     }
-
-
     @Override
     public boolean remover(Integer id) throws BancoDeDadosException {
         Connection conexao = null;
         try {
-            conexao =  conexaoBancoDeDados.getConnection();
+            conexao = conexaoBancoDeDados.getConnection();
             String sql = "DELETE FROM FILME WHERE ID_FILME = ?";
             PreparedStatement pst = conexao.prepareStatement(sql);
             pst.setInt(1, id);
@@ -101,17 +85,13 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
             }
         }
     }
-
     @Override
     public Filme editar(Integer id, Filme filme) throws BancoDeDadosException {
         Connection conexao = null;
         try {
             conexao = conexaoBancoDeDados.getConnection();
-
-
             String sql = "UPDATE FILME SET NOME = ?, IDIOMA = ?," +
                     "CLASSIFICACAO = ?, DURACAO = ? WHERE ID_FILME = ?";
-
             PreparedStatement pst = conexao.prepareStatement(sql);
             pst.setString(1, filme.getNome());
             pst.setString(2, filme.getIdioma().getIdioma());
@@ -119,14 +99,11 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
             pst.setInt(4, filme.getDuracao());
             pst.setInt(5, id);
             filme.setIdFilme(id);
-
             int ret = pst.executeUpdate();
             if (ret == 0) {
                 System.out.println("Não foi possível realizar a alteração do Filme!");
             }
-
             return filme;
-
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -139,7 +116,6 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
             }
         }
     }
-
     @Override
     public List<Filme> listar() throws BancoDeDadosException {
         List<Filme> listaFilmes = new ArrayList<>();
@@ -147,9 +123,7 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
         try {
             con = conexaoBancoDeDados.getConnection();
             Statement stmt = con.createStatement();
-
             String sql = "SELECT * FROM FILME ORDER BY ID_FILME";
-
             ResultSet res = stmt.executeQuery(sql);
             while (res.next()) {
                 Filme filme = new Filme();
@@ -160,7 +134,6 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
                 filme.setDuracao(res.getInt("DURACAO"));
                 listaFilmes.add(filme);
             }
-
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -174,7 +147,6 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
         }
         return listaFilmes;
     }
-
     public List<String> listaFilmesPorCinema(int idCinema) throws BancoDeDadosException {
         List<String> listaNomeFilme = new ArrayList<>();
         Connection conexao = null;
@@ -186,9 +158,7 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
                     " GROUP BY f.NOME";
             PreparedStatement stmt = conexao.prepareStatement(sql);
             stmt.setInt(1, idCinema);
-
             ResultSet res = stmt.executeQuery();
-
             while (res.next()) {
                 listaNomeFilme.add(res.getString("NOME"));
             }
@@ -205,10 +175,8 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
         }
         return listaNomeFilme;
     }
-
     public List<LocalDateTime> listaHorariosDoFilme(int idFilme, int idCinema) throws BancoDeDadosException {
         List<LocalDateTime> listaHorario = new ArrayList<>();
-
         Connection conexao = null;
         try {
             conexao = conexaoBancoDeDados.getConnection();
@@ -218,9 +186,7 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
             PreparedStatement stmt = conexao.prepareStatement(sql);
             stmt.setInt(1, idFilme);
             stmt.setInt(2, idCinema);
-
             ResultSet res = stmt.executeQuery();
-
             while (res.next()) {
                 listaHorario.add(res.getTimestamp("DATA_HORA").toLocalDateTime());
             }
@@ -235,7 +201,6 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
                 e.printStackTrace();
             }
         }
-
         return listaHorario;
     }
 }
