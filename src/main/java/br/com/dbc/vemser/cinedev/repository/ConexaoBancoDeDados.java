@@ -12,12 +12,7 @@ import java.sql.SQLException;
 
 @Service
 public class ConexaoBancoDeDados {
-//    -Djdbc-string=jdbc:oracle:thin:@vemser-dbc.dbccompany.com.br:25000:xe -Djdbc-user=moises_noah -Djdbc-pass=kqmsNzHdiPeC -Djdbc-schema=MOISES_NOAH -Dspring.mail.username=moises.noah@dbccompany.com.br -Dspring.mail.password=J(TX6kQ)
-//
-//
-//
-//
-//
+
 
     @Value("${jdbc-string}")
     private String jdbcString;
