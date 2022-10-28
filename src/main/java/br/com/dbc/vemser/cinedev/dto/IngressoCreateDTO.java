@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class IngressoCreateDTO {
 
-    private int cadeira;
+    private int idCliente;
 
     private double preco;
 

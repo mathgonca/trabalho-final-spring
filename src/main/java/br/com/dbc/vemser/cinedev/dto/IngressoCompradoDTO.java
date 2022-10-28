@@ -5,8 +5,6 @@ import lombok.Data;
 import java.time.LocalDateTime;
 @Data
 public class IngressoCompradoDTO {
-
-    private int idCliente;
     private int idIngressoComprado;
     private String nomeFilme;
     private String nomeCinema;
