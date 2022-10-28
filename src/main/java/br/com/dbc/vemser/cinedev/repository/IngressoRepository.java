@@ -175,7 +175,7 @@ public class IngressoRepository {
                     "SELECT  CT.PRIMEIRO_NOME AS CLIENTE, F.NOME AS FILME, C.NOME AS CINEMA,ID_INGRESSO,I.DATA_HORA FROM INGRESSO I\n" +
                             "INNER JOIN CLIENTE CT ON I.ID_CLIENTE = I.ID_CLIENTE \n" +
                             "INNER JOIN FILME F ON F.ID_FILME = I.ID_FILME  \n" +
-                            "INNER JOIN CINEMA C ON C.ID_CINEMA = I.ID_CINEMA WHERE CT.ID_CLIENTE = I.ID_INGRESSO AND CT.ID_CLIENTE = ? " +
+                            "INNER JOIN CINEMA C ON C.ID_CINEMA = I.ID_CINEMA WHERE CT.ID_CLIENTE = I.ID_CLIENTE AND CT.ID_CLIENTE = ? " +
                             "ORDER BY I.DATA_HORA";
 
             PreparedStatement stmt = conexao.prepareStatement(sql);
