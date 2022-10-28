@@ -13,9 +13,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 
 public class IngressoDTO extends IngressoCreateDTO {
-    private  int idCliente;
-    private int idIngressoComprado;
-
+    private Integer idIngresso;
+    private int idFilme;
+    private int idCinema;
+    private int idCliente;
 
 
 }

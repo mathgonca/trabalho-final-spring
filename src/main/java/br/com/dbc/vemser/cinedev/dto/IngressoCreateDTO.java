@@ -14,19 +14,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class IngressoCreateDTO {
 
-    private  int idCliente;
-    private int idIngressoComprado;
-    private String nomeFilme;
-    private String nomeCinema;
-    private LocalDateTime DataHora;
+    private int cadeira;
 
-    @Override
-    public String toString() {
-        return "Informações do Ingresso : " +
-                "ID do Ingresso=" + idIngressoComprado +
-                ", Filme ='" + nomeFilme + '\'' +
-                ", Cinema ='" + nomeCinema + '\'' +
-                ", Data e Horario =" + DataHora +
-                '}';
-    }
+    private double preco;
+
+    private LocalDateTime dataHora;
+
+    private Disponibilidade disponibilidade;
+
 }

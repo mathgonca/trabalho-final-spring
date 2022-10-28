@@ -147,6 +147,34 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
         }
         return listaFilmes;
     }
+    public Filme findById(int idFilme) throws BancoDeDadosException {
+        Connection conexao = null;
+        Filme filme;
+        try {
+            conexao = conexaoBancoDeDados.getConnection();
+            String sql = "SELECT * FROM FILME WHERE ID_FILME = ?";
+            PreparedStatement stmt = conexao.prepareStatement(sql);
+            stmt.setInt(1, idFilme);
+            ResultSet res = stmt.executeQuery();
+            filme = new Filme();
+            filme.setIdFilme(res.getInt("ID_FILME"));
+            filme.setNome(res.getString("NOME"));
+            filme.setIdioma(Idioma.valueOf(res.getString("IDIOMA")));
+            filme.setClassificacaoEtaria(res.getInt("CLASSIFICACAO"));
+            filme.setDuracao(res.getInt("DURACAO"));
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (conexao != null) {
+                    conexao.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return filme;
+    }
     public List<String> listaFilmesPorCinema(int idCinema) throws BancoDeDadosException {
         List<String> listaNomeFilme = new ArrayList<>();
         Connection conexao = null;

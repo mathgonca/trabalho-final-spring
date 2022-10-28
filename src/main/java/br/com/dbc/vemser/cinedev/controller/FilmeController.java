@@ -1,15 +1,13 @@
 package br.com.dbc.vemser.cinedev.controller;
 
 
+import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerFilme;
 import br.com.dbc.vemser.cinedev.dto.FilmeCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.FilmeDTO;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.FilmeService;
 import io.swagger.v3.oas.annotations.Hidden;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +22,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/filme")
-public class FilmeController implements OperationController<Integer, FilmeDTO, FilmeCreateDTO> {
+public class FilmeController implements OperationControllerFilme {
 
     private final FilmeService filmeService;
 
@@ -34,22 +32,7 @@ public class FilmeController implements OperationController<Integer, FilmeDTO, F
         return filmeService.listarTodosFilmes();
     }
 
-    @GetMapping("/{idFilme}")
-    @Hidden
-    public FilmeDTO listarByIdFilme(@PathVariable("idFilme") Integer idFilme) throws BancoDeDadosException, RegraDeNegocioException {
-        return filmeService.findById(idFilme);
-    }
-
-    @GetMapping("/horario/cinema/{idFilme}/{idCinema}")
-    @Hidden
-    public List<LocalDateTime> listarFilmePorHorario(@PathVariable("idFilme") Integer idFilme, @PathVariable("idCinema") Integer idCinema) throws RegraDeNegocioException, BancoDeDadosException {
-        return filmeService.listarFilmesPorHorario(idFilme, idCinema);
-    }
-
-    @Operation(summary = "Cadastro.", description = "Cadastramento de dados de usuários")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Cadastro realizado com Sucesso!"),
-            @ApiResponse(responseCode = "403", description = "Erro na inserção de dados!"),
-            @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
+    @Override
     @PostMapping
     public ResponseEntity<FilmeDTO> cadastrarFilme(@Valid @RequestBody FilmeCreateDTO filme) throws RegraDeNegocioException,
             RegraDeNegocioException, BancoDeDadosException {
@@ -58,7 +41,8 @@ public class FilmeController implements OperationController<Integer, FilmeDTO, F
 
     @Override
     @PutMapping("/{idFilme}")
-    public ResponseEntity<FilmeDTO> update(@PathVariable("idFilme") Integer id, @Valid @RequestBody FilmeCreateDTO filmeAtualizar) throws RegraDeNegocioException, BancoDeDadosException {
+    public ResponseEntity<FilmeDTO> update(@PathVariable("idFilme") Integer id,
+                                           @Valid @RequestBody FilmeCreateDTO filmeAtualizar) throws RegraDeNegocioException, BancoDeDadosException {
         return new ResponseEntity<>(filmeService.editarFilme(id, filmeAtualizar), HttpStatus.OK);
     }
 
@@ -69,10 +53,19 @@ public class FilmeController implements OperationController<Integer, FilmeDTO, F
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Override
+    @GetMapping("/{idFilme}")
     @Hidden
-    public ResponseEntity<FilmeDTO> create(Integer id, FilmeCreateDTO filmeCreateDTO) {
-        return null;
+    public FilmeDTO listarByIdFilme(@PathVariable("idFilme") Integer idFilme)
+            throws BancoDeDadosException, RegraDeNegocioException {
+        return filmeService.findById(idFilme);
     }
+
+    @GetMapping("/horario/cinema/{idFilme}/{idCinema}")
+    @Hidden
+    public List<LocalDateTime> listarFilmePorHorario(@PathVariable("idFilme") Integer idFilme,
+                                                     @PathVariable("idCinema") Integer idCinema) throws RegraDeNegocioException, BancoDeDadosException {
+        return filmeService.listarFilmesPorHorario(idFilme, idCinema);
+    }
+
 
 }

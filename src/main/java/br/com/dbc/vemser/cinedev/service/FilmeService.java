@@ -48,11 +48,8 @@ public class FilmeService {
         return filmeRepository.listaFilmesPorCinema(idCinema);
     }
     public FilmeDTO findById(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
-        Filme filmeEncontrado = filmeRepository.listar().stream()
-                .filter(filme -> filme.getIdFilme().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Não foi posivel localizar esse Filme!"));
-        FilmeDTO filmeDTO = objectMapper.convertValue(filmeEncontrado, FilmeDTO.class);
-        return filmeDTO;
+       Filme filmeEncontrado = filmeRepository.findById(id);
+       FilmeDTO filmeDTO = objectMapper.convertValue(filmeEncontrado, FilmeDTO.class);
+       return filmeDTO;
     }
 }

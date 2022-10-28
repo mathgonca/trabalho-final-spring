@@ -1,14 +1,11 @@
 package br.com.dbc.vemser.cinedev.controller;
 
+import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerCliente;
 import br.com.dbc.vemser.cinedev.dto.ClienteCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.ClienteService;
-import io.swagger.v3.oas.annotations.Hidden;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/cliente")
-public class ClienteController implements OperationController<Integer, ClienteDTO, ClienteCreateDTO> {
+public class ClienteController implements OperationControllerCliente {
 
     private final ClienteService clienteService;
 
@@ -32,10 +29,7 @@ public class ClienteController implements OperationController<Integer, ClienteDT
         return clienteService.listarTodosClientes();
     }
 
-    @Operation(summary = "Cadastro.", description = "Cadastramento de dados de usuários")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Cadastro realizado com Sucesso!"),
-            @ApiResponse(responseCode = "403", description = "Erro na inserção de dados!"),
-            @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
+    @Override
     @PostMapping
     public ResponseEntity<ClienteDTO> cadastrarCliente(@Valid @RequestBody ClienteCreateDTO clienteCreateDTO)
             throws BancoDeDadosException, RegraDeNegocioException {
@@ -55,10 +49,6 @@ public class ClienteController implements OperationController<Integer, ClienteDT
         clienteService.deletarCliente(idCliente);
         return null;
     }
-
-    @Override
-    @Hidden
-    public ResponseEntity<ClienteDTO> create(Integer id, ClienteCreateDTO clienteCreateDTO) {
-        return null;
-    }
 }
+
+
