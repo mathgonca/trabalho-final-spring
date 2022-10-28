@@ -30,7 +30,7 @@ public class CinemaController implements OperationControllerCinema {
     }
 
     @Override
-    @GetMapping
+    @GetMapping("/{idCinema}")
     public CinemaDTO listaPorId(@PathVariable("idCinema")Integer id) throws RegraDeNegocioException, BancoDeDadosException{
         return cinemaService.listarCinemaPorId(id);
     }
