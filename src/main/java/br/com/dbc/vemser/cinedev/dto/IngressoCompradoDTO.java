@@ -5,9 +5,8 @@ import lombok.Data;
 import java.time.LocalDateTime;
 @Data
 public class IngressoCompradoDTO {
-
-    private int idCliente;
     private int idIngressoComprado;
+    private String nomeCliente;
     private String nomeFilme;
     private String nomeCinema;
     private LocalDateTime DataHora;
@@ -15,7 +14,8 @@ public class IngressoCompradoDTO {
     @Override
     public String toString() {
         return "Informações do Ingresso : " +
-                "ID do Ingresso=" + idIngressoComprado +
+                "ID do Ingresso=" + idIngressoComprado + '\'' +
+                ", Cliente = " + nomeCliente + '\'' +
                 ", Filme ='" + nomeFilme + '\'' +
                 ", Cinema ='" + nomeCinema + '\'' +
                 ", Data e Horario =" + DataHora +

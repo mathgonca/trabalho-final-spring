@@ -33,6 +33,7 @@ public class IngressoRepository {
     public IngressoCompradoDTO getIngressoResultSet(ResultSet res) throws SQLException {
         IngressoCompradoDTO ingresso = new IngressoCompradoDTO();
         ingresso.setIdIngressoComprado(res.getInt("ID_INGRESSO"));
+        ingresso.setNomeCliente(res.getString("CLIENTE"));
         ingresso.setNomeFilme(res.getString("FILME"));
         ingresso.setDataHora(res.getTimestamp("DATA_HORA").toLocalDateTime());
         ingresso.setNomeCinema(res.getString("CINEMA"));
@@ -45,7 +46,7 @@ public class IngressoRepository {
             conexao = conexaoBancoDeDados.getConnection();
             Integer chaveId = this.getProximoId(conexao);
             ingresso.setIdIngresso(chaveId);
-            String sql = "INSERT INTO INGRESSO (ID_INGRESSO,ID_CINEMA, ID_FILME, ID_CLIENTE, VALOR, CADEIRA, DATA_HORA, DISPONIBLIDADE)\n" +
+            String sql = "INSERT INTO INGRESSO (ID_INGRESSO,ID_CINEMA, ID_FILME, ID_CLIENTE, VALOR, DATA_HORA, DISPONIBLIDADE)\n" +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement pst = conexao.prepareStatement(sql);
             pst.setInt(1, ingresso.getIdIngresso());
@@ -53,7 +54,6 @@ public class IngressoRepository {
             pst.setInt(3,  ingresso.getIdFilme());
             pst.setInt(4, ingresso.getIdCliente());
             pst.setDouble(5, ingresso.getPreco());
-            pst.setInt(6, ingresso.getCadeira());
             pst.setTimestamp(7, Timestamp.valueOf(ingresso.getDataHora()));
             pst.setString(8, ingresso.getDisponibilidade().isDisponibilidade());
             int ret = pst.executeUpdate();
@@ -99,7 +99,7 @@ public class IngressoRepository {
             }
         }
     }
-    public Optional<Ingresso> editar(Integer id, Ingresso ingresso) throws BancoDeDadosException {
+    public List<IngressoCompradoDTO> editar(Integer id, Ingresso ingresso) throws BancoDeDadosException {
         Connection conexao = null;
         try{
             conexao = conexaoBancoDeDados.getConnection();
@@ -107,17 +107,17 @@ public class IngressoRepository {
             String sql = "UPDATE INGRESSO SET ID_CLIENTE = ?, VALOR = ?, DISPONIBLIDADE = ? WHERE ID_INGRESSO = ?";
 
             PreparedStatement pst = conexao.prepareStatement(sql);
-            pst.setInt(1, id);
+            pst.setInt(1, ingresso.getIdCliente());
             pst.setDouble(2, 30);
-            pst.setString(3, "N");
-            pst.setInt(4, ingresso.getIdIngresso());
+            pst.setString(3, ingresso.getDisponibilidade().toString());
+            pst.setInt(4, id);
 
             int ret = pst.executeUpdate();
             if (ret == 0) {
                 System.out.println("Não foi possível realizar a alteração do seu Ingresso!");
             }
             System.out.println("O Ingresso foi alterado com sucesso!");
-            return  listarIngressoPeloId(id);
+            return listarIngressoComprado(ingresso.getIdCliente());
         }catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -137,24 +137,19 @@ public class IngressoRepository {
         try{
             conexao = conexaoBancoDeDados.getConnection();
             Statement stmt = conexao.createStatement();
-            String sql = "SELECT * FROM INGRESSO";
+            String sql = "SELECT * FROM INGRESSO ORDER BY ID_INGRESSO";
             ResultSet res = stmt.executeQuery(sql);
             while(res.next()){
                 Ingresso ingresso = new Ingresso();
-                Cliente cliente = new Cliente();
-                Cinema cinema = new Cinema();
-                Filme filme = new Filme();
                 ingresso.setIdIngresso(res.getInt("ID_INGRESSO"));
-                filme.setIdFilme(res.getInt("ID_FILME"));
-                cliente.setIdCliente(res.getInt("ID_CLIENTE"));
-                cinema.setIdCinema(res.getInt("ID_CINEMA"));
+                ingresso.setIdFilme(res.getInt("ID_FILME"));
+                ingresso.setIdCliente(res.getInt("ID_CLIENTE"));
+                ingresso.setIdCinema(res.getInt("ID_CINEMA"));
                 ingresso.setPreco(res.getDouble("VALOR"));
-                ingresso.setCadeira(res.getInt("CADEIRA"));
                 ingresso.setDataHora(res.getTimestamp("DATA_HORA").toLocalDateTime());
                 ingresso.setDisponibilidade(Disponibilidade.valueOf(res.getString("DISPONIBLIDADE")));
                 listarIngresso.add(ingresso);
             }
-            return listarIngresso;
         }catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -166,6 +161,7 @@ public class IngressoRepository {
                 e.printStackTrace();
             }
         }
+        return listarIngresso;
     }
 
     public List<IngressoCompradoDTO> listarIngressoComprado(Integer id) throws  BancoDeDadosException {
@@ -176,10 +172,11 @@ public class IngressoRepository {
             conexao = conexaoBancoDeDados.getConnection();
 
             String sql =
-                    "SELECT F.NOME AS FILME, C.NOME AS CINEMA,ID_INGRESSO,I.DATA_HORA FROM INGRESSO I\n" +
+                    "SELECT  CT.PRIMEIRO_NOME AS CLIENTE, F.NOME AS FILME, C.NOME AS CINEMA,ID_INGRESSO,I.DATA_HORA FROM INGRESSO I\n" +
                             "INNER JOIN CLIENTE CT ON I.ID_CLIENTE = I.ID_CLIENTE \n" +
                             "INNER JOIN FILME F ON F.ID_FILME = I.ID_FILME  \n" +
-                            "INNER JOIN CINEMA C ON C.ID_CINEMA = I.ID_CINEMA WHERE CT.ID_CLIENTE = ? ORDER BY I.DATA_HORA";
+                            "INNER JOIN CINEMA C ON C.ID_CINEMA = I.ID_CINEMA WHERE CT.ID_CLIENTE = I.ID_CLIENTE AND CT.ID_CLIENTE = ? " +
+                            "ORDER BY I.DATA_HORA";
 
             PreparedStatement stmt = conexao.prepareStatement(sql);
             stmt.setInt(1, id);
@@ -204,7 +201,7 @@ public class IngressoRepository {
         }
     }
 
-    public Optional<Ingresso> listarIngressoPeloId(int idIngresso) throws BancoDeDadosException {
+    public Ingresso listarIngressoPeloId(int idIngresso) throws BancoDeDadosException {
         Optional<Ingresso> ingressoOptional = Optional.empty();
 
         Connection con = null;
@@ -243,7 +240,7 @@ public class IngressoRepository {
                 e.printStackTrace();
             }
         }
-        return ingressoOptional;
+        return ingressoOptional.get();
     }
 
 }

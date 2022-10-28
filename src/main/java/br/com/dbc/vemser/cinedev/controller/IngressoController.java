@@ -26,9 +26,20 @@ public class IngressoController implements OperationControllerIngresso {
     private final IngressoService ingressoService;
 
     @Override
+<<<<<<< HEAD
     @GetMapping("/{idIngresso}")
     public List<IngressoCompradoDTO> listarIngressosComprados(@PathVariable("idIngresso") Integer id) throws RegraDeNegocioException, BancoDeDadosException {
+=======
+    @GetMapping("/comprado/{idCliente}")
+    public List<IngressoCompradoDTO> listarIngressosComprados(@PathVariable("idCliente") Integer id) throws RegraDeNegocioException, BancoDeDadosException {
+>>>>>>> b6b8e48dab1841be07cf92cf95a2dfeaaf95ffdb
         return ingressoService.listarIngressosComprados(id);
+    }
+
+    @Override
+    @GetMapping("/{idIngresso}")
+    public IngressoDTO listarIngressosPorId(@PathVariable("idIngresso") Integer id) throws RegraDeNegocioException, BancoDeDadosException {
+        return ingressoService.findById(id);
     }
 
     @Override
@@ -45,10 +56,10 @@ public class IngressoController implements OperationControllerIngresso {
     }
 
     @Override
-    @PutMapping("/{idIngresso}")
-    public ResponseEntity<IngressoDTO> updateIngresso(@PathVariable("idIngresso") Integer id,
+    @PutMapping("/comprar/{idCliente}")
+    public List<IngressoCompradoDTO> updateIngresso(@PathVariable("idCliente") Integer id,
                                                       @Valid @RequestBody IngressoCreateDTO ingresso) throws RegraDeNegocioException, BancoDeDadosException {
-        return new ResponseEntity<>(ingressoService.updateIngresso(id, ingresso), HttpStatus.OK);
+        return ingressoService.comprarIngresso(id, ingresso);
     }
 
     @Override

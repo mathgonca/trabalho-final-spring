@@ -5,6 +5,7 @@ import br.com.dbc.vemser.cinedev.dto.IngressoCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.IngressoDTO;
 import br.com.dbc.vemser.cinedev.entity.Ingresso;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
+import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.IngressoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +26,10 @@ public class IngressoService {
     }
 
     public List<IngressoDTO> listarIngressos() throws BancoDeDadosException {
-        List<IngressoDTO> list = ingressoRepository.listar().stream()
+        List<Ingresso> ingressoslist = ingressoRepository.listar();
+        return ingressoslist.stream()
                 .map(ingresso -> objectMapper.convertValue(ingresso, IngressoDTO.class))
                 .toList();
-        return list;
     }
 
     public IngressoDTO createIngresso(IngressoCreateDTO ingressoCreateDTO) throws BancoDeDadosException {
@@ -38,13 +39,12 @@ public class IngressoService {
         return ingressoDTO;
     }
 
-    public IngressoDTO updateIngresso(Integer id, IngressoCreateDTO ingressoCreateDTO) throws BancoDeDadosException {
+    public List<IngressoCompradoDTO> comprarIngresso(Integer id, IngressoCreateDTO ingressoCreateDTO) throws BancoDeDadosException {
         Ingresso ingresso = objectMapper.convertValue(ingressoCreateDTO, Ingresso.class);
-        IngressoDTO ingressoDTO= objectMapper.convertValue(ingressoRepository.editar(id,ingresso),IngressoDTO.class);
-        return ingressoDTO;
+        return  ingressoRepository.editar(id,ingresso);
     }
 
-    public IngressoDTO findById(Integer id) throws BancoDeDadosException {
+    public IngressoDTO findById(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
         IngressoDTO ingressoDTO= objectMapper.convertValue(ingressoRepository.listarIngressoPeloId(id),IngressoDTO.class);
         return ingressoDTO;
     }

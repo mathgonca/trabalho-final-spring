@@ -14,24 +14,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Ingresso {
-    private Integer idIngresso;
+    private int idIngresso;
     private int idFilme;
     private int idCinema;
     private int idCliente;
-    @NotNull
-    private int cadeira;
-    @NotNull
     private double preco;
-    @NotNull
     private LocalDateTime dataHora;
-    @NotNull
     private Disponibilidade disponibilidade;
-
     @Override
     public String toString() {
         return "Ingresso{" +
                 "idIngresso=" + idIngresso +
-                ", cadeira=" + cadeira +
+                ", idCliente=" + idCliente +
                 ", preco=" + preco +
                 ", dataHora=" + dataHora +
                 ", disponibilidade=" + disponibilidade +

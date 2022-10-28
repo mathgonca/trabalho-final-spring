@@ -21,6 +21,13 @@ public interface OperationControllerIngresso {
     @GetMapping
     public List<IngressoCompradoDTO> listarIngressosComprados(Integer id) throws RegraDeNegocioException, BancoDeDadosException;
 
+    @Operation(summary = "Listagem de Ingressos por ID ", description = "Lista os Ingressos por IdIngresso")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Retorna a lista de Ingressos comprados de acordo com a pesquisa"),
+            @ApiResponse(responseCode = "403", description = "A algo de errado com as inserções de sua pesquisa"),
+            @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
+    @GetMapping("/{idIngresso}")
+    public IngressoDTO listarIngressosPorId(@PathVariable("idIngresso") Integer id) throws RegraDeNegocioException, BancoDeDadosException;
+
     @Operation(summary = "Lista os Ingressos ", description = "Lista os Ingressos referentes a busca do banco")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Retorna a lista de Ingressos de acordo com a pesquisa"),
             @ApiResponse(responseCode = "403", description = "A algo de errado com as inserções de sua pesquisa"),
@@ -41,7 +48,7 @@ public interface OperationControllerIngresso {
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     @PutMapping("/{idIngresso}")
-    public ResponseEntity<IngressoDTO> updateIngresso(@PathVariable("idPessoa") Integer id,
+    public List<IngressoCompradoDTO> updateIngresso(@PathVariable("idPessoa") Integer id,
                                                       @Valid @RequestBody IngressoCreateDTO ingressoCreateDTO) throws RegraDeNegocioException, BancoDeDadosException;
 
     @Operation(summary = "Remove Um Ingresso ", description = "Remoção do Ingresso  partir da 'idIngresso'!")
