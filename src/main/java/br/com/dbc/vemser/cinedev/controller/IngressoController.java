@@ -26,13 +26,8 @@ public class IngressoController implements OperationControllerIngresso {
     private final IngressoService ingressoService;
 
     @Override
-<<<<<<< HEAD
-    @GetMapping("/{idIngresso}")
-    public List<IngressoCompradoDTO> listarIngressosComprados(@PathVariable("idIngresso") Integer id) throws RegraDeNegocioException, BancoDeDadosException {
-=======
     @GetMapping("/comprado/{idCliente}")
     public List<IngressoCompradoDTO> listarIngressosComprados(@PathVariable("idCliente") Integer id) throws RegraDeNegocioException, BancoDeDadosException {
->>>>>>> b6b8e48dab1841be07cf92cf95a2dfeaaf95ffdb
         return ingressoService.listarIngressosComprados(id);
     }
 
@@ -58,7 +53,7 @@ public class IngressoController implements OperationControllerIngresso {
     @Override
     @PutMapping("/comprar/{idCliente}")
     public List<IngressoCompradoDTO> updateIngresso(@PathVariable("idCliente") Integer id,
-                                                      @Valid @RequestBody IngressoCreateDTO ingresso) throws RegraDeNegocioException, BancoDeDadosException {
+                                                    @Valid @RequestBody IngressoCreateDTO ingresso) throws RegraDeNegocioException, BancoDeDadosException {
         return ingressoService.comprarIngresso(id, ingresso);
     }
 
@@ -68,7 +63,6 @@ public class IngressoController implements OperationControllerIngresso {
         ingressoService.removeIngresso(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }
 
 
