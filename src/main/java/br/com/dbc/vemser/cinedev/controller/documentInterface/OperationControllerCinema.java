@@ -15,7 +15,9 @@ import java.util.List;
 
 
 public interface OperationControllerCinema {
+
     @Operation(summary = "Realiza a listagem de Cinemas ", description = "Lista os cinemas que constam em nosso sistema")
+
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Retorna a lista de Cinemas de acordo com a pesquisa Realizada"),
             @ApiResponse(responseCode = "403", description = "A algo de errado com as inserções de sua pesquisa"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})

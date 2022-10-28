@@ -53,7 +53,7 @@ public class IngressoController implements OperationControllerIngresso {
     @Override
     @PutMapping("/comprar/{idCliente}")
     public List<IngressoCompradoDTO> updateIngresso(@PathVariable("idCliente") Integer id,
-                                                      @Valid @RequestBody IngressoCreateDTO ingresso) throws RegraDeNegocioException, BancoDeDadosException {
+                                                    @Valid @RequestBody IngressoCreateDTO ingresso) throws RegraDeNegocioException, BancoDeDadosException {
         return ingressoService.comprarIngresso(id, ingresso);
     }
 
@@ -63,7 +63,6 @@ public class IngressoController implements OperationControllerIngresso {
         ingressoService.removeIngresso(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }
 
 

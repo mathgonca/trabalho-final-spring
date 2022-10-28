@@ -16,14 +16,15 @@ import java.util.List;
 
 public interface OperationControllerFilme {
 
-    @Operation(summary = "Listagem de Dados", description = "Lista os dados referentes a busca do banco")
+
+    @Operation(summary = "Realiza a Listagem de Dados do filme", description = "Lista os dados referentes a busca do banco")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Retorna a lista de dados de acordo com a pesquisa"),
-            @ApiResponse(responseCode = "403", description = "A algo de errado com as inserções de sua pesquisa"),
+            @ApiResponse(responseCode = "403", description = "A algo de errado com as inserções de sua pesquisa!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     @GetMapping
     public List<FilmeDTO> list() throws RegraDeNegocioException, BancoDeDadosException;
 
-    @Operation(summary = "Cadastro.", description = "Cadastramento de dados de usuários")
+    @Operation(summary = "Realiza o Cadastro do Filme.", description = "Realiza o Cadastramento de dados do Filme")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Cadastro realizado com Sucesso!"),
             @ApiResponse(responseCode = "403", description = "Erro na inserção de dados!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
@@ -31,21 +32,19 @@ public interface OperationControllerFilme {
     public ResponseEntity<FilmeDTO> cadastrarFilme(@Valid @RequestBody FilmeCreateDTO filmeCreateDTO) throws RegraDeNegocioException,
             RegraDeNegocioException, BancoDeDadosException;
 
-    @Operation(summary = "Edição e Atualização de Dados", description = "Edição e alteração de dados dos usuários a partir da referencia de pesquisa 'ID'!")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Atualização de dados realizada!"),
-            @ApiResponse(responseCode = "403", description = "Erro na inserção de dados!"),
+    @Operation(summary = "Realiza a atualização de dados do Filme ", description = "Realiza a alteração de dados dos Filmes a partir da referencia de pesquisa 'ID'!")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = " A atualização do Filme foi realizada com sucesso!"),
+            @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     @PutMapping("/{idPessoa}")
     public ResponseEntity<FilmeDTO> update(@PathVariable("idPessoa") Integer id,
-                                         @Valid @RequestBody FilmeCreateDTO filmeCreateDTO) throws RegraDeNegocioException, BancoDeDadosException;
+                                           @Valid @RequestBody FilmeCreateDTO filmeCreateDTO) throws RegraDeNegocioException, BancoDeDadosException;
 
-    @Operation(summary = "Remoção de Dados", description = "Remoção de dados dos usuários a partir da 'ID'!")
+    @Operation(summary = "Realiza a remoção do Filme", description = "Realiza a Remoção de filmes a partir do 'ID'!")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remoção de dados realizada!"),
-            @ApiResponse(responseCode = "403", description = "Erro na inserção de dados para busca!"),
+            @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     @DeleteMapping("/{idPessoa}") // localhost:8080/pessoa/10
     public ResponseEntity<Void> delete(@PathVariable("idPessoa") Integer id) throws RegraDeNegocioException, BancoDeDadosException;
-
-
 
 }
