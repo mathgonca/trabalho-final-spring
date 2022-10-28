@@ -26,8 +26,8 @@ public class IngressoController implements OperationControllerIngresso {
     private final IngressoService ingressoService;
 
     @Override
-    @GetMapping
-    public List<IngressoCompradoDTO> listarIngressosComprados(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
+    @GetMapping("/{idIngresso}")
+    public List<IngressoCompradoDTO> listarIngressosComprados(@PathVariable("idIngresso") Integer id) throws RegraDeNegocioException, BancoDeDadosException {
         return ingressoService.listarIngressosComprados(id);
     }
 

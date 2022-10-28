@@ -30,7 +30,7 @@ public interface OperationControllerIngresso {
 
     @Operation(summary = "Cadastro.", description = "Cadastramento de dados de usuários")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Cadastro realizado com Sucesso!"),
-            @ApiResponse(responseCode = "403", description = "Erro na inserção de dados!"),
+            @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     @PostMapping
     public ResponseEntity<IngressoDTO> createIngresso(@Valid @RequestBody IngressoCreateDTO ingresso) throws RegraDeNegocioException,
@@ -38,7 +38,7 @@ public interface OperationControllerIngresso {
 
     @Operation(summary = "Edição e Atualização de Ingressos", description = "Edição e alteração de dados do Ingresso a partir da referencia de pesquisa 'ID'!")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Atualização de Ingresso realizada!"),
-            @ApiResponse(responseCode = "403", description = "Erro na inserção de dados!"),
+            @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     @PutMapping("/{idIngresso}")
     public ResponseEntity<IngressoDTO> updateIngresso(@PathVariable("idPessoa") Integer id,
@@ -46,7 +46,7 @@ public interface OperationControllerIngresso {
 
     @Operation(summary = "Remove Um Ingresso ", description = "Remoção do Ingresso  partir da 'idIngresso'!")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remoção do Ingresso realizada!"),
-            @ApiResponse(responseCode = "403", description = "Erro na inserção de dados para busca!"),
+            @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     @DeleteMapping("/{idIngresso}") // localhost:8080/ingresso/10
     public ResponseEntity<Void> removeIngresso(@PathVariable("idPessoa") Integer id) throws RegraDeNegocioException, BancoDeDadosException;
