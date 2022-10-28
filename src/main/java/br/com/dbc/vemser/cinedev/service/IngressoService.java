@@ -1,12 +1,16 @@
 package br.com.dbc.vemser.cinedev.service;
 
+import br.com.dbc.vemser.cinedev.dto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.IngressoCompradoDTO;
 import br.com.dbc.vemser.cinedev.dto.IngressoCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.IngressoDTO;
+import br.com.dbc.vemser.cinedev.entity.Cliente;
 import br.com.dbc.vemser.cinedev.entity.Ingresso;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.IngressoRepository;
+import br.com.dbc.vemser.cinedev.service.emails.EmailService;
+import br.com.dbc.vemser.cinedev.service.emails.TipoEmails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +22,8 @@ import java.util.List;
 public class IngressoService {
 
     private final IngressoRepository ingressoRepository;
+    private final ClienteService clienteService;
+    private final EmailService emailService;
     private final ObjectMapper objectMapper;
 
 
@@ -39,8 +45,11 @@ public class IngressoService {
         return ingressoDTO;
     }
 
-    public List<IngressoCompradoDTO> comprarIngresso(Integer id, IngressoCreateDTO ingressoCreateDTO) throws BancoDeDadosException {
+    public List<IngressoCompradoDTO> comprarIngresso(Integer id, IngressoCreateDTO ingressoCreateDTO) throws BancoDeDadosException, RegraDeNegocioException {
         Ingresso ingresso = objectMapper.convertValue(ingressoCreateDTO, Ingresso.class);
+        Cliente cliente = clienteService.listarClientePeloId(ingresso.getIdCliente());
+        ClienteDTO clienteDTO = objectMapper.convertValue(cliente, ClienteDTO.class);
+        emailService.sendEmail(clienteDTO, TipoEmails.ING_COMPRADO);
         return  ingressoRepository.editar(id,ingresso);
     }
 

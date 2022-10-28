@@ -30,6 +30,12 @@ public class CinemaController implements OperationControllerCinema {
     }
 
     @Override
+    @GetMapping
+    public CinemaDTO listaPorId(@PathVariable("idCinema")Integer id) throws RegraDeNegocioException, BancoDeDadosException{
+        return cinemaService.listarCinemaPorId(id);
+    }
+
+    @Override
     @PostMapping
     public ResponseEntity<CinemaDTO> cadastrarCinema(@Valid @RequestBody CinemaCreateDTO cinemaCreateDTO)
             throws BancoDeDadosException, RegraDeNegocioException {

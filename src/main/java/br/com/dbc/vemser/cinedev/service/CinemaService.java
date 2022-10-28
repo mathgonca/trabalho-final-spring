@@ -27,22 +27,22 @@ public class CinemaService {
                 .toList();
     }
 
-public CinemaDTO adicionarCinema(CinemaCreateDTO cinemaCreateDTO) throws BancoDeDadosException, RegraDeNegocioException {
-    String cinemaCadastroNOME = cinemaCreateDTO.getNome();
-    Optional<Cinema> cinemaPorNOME = cinemaRepository.listarCinemaId(Integer.parseInt(cinemaCadastroNOME));
+    public CinemaDTO adicionarCinema(CinemaCreateDTO cinemaCreateDTO) throws BancoDeDadosException, RegraDeNegocioException {
+        String cinemaCadastroNOME = cinemaCreateDTO.getNome();
+        Optional<Cinema> cinemaPorNOME = cinemaRepository.listarCinemaId(Integer.parseInt(cinemaCadastroNOME));
 
 
-    if (cinemaPorNOME.isEmpty()){
-        Cinema cinema = objectMapper.convertValue(cinemaCreateDTO, Cinema.class);
-        Cinema cinemaCadastrado = cinemaRepository.adicionar(cinema);
+        if (cinemaPorNOME.isEmpty()) {
+            Cinema cinema = objectMapper.convertValue(cinemaCreateDTO, Cinema.class);
+            Cinema cinemaCadastrado = cinemaRepository.adicionar(cinema);
 
-        return objectMapper.convertValue(cinemaCadastrado, CinemaDTO.class);
-    } else {
-        throw new RegraDeNegocioException("Cinema já cadastrado com os mesmos dados");
+            return objectMapper.convertValue(cinemaCadastrado, CinemaDTO.class);
+        } else {
+            throw new RegraDeNegocioException("Cinema já cadastrado com os mesmos dados");
+        }
     }
-}
 
-    public Cinema listarCinema(Integer idCinema) throws BancoDeDadosException, RegraDeNegocioException {
+    public Cinema listarCinemaID(Integer idCinema) throws BancoDeDadosException, RegraDeNegocioException {
         Optional<Cinema> cinemaOptional = cinemaRepository.listarCinemaId(idCinema);
 
         if (cinemaOptional.isEmpty()) {
@@ -52,8 +52,11 @@ public CinemaDTO adicionarCinema(CinemaCreateDTO cinemaCreateDTO) throws BancoDe
         return cinemaOptional.get();
     }
 
+    public CinemaDTO listarCinemaPorId(Integer idCinema) throws BancoDeDadosException, RegraDeNegocioException {
+        return objectMapper.convertValue(listarCinemaID(idCinema),CinemaDTO.class);
+    }
     public CinemaDTO atualizarCinema(Integer idCinema, CinemaCreateDTO cinemaCreateDTO) throws BancoDeDadosException, RegraDeNegocioException {
-        listarCinema(idCinema);
+        listarCinemaID(idCinema);
 
         Cinema cinema = objectMapper.convertValue(cinemaCreateDTO, Cinema.class);
         Cinema cinemaAtualizado = cinemaRepository.editar(idCinema, cinema);
@@ -62,7 +65,7 @@ public CinemaDTO adicionarCinema(CinemaCreateDTO cinemaCreateDTO) throws BancoDe
     }
 
     public void deletarCinema(Integer idCinema) throws BancoDeDadosException, RegraDeNegocioException {
-        listarCinema(idCinema);
+        listarCinemaID(idCinema);
         cinemaRepository.remover(idCinema);
     }
 }

@@ -16,7 +16,6 @@ import java.util.List;
 
 public interface OperationControllerFilme {
 
-
     @Operation(summary = "Listagem de Dados", description = "Lista os dados referentes a busca do banco")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Retorna a lista de dados de acordo com a pesquisa"),
             @ApiResponse(responseCode = "403", description = "A algo de errado com as inserções de sua pesquisa"),

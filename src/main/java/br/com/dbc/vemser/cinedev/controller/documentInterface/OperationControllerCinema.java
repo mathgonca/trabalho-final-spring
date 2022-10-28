@@ -15,33 +15,40 @@ import java.util.List;
 
 
 public interface OperationControllerCinema {
-    @Operation(summary = "Listagem de Cinemas ", description = "Listagem de cinemas que constam no banco")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Retorna a lista de dados de acordo com a pesquisa"),
+    @Operation(summary = "Realiza a listagem de Cinemas ", description = "Lista os cinemas que constam em nosso sistema")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Retorna a lista de Cinemas de acordo com a pesquisa Realizada"),
             @ApiResponse(responseCode = "403", description = "A algo de errado com as inserções de sua pesquisa"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     @GetMapping
     public List<CinemaDTO> list() throws RegraDeNegocioException, BancoDeDadosException;
 
-    @Operation(summary = "Cadastramento dos Cinemas ", description = "Cadastramento de dados dos Cinemas")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Cinema Cadastrado com Sucesso!"),
+    @Operation(summary = "Realiza a listagem de Cinemas por Id!", description = "Lista os cinemas que constam em nosso sistema por Id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Retorna a lista de Cinemas de acordo com a pesquisa realizada"),
+            @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+            @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
+    @GetMapping
+    public CinemaDTO listaPorId(@PathVariable("idCinema")Integer id) throws RegraDeNegocioException, BancoDeDadosException;
+
+    @Operation(summary = "Realiza o cadastramento dos Cinemas ", description = "Cadastramento de dados dos Cinemas")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Cinema cadastrado com sucesso!"),
             @ApiResponse(responseCode = "403", description = "Erro na inserção de dados!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     @PostMapping("/{idCinema}")
     public ResponseEntity<CinemaDTO> cadastrarCinema(@Valid @RequestBody CinemaCreateDTO cinemaCreateDTO)
             throws BancoDeDadosException, RegraDeNegocioException;
 
-    @Operation(summary = "Edição e Atualização de Dados dos Cinemas ", description = "Edição e alteração de dados dos cinemas por 'ioCinema' !")
+    @Operation(summary = "Realiza atualização de dados dos Cinemas ", description = "Realiza a alteração de dados dos Cinemas De acordo com o 'idCinema' !")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Atualização de dados realizada!"),
-            @ApiResponse(responseCode = "403", description = "Erro na inserção de dados!"),
+            @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     @PutMapping("/{idCinema}")
     public ResponseEntity<CinemaDTO> update(@PathVariable("idCinema") Integer id,
                                             @Valid @RequestBody CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException, BancoDeDadosException;
 
-    @Operation(summary = "Remoção de Dados dos Cinemas", description = "Remoção de dados dos Cinemas a partir da 'idCinema'!")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remoção de dados realizada!"),
-            @ApiResponse(responseCode = "403", description = "Erro na inserção de dados para busca!"),
+    @Operation(summary = "Realiza Remoção dos Cinemas", description = "Realiza a remoção dos Cinemas a partir do 'idCinema'!")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remoção de cinema realizada com sucesso!"),
+            @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
-    @DeleteMapping("/{idCinema}") // localhost:8080/pessoa/10
+    @DeleteMapping("/{idCinema}")
     public ResponseEntity<Void> delete(@PathVariable("idCinema") Integer id) throws RegraDeNegocioException, BancoDeDadosException;
 }
