@@ -99,7 +99,7 @@ public class IngressoRepository {
             }
         }
     }
-    public List<IngressoCompradoDTO> editar(Integer id, Ingresso ingresso) throws BancoDeDadosException {
+    public IngressoCompradoDTO editar(Integer idCliente, Integer idIngresso) throws BancoDeDadosException {
         Connection conexao = null;
         try{
             conexao = conexaoBancoDeDados.getConnection();
@@ -107,17 +107,17 @@ public class IngressoRepository {
             String sql = "UPDATE INGRESSO SET ID_CLIENTE = ?, VALOR = ?, DISPONIBLIDADE = ? WHERE ID_INGRESSO = ?";
 
             PreparedStatement pst = conexao.prepareStatement(sql);
-            pst.setInt(1, ingresso.getIdCliente());
+            pst.setInt(1, idCliente);
             pst.setDouble(2, 30);
-            pst.setString(3, ingresso.getDisponibilidade().toString());
-            pst.setInt(4, id);
+            pst.setString(3, "N");
+            pst.setInt(4, idIngresso);
 
             int ret = pst.executeUpdate();
             if (ret == 0) {
                 System.out.println("Não foi possível realizar a alteração do seu Ingresso!");
             }
             System.out.println("O Ingresso foi alterado com sucesso!");
-            return listarIngressoComprado(ingresso.getIdCliente());
+            return listarIngressoCompradoPorId(idIngresso);
         }catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -187,6 +187,41 @@ public class IngressoRepository {
                 ingressosComprados.add(ingresso);
             }
             return ingressosComprados;
+
+        }catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (conexao != null) {
+                    conexao.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public IngressoCompradoDTO listarIngressoCompradoPorId(Integer id) throws  BancoDeDadosException {
+        IngressoCompradoDTO ingressosComprado = new IngressoCompradoDTO();
+        Connection conexao = null;
+
+        try{
+            conexao = conexaoBancoDeDados.getConnection();
+
+            String sql =
+                    "SELECT  CT.PRIMEIRO_NOME AS CLIENTE, F.NOME AS FILME, C.NOME AS CINEMA,ID_INGRESSO,I.DATA_HORA FROM INGRESSO I\n" +
+                            "INNER JOIN CLIENTE CT ON I.ID_CLIENTE = I.ID_CLIENTE \n" +
+                            "INNER JOIN FILME F ON F.ID_FILME = I.ID_FILME  \n" +
+                            "INNER JOIN CINEMA C ON C.ID_CINEMA = I.ID_CINEMA WHERE CT.ID_CLIENTE = I.ID_CLIENTE AND ID_INGRESSO = ? " +
+                            "ORDER BY I.DATA_HORA";
+
+            PreparedStatement stmt = conexao.prepareStatement(sql);
+            stmt.setInt(1, id);
+
+            ResultSet res = stmt.executeQuery();
+            if (res.next()) {
+            ingressosComprado = getIngressoResultSet(res);
+            }
+            return ingressosComprado;
 
         }catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());

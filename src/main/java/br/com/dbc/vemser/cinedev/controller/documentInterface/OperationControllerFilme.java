@@ -17,14 +17,14 @@ import java.util.List;
 public interface OperationControllerFilme {
 
 
-    @Operation(summary = "Realiza a Listagem de Dados do filme", description = "Lista os dados referentes a busca do banco")
+    @Operation(summary = "Realiza a listagem de dados do Filme", description = "Lista os dados referentes a busca do banco")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Retorna a lista de dados de acordo com a pesquisa"),
             @ApiResponse(responseCode = "403", description = "A algo de errado com as inserções de sua pesquisa!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     @GetMapping
     public List<FilmeDTO> list() throws RegraDeNegocioException, BancoDeDadosException;
 
-    @Operation(summary = "Realiza o Cadastro do Filme.", description = "Realiza o Cadastramento de dados do Filme")
+    @Operation(summary = "Realiza o Cadastro do Filme.", description = "Realiza o dadastramento de dados do Filme")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Cadastro realizado com Sucesso!"),
             @ApiResponse(responseCode = "403", description = "Erro na inserção de dados!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
@@ -36,15 +36,15 @@ public interface OperationControllerFilme {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = " A atualização do Filme foi realizada com sucesso!"),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
-    @PutMapping("/{idPessoa}")
+    @PutMapping("/{idFilme}")
     public ResponseEntity<FilmeDTO> update(@PathVariable("idPessoa") Integer id,
                                            @Valid @RequestBody FilmeCreateDTO filmeCreateDTO) throws RegraDeNegocioException, BancoDeDadosException;
 
-    @Operation(summary = "Realiza a remoção do Filme", description = "Realiza a Remoção de filmes a partir do 'ID'!")
+    @Operation(summary = "Realiza a remoção do Filme", description = "Realiza a remoção de filmes a partir do 'ID'!")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remoção de dados realizada!"),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
-    @DeleteMapping("/{idPessoa}") // localhost:8080/pessoa/10
-    public ResponseEntity<Void> delete(@PathVariable("idPessoa") Integer id) throws RegraDeNegocioException, BancoDeDadosException;
+    @DeleteMapping("/{idFilme}") // localhost:8080/pessoa/10
+    public ResponseEntity<Void> delete(@PathVariable("idFilme") Integer id) throws RegraDeNegocioException, BancoDeDadosException;
 
 }

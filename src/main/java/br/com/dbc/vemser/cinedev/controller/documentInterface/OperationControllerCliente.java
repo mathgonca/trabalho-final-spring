@@ -37,7 +37,7 @@ public interface OperationControllerCliente {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Atualização de dados realizada com sucesso!"),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
-    @PutMapping("/{idPessoa}")
+    @PutMapping("/{idCliente}")
     public ResponseEntity<ClienteDTO> update(@PathVariable("idPessoa") Integer id,
                                              @Valid @RequestBody ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException, BancoDeDadosException;
 

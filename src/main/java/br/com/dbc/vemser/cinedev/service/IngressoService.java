@@ -45,12 +45,11 @@ public class IngressoService {
         return ingressoDTO;
     }
 
-    public List<IngressoCompradoDTO> comprarIngresso(Integer id, IngressoCreateDTO ingressoCreateDTO) throws BancoDeDadosException, RegraDeNegocioException {
-        Ingresso ingresso = objectMapper.convertValue(ingressoCreateDTO, Ingresso.class);
-        Cliente cliente = clienteService.listarClientePeloId(ingresso.getIdCliente());
+    public IngressoCompradoDTO comprarIngresso(Integer idCliente, Integer idIngresso) throws BancoDeDadosException, RegraDeNegocioException {
+        Cliente cliente = clienteService.listarClientePeloId(idCliente);
         ClienteDTO clienteDTO = objectMapper.convertValue(cliente, ClienteDTO.class);
         emailService.sendEmail(clienteDTO, TipoEmails.ING_COMPRADO);
-        return  ingressoRepository.editar(id,ingresso);
+        return  ingressoRepository.editar(idCliente,idIngresso);
     }
 
     public IngressoDTO findById(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
