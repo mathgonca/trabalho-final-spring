@@ -3,7 +3,6 @@ package br.com.dbc.vemser.cinedev.controller;
 import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerCinema;
 import br.com.dbc.vemser.cinedev.dto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.CinemaDTO;
-import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.CinemaService;
 import lombok.RequiredArgsConstructor;
@@ -25,32 +24,32 @@ public class CinemaController implements OperationControllerCinema {
 
     @Override
     @GetMapping
-    public List<CinemaDTO> list() throws RegraDeNegocioException, BancoDeDadosException {
+    public List<CinemaDTO> list() throws RegraDeNegocioException{
         return cinemaService.listarCinema();
     }
 
     @Override
     @GetMapping("/{idCinema}")
-    public CinemaDTO listaPorId(@PathVariable("idCinema")Integer id) throws RegraDeNegocioException, BancoDeDadosException{
+    public CinemaDTO listaPorId(@PathVariable("idCinema")Integer id) throws RegraDeNegocioException{
         return cinemaService.listarCinemaPorId(id);
     }
 
     @Override
     @PostMapping
     public ResponseEntity<CinemaDTO> cadastrarCinema(@Valid @RequestBody CinemaCreateDTO cinemaCreateDTO)
-            throws BancoDeDadosException, RegraDeNegocioException {
+            throws RegraDeNegocioException {
         return new ResponseEntity<>(cinemaService.adicionarCinema(cinemaCreateDTO), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<CinemaDTO> update(Integer id, CinemaCreateDTO cinemaCreateDTO) throws BancoDeDadosException, RegraDeNegocioException {
+    public ResponseEntity<CinemaDTO> update(Integer id, CinemaCreateDTO cinemaCreateDTO) throws  RegraDeNegocioException {
         return new ResponseEntity<>(cinemaService.atualizarCinema(id, cinemaCreateDTO), HttpStatus.OK);
     }
 
     @Override
     @DeleteMapping("/{idCinema}")
     public ResponseEntity<Void> delete(@PathVariable Integer idCinema) throws
-            RegraDeNegocioException, BancoDeDadosException {
+            RegraDeNegocioException {
         cinemaService.deletarCinema(idCinema);
         return new ResponseEntity<>(HttpStatus.OK);
     }

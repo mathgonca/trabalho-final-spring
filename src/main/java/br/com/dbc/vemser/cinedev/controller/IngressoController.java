@@ -27,38 +27,38 @@ public class IngressoController implements OperationControllerIngresso {
 
     @Override
     @GetMapping("/comprado/{idCliente}")
-    public List<IngressoCompradoDTO> listarIngressosComprados(@PathVariable("idCliente") Integer id) throws RegraDeNegocioException, BancoDeDadosException {
+    public List<IngressoCompradoDTO> listarIngressosComprados(@PathVariable("idCliente") Integer id) throws RegraDeNegocioException {
         return ingressoService.listarIngressosComprados(id);
     }
 
     @Override
     @GetMapping("/{idIngresso}")
-    public IngressoDTO listarIngressosPorId(@PathVariable("idIngresso") Integer id) throws RegraDeNegocioException, BancoDeDadosException {
+    public IngressoDTO listarIngressosPorId(@PathVariable("idIngresso") Integer id) throws RegraDeNegocioException {
         return ingressoService.findById(id);
     }
 
     @Override
     @GetMapping
-    public List<IngressoDTO> listarIngressos() throws RegraDeNegocioException, BancoDeDadosException {
+    public List<IngressoDTO> listarIngressos() throws RegraDeNegocioException {
         return ingressoService.listarIngressos();
     }
 
     @Override
     @PostMapping
-    public ResponseEntity<IngressoDTO> createIngresso(@Valid @RequestBody IngressoCreateDTO ingresso) throws RegraDeNegocioException,
-            RegraDeNegocioException, BancoDeDadosException {
+    public ResponseEntity<IngressoDTO> createIngresso(@Valid @RequestBody IngressoCreateDTO ingresso) throws RegraDeNegocioException {
         return new ResponseEntity<>(ingressoService.createIngresso(ingresso), HttpStatus.OK);
     }
 
     @Override
     @PutMapping("/comprar/{idCliente}/ingresso/{idIngresso}")
-    public ResponseEntity<IngressoCompradoDTO> comprarIngresso(@PathVariable("idCliente") Integer idCliente,@PathVariable("idIngresso") Integer idIngresso) throws RegraDeNegocioException, BancoDeDadosException {
+    public ResponseEntity<IngressoCompradoDTO> comprarIngresso(@PathVariable("idCliente") Integer idCliente,
+                                                               @PathVariable("idIngresso") Integer idIngresso) throws RegraDeNegocioException{
         return new ResponseEntity<>(ingressoService.comprarIngresso(idCliente, idIngresso), HttpStatus.OK);
     }
 
     @Override
     @DeleteMapping("/{idIngresso}")
-    public ResponseEntity<Void> removeIngresso(@PathVariable("idIngresso") Integer id) throws RegraDeNegocioException, BancoDeDadosException {
+    public ResponseEntity<Void> removeIngresso(@PathVariable("idIngresso") Integer id) throws RegraDeNegocioException {
         ingressoService.removeIngresso(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

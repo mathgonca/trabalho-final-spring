@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,37 +18,54 @@ public class FilmeService {
     private final FilmeRepository filmeRepository;
     private final ObjectMapper objectMapper;
 
-    public FilmeDTO adicionarFilme(FilmeCreateDTO filmeCapturado) throws BancoDeDadosException {
+    public FilmeDTO adicionarFilme(FilmeCreateDTO filmeCapturado) throws RegraDeNegocioException {
         Filme filmeTransform = objectMapper.convertValue(filmeCapturado, Filme.class);
-        Filme filmeSalvo = filmeRepository.adicionar(filmeTransform);
+        Filme filmeSalvo = null;
+        try {
+            filmeSalvo = filmeRepository.adicionar(filmeTransform);
+        } catch (BancoDeDadosException e) {
+            throw new RegraDeNegocioException("Erro na comunicação com o Banco de Dados");
+        }
         FilmeDTO filmeDTO = objectMapper.convertValue(filmeSalvo, FilmeDTO.class);
         return filmeDTO;
     }
-    public void removerFilme(Integer id) throws BancoDeDadosException {
-        boolean realizouRemover = filmeRepository.remover(id);
+    public void removerFilme(Integer id) throws RegraDeNegocioException {
+        try {
+             filmeRepository.remover(id);
+        } catch (BancoDeDadosException e) {
+            throw new RuntimeException(e);
+        }
     }
-    public FilmeDTO editarFilme(Integer id, FilmeCreateDTO filmeCapturado) throws BancoDeDadosException, RegraDeNegocioException {
-        FilmeDTO filmeRecuperado = findById(id);
+    public FilmeDTO editarFilme(Integer id, FilmeCreateDTO filmeCapturado) throws RegraDeNegocioException {
         Filme filmeTransf = objectMapper.convertValue(filmeCapturado, Filme.class);
-        Filme filmeSalvo = filmeRepository.editar(id, filmeTransf);
+        Filme filmeSalvo = null;
+        try {
+            filmeSalvo = filmeRepository.editar(id, filmeTransf);
+        } catch (BancoDeDadosException e) {
+            throw new RegraDeNegocioException("Erro na comunicação com o Banco de Dados");
+        }
         FilmeDTO filmeDTO = objectMapper.convertValue(filmeSalvo, FilmeDTO.class);
         return filmeDTO;
     }
-    public List<FilmeDTO> listarTodosFilmes() throws BancoDeDadosException {
-        List<Filme> filmeList = filmeRepository.listar();
+    public List<FilmeDTO> listarTodosFilmes() throws RegraDeNegocioException {
+        List<Filme> filmeList = null;
+        try {
+            filmeList = filmeRepository.listar();
+        } catch (BancoDeDadosException e) {
+            throw new RegraDeNegocioException("Erro na comunicação com o Banco de Dados");
+        }
         return filmeList.stream()
                 .map(filme -> objectMapper.convertValue(filme, FilmeDTO.class))
                 .toList();
     }
-    public List<LocalDateTime> listarFilmesPorHorario(int idFilme, int idCinema) throws BancoDeDadosException {
-        return filmeRepository.listaHorariosDoFilme(idFilme, idCinema);
-    }
-    public List<String> ListarFilmesPorCinema(int idCinema) throws BancoDeDadosException {
-        return filmeRepository.listaFilmesPorCinema(idCinema);
-    }
-    public FilmeDTO findById(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
-       Filme filmeEncontrado = filmeRepository.findById(id);
-       FilmeDTO filmeDTO = objectMapper.convertValue(filmeEncontrado, FilmeDTO.class);
+    public FilmeDTO findById(Integer id) throws RegraDeNegocioException {
+        Filme filmeEncontrado = null;
+        try {
+            filmeEncontrado = filmeRepository.findById(id);
+        } catch (BancoDeDadosException e) {
+            throw new RegraDeNegocioException("Erro na comunicação com o Banco de Dados");
+        }
+        FilmeDTO filmeDTO = objectMapper.convertValue(filmeEncontrado, FilmeDTO.class);
        return filmeDTO;
     }
 }

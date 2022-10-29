@@ -92,18 +92,19 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
             conexao = conexaoBancoDeDados.getConnection();
             String sql = "UPDATE FILME SET NOME = ?, IDIOMA = ?," +
                     "CLASSIFICACAO = ?, DURACAO = ? WHERE ID_FILME = ?";
+
             PreparedStatement pst = conexao.prepareStatement(sql);
             pst.setString(1, filme.getNome());
             pst.setString(2, filme.getIdioma().getIdioma());
             pst.setInt(3, filme.getClassificacaoEtaria());
             pst.setInt(4, filme.getDuracao());
             pst.setInt(5, id);
-            filme.setIdFilme(id);
-            int ret = pst.executeUpdate();
-            if (ret == 0) {
+
+            int res = pst.executeUpdate();
+            if (res == 0) {
                 System.out.println("Não foi possível realizar a alteração do Filme!");
             }
-            return filme;
+            return findById(id);
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -157,11 +158,13 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
             stmt.setInt(1, idFilme);
             ResultSet res = stmt.executeQuery();
             filme = new Filme();
+            while (res.next()) {
             filme.setIdFilme(res.getInt("ID_FILME"));
             filme.setNome(res.getString("NOME"));
             filme.setIdioma(Idioma.valueOf(res.getString("IDIOMA")));
             filme.setClassificacaoEtaria(res.getInt("CLASSIFICACAO"));
-            filme.setDuracao(res.getInt("DURACAO"));
+            filme.setDuracao(res.getInt("DURACAO"));}
+
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -174,61 +177,5 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
             }
         }
         return filme;
-    }
-    public List<String> listaFilmesPorCinema(int idCinema) throws BancoDeDadosException {
-        List<String> listaNomeFilme = new ArrayList<>();
-        Connection conexao = null;
-        try {
-            conexao = conexaoBancoDeDados.getConnection();
-            String sql = "SELECT f.NOME FROM INGRESSO i" +
-                    " INNER JOIN FILME f ON f.ID_FILME = i.ID_FILME" +
-                    " WHERE i.ID_CINEMA = ?" +
-                    " GROUP BY f.NOME";
-            PreparedStatement stmt = conexao.prepareStatement(sql);
-            stmt.setInt(1, idCinema);
-            ResultSet res = stmt.executeQuery();
-            while (res.next()) {
-                listaNomeFilme.add(res.getString("NOME"));
-            }
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if (conexao != null) {
-                    conexao.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return listaNomeFilme;
-    }
-    public List<LocalDateTime> listaHorariosDoFilme(int idFilme, int idCinema) throws BancoDeDadosException {
-        List<LocalDateTime> listaHorario = new ArrayList<>();
-        Connection conexao = null;
-        try {
-            conexao = conexaoBancoDeDados.getConnection();
-            String sql = "SELECT i.DATA_HORA FROM INGRESSO i" +
-                    " WHERE i.ID_FILME = ? AND i.ID_CINEMA = ?" +
-                    " GROUP BY i.DATA_HORA";
-            PreparedStatement stmt = conexao.prepareStatement(sql);
-            stmt.setInt(1, idFilme);
-            stmt.setInt(2, idCinema);
-            ResultSet res = stmt.executeQuery();
-            while (res.next()) {
-                listaHorario.add(res.getTimestamp("DATA_HORA").toLocalDateTime());
-            }
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if (conexao != null) {
-                    conexao.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return listaHorario;
     }
 }
