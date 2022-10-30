@@ -21,23 +21,19 @@ public class FilmeService {
 
     public FilmeDTO adicionarFilme(FilmeCreateDTO filmeCapturado) throws RegraDeNegocioException {
         try {
-            String nomeDoFilme = filmeCapturado.getNome();
-            Optional<Boolean> verificarFilme = filmeRepository.listar()
-                    .stream().map(filme -> filme.getNome().equals(nomeDoFilme)).findAny();
-            if (verificarFilme.get()) {
-                try {
+            String filmeNome = filmeCapturado.getNome();
+            Optional<Filme> filmePorNome = filmeRepository.listarPorNome(filmeNome);
+
+            if (filmePorNome.isEmpty()) {
                     Filme filmeTransform = objectMapper.convertValue(filmeCapturado, Filme.class);
-                    Filme filmeSalvo = filmeSalvo = filmeRepository.adicionar(filmeTransform);
+                    Filme filmeSalvo = filmeRepository.adicionar(filmeTransform);
                     FilmeDTO filmeDTO = objectMapper.convertValue(filmeSalvo, FilmeDTO.class);
                     return filmeDTO;
-                } catch (BancoDeDadosException e) {
-                    throw new RegraDeNegocioException("Ocorreu um erro ao tentar cadastrar o Filme! Verifique os dados e tente novamente.");
-                }
             } else {
-                throw new RegraDeNegocioException("Filme já cadastrado!");
+                throw new RegraDeNegocioException("Erro!Nome do filme já consta em nossa lista de cadastros!");
             }
         } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro de verificação no banco de dados");
+            throw new RegraDeNegocioException("Erro de verificação no banco de dados!");
         }
     }
     public void removerFilme(Integer id) throws RegraDeNegocioException {
@@ -50,10 +46,15 @@ public class FilmeService {
     public FilmeDTO editarFilme(Integer id, FilmeCreateDTO filmeCapturado) throws RegraDeNegocioException {
 
         try {
+            String filmeNome = filmeCapturado.getNome();
+            Optional<Filme> filmePorNome = filmeRepository.listarPorNome(filmeNome);
+            if (filmePorNome.isEmpty()) {
             Filme filmeTransf = objectMapper.convertValue(filmeCapturado, Filme.class);
             Filme filmeSalvo = filmeRepository.editar(id, filmeTransf);
             FilmeDTO filmeDTO = objectMapper.convertValue(filmeSalvo, FilmeDTO.class);
-            return filmeDTO;
+            return filmeDTO;} else {
+                throw new RegraDeNegocioException("Erro!Nome do filme já consta em nossa lista de cadastros!");
+            }
         } catch (BancoDeDadosException e) {
             throw new RegraDeNegocioException("Erro!Não foi possivel realizar a alteração de dados!");
         }

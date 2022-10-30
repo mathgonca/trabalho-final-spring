@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.cinedev.repository;
 
+import br.com.dbc.vemser.cinedev.entity.Cliente;
 import br.com.dbc.vemser.cinedev.entity.Filme;
 import br.com.dbc.vemser.cinedev.entity.enums.Idioma;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
@@ -10,6 +11,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -147,6 +149,46 @@ public class FilmeRepository implements Repositorio<Integer, Filme> {
             }
         }
         return listaFilmes;
+    }
+
+    public Optional<Filme> listarPorNome(String nome) throws BancoDeDadosException {
+        Optional<Filme> filmePorNome = Optional.empty();
+        Connection con = null;
+        try {
+            con = conexaoBancoDeDados.getConnection();
+
+            StringBuilder sql = new StringBuilder();
+            sql.append("SELECT * FROM FILME");
+            sql.append(" WHERE NOME = ?");
+
+            PreparedStatement stmt = con.prepareStatement(sql.toString());
+
+            stmt.setString(1, nome.toUpperCase());
+
+            ResultSet res = stmt.executeQuery();
+
+            if (res.next()) {
+               Filme filme = new Filme();
+                filme.setIdFilme(res.getInt("ID_FILME"));
+                filme.setNome(res.getString("NOME"));
+                filme.setIdioma(Idioma.valueOf(res.getString("IDIOMA")));
+                filme.setClassificacaoEtaria(res.getInt("CLASSIFICACAO"));
+                filme.setDuracao(res.getInt("DURACAO"));
+
+                filmePorNome = Optional.of(filme);
+            }
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return filmePorNome;
     }
     public Filme findById(int idFilme) throws BancoDeDadosException {
         Connection conexao = null;
