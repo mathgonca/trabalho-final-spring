@@ -9,12 +9,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class CinemaRepository implements Repositorio<Integer, Cinema> {
 
     private final ConexaoBancoDeDados conexaoBancoDeDados;
-
 
 
     public Integer getProximoId(Connection connection) throws SQLException {
@@ -166,6 +166,7 @@ public class CinemaRepository implements Repositorio<Integer, Cinema> {
         }
         return listaCinema;
     }
+
     public Optional<Cinema> listarCinemaId(int ID_CINEMA) throws BancoDeDadosException {
         Optional<Cinema> cinemaOptional = Optional.empty();
         Cinema cinema = new Cinema();
@@ -206,4 +207,42 @@ public class CinemaRepository implements Repositorio<Integer, Cinema> {
         return cinemaOptional;
     }
 
+    public Optional<Cinema> listarCinemaPeloNome(String nome) throws BancoDeDadosException {
+        Connection con = null;
+        try {
+            con = conexaoBancoDeDados.getConnection();
+
+            StringBuilder sql = new StringBuilder();
+            sql.append("SELECT * FROM CINEMA");
+            sql.append(" WHERE NOME = ?");
+
+            PreparedStatement stmt = con.prepareStatement(sql.toString());
+            stmt.setString(1, nome);
+
+            ResultSet res = stmt.executeQuery();
+
+            if (res.next()) {
+                Cinema cinema = new Cinema();
+                cinema.setIdCinema(res.getInt("ID_CINEMA"));
+                cinema.setNome(res.getString("NOME"));
+                cinema.setEstado(res.getString("ESTADO"));
+                cinema.setCidade(res.getString("CIDADE"));
+                listar().add(cinema);
+
+                return Optional.of(cinema);
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
