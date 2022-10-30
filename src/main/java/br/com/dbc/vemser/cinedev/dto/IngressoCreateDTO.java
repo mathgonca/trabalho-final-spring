@@ -34,7 +34,7 @@ public class IngressoCreateDTO {
 
     @NotNull
     @NotEmpty
-    @Schema(description = "Disponibilidade", example = "S ou N")
+    @Schema(description = "Disponibilidade", example = "S")
     private Disponibilidade disponibilidade;
 
 }

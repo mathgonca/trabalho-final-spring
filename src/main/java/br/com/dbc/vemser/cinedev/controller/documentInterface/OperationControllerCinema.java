@@ -19,13 +19,13 @@ public interface OperationControllerCinema {
 
     @Operation(summary = "Realiza a listagem de Cinemas ", description = "Lista os cinemas que constam em nosso sistema")
 
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Retorna a lista de Cinemas de acordo com a pesquisa Realizada"),
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Listagem realizada com sucesso!"),
             @ApiResponse(responseCode = "403", description = "A algo de errado com as inserções de sua pesquisa"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     List<CinemaDTO> list() throws RegraDeNegocioException, BancoDeDadosException;
 
     @Operation(summary = "Realiza a listagem de Cinemas por Id!", description = "Lista os cinemas que constam em nosso sistema por Id")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Retorna a lista de Cinemas de acordo com a pesquisa realizada"),
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Listagem realizada com sucesso!"),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     CinemaDTO listaPorId(@PathVariable("idCinema") Integer id) throws RegraDeNegocioException;

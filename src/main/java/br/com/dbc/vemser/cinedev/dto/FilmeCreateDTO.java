@@ -19,7 +19,7 @@ public class FilmeCreateDTO {
     @Schema(description = "Título do filme que deseja cadastrar!", example = "STAR WARS")
     private String nome;
     @NotNull
-    @Schema(description = "Linguagens disponíveis para o espectador.", example = "DUBLADO OU LEGENDADO")
+    @Schema(description = "Linguagens disponíveis para o espectador.", example = "DUBLADO")
     private Idioma idioma;
     @NotNull
     @Schema(description = "Sensura, ou limite da faixa etaria permitido pelo filme.", example = "13")

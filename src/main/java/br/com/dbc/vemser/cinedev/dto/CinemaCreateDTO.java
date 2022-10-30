@@ -18,7 +18,7 @@ public class CinemaCreateDTO {
     @NotNull
     @NotEmpty
     @Size(min = 1, max = 350)
-    @Schema(description = "Nome Fantasia, ou Razão Social da Empresa", example = "CINEMARK")
+    @Schema(description = "Nome Fantasia, ou Razão Social da Empresa", example = "CINEMARK Pier-21")
     private String nome;
     @NotNull
     @NotEmpty

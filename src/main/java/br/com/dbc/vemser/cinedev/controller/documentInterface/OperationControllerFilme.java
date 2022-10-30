@@ -17,13 +17,13 @@ import java.util.List;
 public interface OperationControllerFilme {
 
     @Operation(summary = "Realiza a listagem de dados do Filme", description = "Lista todos os filmes cadastrados no Banco de Dados")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Retorna a lista de dados de acordo com a pesquisa"),
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Listagem executada com sucesso!"),
             @ApiResponse(responseCode = "403", description = "A algo de errado com as inserções de sua pesquisa!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     List<FilmeDTO> list() throws RegraDeNegocioException;
 
     @Operation(summary = "Realiza busca de filmes por ID", description = "Localização do filme de acordo com a ID informada")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Retorna a lista de dados de acordo com a pesquisa"),
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Listagem executada com sucesso!"),
             @ApiResponse(responseCode = "403", description = "A algo de errado com as inserções de sua pesquisa!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     FilmeDTO listarByIdFilme(@PathVariable("idFilme") Integer idFilme) throws RegraDeNegocioException;

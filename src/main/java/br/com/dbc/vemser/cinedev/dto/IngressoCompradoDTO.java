@@ -23,7 +23,7 @@ public class IngressoCompradoDTO {
     private String nomeFilme;
     @NotNull
     @NotEmpty
-    @Schema(description = "Cinema escolhido ", example = "GNC Iguatemi', 'RS', 'Porto Alegre'")
+    @Schema(description = "Cinema escolhido ", example = "GNC Iguatemi")
     private String nomeCinema;
     @NotNull
     @NotEmpty

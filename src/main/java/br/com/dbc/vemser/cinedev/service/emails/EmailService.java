@@ -54,8 +54,8 @@ public class EmailService {
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(from);
-            mimeMessageHelper.setTo("moises.noah@dbccompany.com.br");
-//            mimeMessageHelper.setTo(clienteDTO.getEmail());
+//            mimeMessageHelper.setTo("mrmoisesnoah@gmail.com");
+            mimeMessageHelper.setTo(clienteDTO.getEmail());
             mimeMessageHelper.setSubject(tipoEmails.getDescricao());
             mimeMessageHelper.setText(geContentFromTemplate(clienteDTO, tipoEmails), true);
             emailSender.send(mimeMessageHelper.getMimeMessage());

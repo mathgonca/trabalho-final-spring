@@ -41,7 +41,6 @@ public class CinemaService {
             throw new RegraDeNegocioException("Ocorreu um erro ao cadastrar o nome do Cinema, tente de novo mais tarde.");
         }
 
-
         if (cinemaPorNOME.isEmpty()) {
             Cinema cinema = objectMapper.convertValue(cinemaCreateDTO, Cinema.class);
             Cinema cinemaCadastrado;

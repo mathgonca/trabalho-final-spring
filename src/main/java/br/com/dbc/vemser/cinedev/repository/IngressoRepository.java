@@ -1,10 +1,6 @@
 package br.com.dbc.vemser.cinedev.repository;
 
 import br.com.dbc.vemser.cinedev.dto.IngressoCompradoDTO;
-import br.com.dbc.vemser.cinedev.dto.IngressoDTO;
-import br.com.dbc.vemser.cinedev.entity.Cinema;
-import br.com.dbc.vemser.cinedev.entity.Cliente;
-import br.com.dbc.vemser.cinedev.entity.Filme;
 import br.com.dbc.vemser.cinedev.entity.Ingresso;
 import br.com.dbc.vemser.cinedev.entity.enums.Disponibilidade;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
@@ -131,13 +127,45 @@ public class IngressoRepository {
         }
     }
 
-    public List<Ingresso> listar() throws BancoDeDadosException {
+    public List<Ingresso> listarIngressos() throws BancoDeDadosException {
         List<Ingresso> listarIngresso = new ArrayList<>();
         Connection conexao = null;
         try{
             conexao = conexaoBancoDeDados.getConnection();
             Statement stmt = conexao.createStatement();
-            String sql = "SELECT * FROM INGRESSO ORDER BY ID_INGRESSO";
+            String sql = "SELECT * FROM INGRESSO WHERE DISPONIBLIDADE = 'S' ORDER BY ID_INGRESSO";
+            ResultSet res = stmt.executeQuery(sql);
+            while(res.next()){
+                Ingresso ingresso = new Ingresso();
+                ingresso.setIdIngresso(res.getInt("ID_INGRESSO"));
+                ingresso.setIdFilme(res.getInt("ID_FILME"));
+                ingresso.setIdCliente(res.getInt("ID_CLIENTE"));
+                ingresso.setIdCinema(res.getInt("ID_CINEMA"));
+                ingresso.setPreco(res.getDouble("VALOR"));
+                ingresso.setDataHora(res.getTimestamp("DATA_HORA").toLocalDateTime());
+                ingresso.setDisponibilidade(Disponibilidade.valueOf(res.getString("DISPONIBLIDADE")));
+                listarIngresso.add(ingresso);
+            }
+        }catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (conexao != null) {
+                    conexao.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return listarIngresso;
+    }
+    public List<Ingresso> listarIngressosComprados() throws BancoDeDadosException {
+        List<Ingresso> listarIngresso = new ArrayList<>();
+        Connection conexao = null;
+        try{
+            conexao = conexaoBancoDeDados.getConnection();
+            Statement stmt = conexao.createStatement();
+            String sql = "SELECT * FROM INGRESSO WHERE DISPONIBLIDADE = 'N' ORDER BY ID_INGRESSO";
             ResultSet res = stmt.executeQuery(sql);
             while(res.next()){
                 Ingresso ingresso = new Ingresso();
@@ -164,7 +192,7 @@ public class IngressoRepository {
         return listarIngresso;
     }
 
-    public List<IngressoCompradoDTO> listarIngressoComprado(Integer id) throws  BancoDeDadosException {
+    public List<IngressoCompradoDTO> listarIngressoCompradoPorCliente(Integer id) throws  BancoDeDadosException {
         List<IngressoCompradoDTO> ingressosComprados = new ArrayList<>();
         Connection conexao = null;
 
