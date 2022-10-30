@@ -3,6 +3,7 @@ package br.com.dbc.vemser.cinedev.controller;
 import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerCinema;
 import br.com.dbc.vemser.cinedev.dto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.CinemaDTO;
+import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.CinemaService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class CinemaController implements OperationControllerCinema {
 
     @Override
     @GetMapping
-    public List<CinemaDTO> list() throws RegraDeNegocioException{
+    public List<CinemaDTO> list() throws RegraDeNegocioException {
         return cinemaService.listarCinema();
     }
 

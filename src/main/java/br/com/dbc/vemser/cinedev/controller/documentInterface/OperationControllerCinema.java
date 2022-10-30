@@ -2,6 +2,7 @@ package br.com.dbc.vemser.cinedev.controller.documentInterface;
 
 import br.com.dbc.vemser.cinedev.dto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.CinemaDTO;
+import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,7 +22,7 @@ public interface OperationControllerCinema {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Retorna a lista de Cinemas de acordo com a pesquisa Realizada"),
             @ApiResponse(responseCode = "403", description = "A algo de errado com as inserções de sua pesquisa"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
-    List<CinemaDTO> list() throws RegraDeNegocioException;
+    List<CinemaDTO> list() throws RegraDeNegocioException, BancoDeDadosException;
 
     @Operation(summary = "Realiza a listagem de Cinemas por Id!", description = "Lista os cinemas que constam em nosso sistema por Id")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Retorna a lista de Cinemas de acordo com a pesquisa realizada"),

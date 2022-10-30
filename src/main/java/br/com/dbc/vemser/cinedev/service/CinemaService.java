@@ -19,12 +19,12 @@ public class CinemaService {
     private final CinemaRepository cinemaRepository;
     private final ObjectMapper objectMapper;
 
-    public List<CinemaDTO> listarCinema() {
-        List<Cinema> cinemaList = null;
+    public List<CinemaDTO> listarCinema() throws RegraDeNegocioException {
+        List<Cinema> cinemaList;
         try {
             cinemaList = cinemaRepository.listar();
         } catch (BancoDeDadosException e) {
-            throw new RuntimeException("Error! Falha na comunicação com o Banco de dados");
+            throw new RegraDeNegocioException("Ocorreu um erro ao retornar a lista de Cinema, tente de novo mais tarde.");
         }
         return cinemaList.stream()
                 .map(cinema -> objectMapper.convertValue(cinema, CinemaDTO.class))
@@ -34,21 +34,21 @@ public class CinemaService {
 
     public CinemaDTO adicionarCinema(CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
         String cinemaCadastroNOME = cinemaCreateDTO.getNome();
-        Optional<Cinema> cinemaPorNOME = null;
+        Optional<Cinema> cinemaPorNOME;
         try {
             cinemaPorNOME = cinemaRepository.listarCinemaId(Integer.parseInt(cinemaCadastroNOME));
         } catch (BancoDeDadosException e) {
-            throw new RuntimeException("Error! Falha na comunicação com o Banco de dados");
+            throw new RegraDeNegocioException("Ocorreu um erro ao cadastrar o nome do Cinema, tente de novo mais tarde.");
         }
 
 
         if (cinemaPorNOME.isEmpty()) {
             Cinema cinema = objectMapper.convertValue(cinemaCreateDTO, Cinema.class);
-            Cinema cinemaCadastrado = null;
+            Cinema cinemaCadastrado;
             try {
                 cinemaCadastrado = cinemaRepository.adicionar(cinema);
             } catch (BancoDeDadosException e) {
-                throw new RuntimeException("Error! Falha na comunicação com o Banco de dados");
+                throw new RegraDeNegocioException("Ocorreu um erro ao cadastrar um Cinema, tente de novo mais tarde.");
             }
 
             return objectMapper.convertValue(cinemaCadastrado, CinemaDTO.class);
@@ -58,11 +58,11 @@ public class CinemaService {
     }
 
     public Cinema listarCinemaID(Integer idCinema) throws RegraDeNegocioException {
-        Optional<Cinema> cinemaOptional = null;
+        Optional<Cinema> cinemaOptional;
         try {
             cinemaOptional = cinemaRepository.listarCinemaId(idCinema);
         } catch (BancoDeDadosException e) {
-            throw new RuntimeException("Error! Falha na comunicação com o Banco de dados");
+            throw new RegraDeNegocioException("Ocorreu um erro ao retornar a lista de Cinema por Id, tente de novo mais tarde.");
         }
 
         if (cinemaOptional.isEmpty()) {
@@ -80,11 +80,11 @@ public class CinemaService {
         listarCinemaID(idCinema);
 
         Cinema cinema = objectMapper.convertValue(cinemaCreateDTO, Cinema.class);
-        Cinema cinemaAtualizado = null;
+        Cinema cinemaAtualizado;
         try {
             cinemaAtualizado = cinemaRepository.editar(idCinema, cinema);
         } catch (BancoDeDadosException e) {
-            throw new RuntimeException("Error! Falha na comunicação com o Banco de dados");
+            throw new RegraDeNegocioException("Ocorreu um erro ao atualizar um Cinema, tente de novo mais tarde");
         }
 
         return objectMapper.convertValue(cinemaAtualizado, CinemaDTO.class);
@@ -95,7 +95,7 @@ public class CinemaService {
         try {
             cinemaRepository.remover(idCinema);
         } catch (BancoDeDadosException e) {
-            throw new RuntimeException("Error! Falha na comunicação com o Banco de dados");
+            throw new RegraDeNegocioException("Ocorreu um erro ao deletar um Cinema, tente de novo mais tarde");
         }
     }
 }
