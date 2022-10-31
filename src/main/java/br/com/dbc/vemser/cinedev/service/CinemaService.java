@@ -32,27 +32,21 @@ public class CinemaService {
     }
 
 
-    public CinemaDTO adicionarCinema(CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
-        String cinemaCadastroNOME = cinemaCreateDTO.getNome();
-        Optional<Cinema> cinemaPorNOME;
+    public CinemaDTO adicionarCinema(CinemaCreateDTO cinemaCapturado) throws RegraDeNegocioException {
         try {
-            cinemaPorNOME = cinemaRepository.listarCinemaId(Integer.parseInt(cinemaCadastroNOME));
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Ocorreu um erro ao cadastrar o nome do Cinema, tente de novo mais tarde.");
-        }
+            String cinemaNome = cinemaCapturado.getNome();
+            Optional<Cinema> cinemaPorNome = cinemaRepository.listarCinemaPeloNome(cinemaNome);
 
-        if (cinemaPorNOME.isEmpty()) {
-            Cinema cinema = objectMapper.convertValue(cinemaCreateDTO, Cinema.class);
-            Cinema cinemaCadastrado;
-            try {
-                cinemaCadastrado = cinemaRepository.adicionar(cinema);
-            } catch (BancoDeDadosException e) {
-                throw new RegraDeNegocioException("Ocorreu um erro ao cadastrar um Cinema, tente de novo mais tarde.");
+            if (cinemaPorNome.isEmpty()) {
+                Cinema cinemaTransform = objectMapper.convertValue(cinemaCapturado, Cinema.class);
+                Cinema cinemaSalvo = cinemaRepository.adicionar(cinemaTransform);
+                CinemaDTO cinemaDTO = objectMapper.convertValue(cinemaSalvo, CinemaDTO.class);
+                return cinemaDTO;
+            } else {
+                throw new RegraDeNegocioException("Erro!Nome do Cinema já consta em nossa lista de cadastros!");
             }
-
-            return objectMapper.convertValue(cinemaCadastrado, CinemaDTO.class);
-        } else {
-            throw new RegraDeNegocioException("Cinema já cadastrado com os mesmos dados");
+        } catch (BancoDeDadosException e) {
+            throw new RegraDeNegocioException("Erro de verificação no banco de dados!");
         }
     }
 
