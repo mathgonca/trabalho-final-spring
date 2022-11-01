@@ -2,8 +2,7 @@ package br.com.dbc.vemser.cinedev.service;
 
 import br.com.dbc.vemser.cinedev.dto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.CinemaDTO;
-import br.com.dbc.vemser.cinedev.entity.Cinema;
-import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
+import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.CinemaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,44 +18,30 @@ public class CinemaService {
     private final CinemaRepository cinemaRepository;
     private final ObjectMapper objectMapper;
 
-    public List<CinemaDTO> listarCinema() throws RegraDeNegocioException {
-        List<Cinema> cinemaList;
-        try {
-            cinemaList = cinemaRepository.listar();
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Ocorreu um erro ao retornar a lista de Cinema, tente de novo mais tarde.");
-        }
-        return cinemaList.stream()
-                .map(cinema -> objectMapper.convertValue(cinema, CinemaDTO.class))
+    public List<CinemaDTO> listarCinema() {
+        List<CinemaEntity> cinemaEntityList = cinemaRepository.findAll();
+        return cinemaEntityList.stream()
+                .map(cinemaEntity -> objectMapper.convertValue(cinemaEntity, CinemaDTO.class))
                 .toList();
     }
 
-
     public CinemaDTO adicionarCinema(CinemaCreateDTO cinemaCapturado) throws RegraDeNegocioException {
-        try {
-            String cinemaNome = cinemaCapturado.getNome();
-            Optional<Cinema> cinemaPorNome = cinemaRepository.listarCinemaPeloNome(cinemaNome);
+        String cinemaNome = cinemaCapturado.getNome();
+        Optional<CinemaEntity> cinemaPorNome = cinemaRepository.findByNome(cinemaNome);
 
-            if (cinemaPorNome.isEmpty()) {
-                Cinema cinemaTransform = objectMapper.convertValue(cinemaCapturado, Cinema.class);
-                Cinema cinemaSalvo = cinemaRepository.adicionar(cinemaTransform);
-                CinemaDTO cinemaDTO = objectMapper.convertValue(cinemaSalvo, CinemaDTO.class);
-                return cinemaDTO;
-            } else {
-                throw new RegraDeNegocioException("Erro!Nome do Cinema já consta em nossa lista de cadastros!");
-            }
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro de verificação no banco de dados!");
+        if (cinemaPorNome.isPresent()) {
+            throw new RegraDeNegocioException("Erro! Nome do Cinema já consta em nossa lista de cadastros!");
         }
+
+        CinemaEntity cinemaEntityTransform = objectMapper.convertValue(cinemaCapturado, CinemaEntity.class);
+        CinemaEntity cinemaEntitySalvo = cinemaRepository.save(cinemaEntityTransform);
+        CinemaDTO cinemaDTO = objectMapper.convertValue(cinemaEntitySalvo, CinemaDTO.class);
+
+        return cinemaDTO;
     }
 
-    public Cinema listarCinemaID(Integer idCinema) throws RegraDeNegocioException {
-        Optional<Cinema> cinemaOptional;
-        try {
-            cinemaOptional = cinemaRepository.listarCinemaId(idCinema);
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Ocorreu um erro ao retornar a lista de Cinema por Id, tente de novo mais tarde.");
-        }
+    public CinemaEntity listarCinemaID(Integer idCinema) throws RegraDeNegocioException {
+        Optional<CinemaEntity> cinemaOptional = cinemaRepository.findById(idCinema);
 
         if (cinemaOptional.isEmpty()) {
             throw new RegraDeNegocioException("cinema não cadastrado");
@@ -72,23 +57,16 @@ public class CinemaService {
     public CinemaDTO atualizarCinema(Integer idCinema, CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
         listarCinemaID(idCinema);
 
-        Cinema cinema = objectMapper.convertValue(cinemaCreateDTO, Cinema.class);
-        Cinema cinemaAtualizado;
-        try {
-            cinemaAtualizado = cinemaRepository.editar(idCinema, cinema);
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Ocorreu um erro ao atualizar um Cinema, tente de novo mais tarde");
-        }
+        CinemaEntity cinemaEntity = objectMapper.convertValue(cinemaCreateDTO, CinemaEntity.class);
+        cinemaEntity.setIdCinema(idCinema);
 
-        return objectMapper.convertValue(cinemaAtualizado, CinemaDTO.class);
+        CinemaEntity cinemaEntityAtualizado = cinemaRepository.save(cinemaEntity);
+
+        return objectMapper.convertValue(cinemaEntityAtualizado, CinemaDTO.class);
     }
 
     public void deletarCinema(Integer idCinema) throws RegraDeNegocioException {
-        listarCinemaID(idCinema);
-        try {
-            cinemaRepository.remover(idCinema);
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Ocorreu um erro ao deletar um Cinema, tente de novo mais tarde");
-        }
+        CinemaEntity cinema = listarCinemaID(idCinema);
+        cinemaRepository.delete(cinema);
     }
 }

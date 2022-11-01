@@ -1,6 +1,5 @@
 package br.com.dbc.vemser.cinedev.repository;
 
-import br.com.dbc.vemser.cinedev.entity.Cliente;
 import br.com.dbc.vemser.cinedev.entity.Filme;
 import br.com.dbc.vemser.cinedev.entity.enums.Idioma;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
@@ -8,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

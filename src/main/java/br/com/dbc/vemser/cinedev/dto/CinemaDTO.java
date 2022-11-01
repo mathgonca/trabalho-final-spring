@@ -1,10 +1,14 @@
-
-
 package br.com.dbc.vemser.cinedev.dto;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CinemaDTO extends CinemaCreateDTO {
-    private Integer idCinema;}
+    private Integer idCinema;
+}
