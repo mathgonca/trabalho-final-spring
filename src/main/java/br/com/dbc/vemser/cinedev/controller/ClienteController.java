@@ -25,7 +25,7 @@ public class ClienteController implements OperationControllerCliente {
 
     @Override
     @GetMapping
-    public List<ClienteDTO> list() throws RegraDeNegocioException, BancoDeDadosException {
+    public List<ClienteDTO> list() throws RegraDeNegocioException {
         return clienteService.listarTodosClientes();
     }
 
@@ -44,13 +44,13 @@ public class ClienteController implements OperationControllerCliente {
     @Override
     @PutMapping("/{idCliente}")
     public ResponseEntity<ClienteDTO> update(@PathVariable Integer idCliente,
-                                             @Valid @RequestBody ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException, BancoDeDadosException {
+                                             @Valid @RequestBody ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(clienteService.atualizarCliente(idCliente, clienteCreateDTO), HttpStatus.OK);
     }
 
     @Override
     @DeleteMapping("/{idCliente}")
-    public void delete(@PathVariable Integer idCliente) throws RegraDeNegocioException, BancoDeDadosException {
+    public void delete(@PathVariable Integer idCliente) throws RegraDeNegocioException {
         clienteService.deletarCliente(idCliente);
     }
 }

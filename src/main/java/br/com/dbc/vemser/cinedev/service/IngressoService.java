@@ -4,7 +4,7 @@ import br.com.dbc.vemser.cinedev.dto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.IngressoCompradoDTO;
 import br.com.dbc.vemser.cinedev.dto.IngressoCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.IngressoDTO;
-import br.com.dbc.vemser.cinedev.entity.Cliente;
+import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
 import br.com.dbc.vemser.cinedev.entity.Ingresso;
 import br.com.dbc.vemser.cinedev.entity.enums.Disponibilidade;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
@@ -78,7 +78,7 @@ public class IngressoService {
         try {
             Disponibilidade disponibilidade = findById(idIngresso).getDisponibilidade();
             if (disponibilidade.getDisponibilidade().equals("S")) {
-                Cliente cliente = clienteService.listarClientePeloId(idCliente);
+                ClienteEntity cliente = clienteService.listarClientePeloId(idCliente);
                 ClienteDTO clienteDTO = objectMapper.convertValue(cliente, ClienteDTO.class);
                 emailService.sendEmail(clienteDTO, TipoEmails.ING_COMPRADO);
                 return ingressoRepository.editar(idCliente, idIngresso);
