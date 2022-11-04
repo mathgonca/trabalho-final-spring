@@ -94,7 +94,7 @@ public class ClienteService {
             emailService.sendEmail(clienteDTO, TipoEmails.DELETE);
             clienteRepository.remover(idCliente);
         } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Ocorreu um erro ao deletar o Cliente, tente de nov mais tarde.");
+            throw new RegraDeNegocioException("Ocorreu um erro ao deletar o Cliente, tente de novo mais tarde.");
         }
     }
 }
