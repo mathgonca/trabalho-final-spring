@@ -2,7 +2,7 @@ package br.com.dbc.vemser.cinedev.service;
 
 import br.com.dbc.vemser.cinedev.dto.FilmeCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.FilmeDTO;
-import br.com.dbc.vemser.cinedev.entity.Filme;
+import br.com.dbc.vemser.cinedev.entity.FilmeEntity;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.FilmeRepository;
@@ -22,12 +22,12 @@ public class FilmeService {
     public FilmeDTO adicionarFilme(FilmeCreateDTO filmeCapturado) throws RegraDeNegocioException {
         try {
             String filmeNome = filmeCapturado.getNome();
-            Optional<Filme> filmePorNome = filmeRepository.listarPorNome(filmeNome);
+            Optional<FilmeEntity> filmePorNome = filmeRepository.listarPorNome(filmeNome);
 
             if (filmePorNome.isEmpty()) {
-                    Filme filmeTransform = objectMapper.convertValue(filmeCapturado, Filme.class);
-                    Filme filmeSalvo = filmeRepository.adicionar(filmeTransform);
-                    FilmeDTO filmeDTO = objectMapper.convertValue(filmeSalvo, FilmeDTO.class);
+                    FilmeEntity filmeEntityTransform = objectMapper.convertValue(filmeCapturado, FilmeEntity.class);
+                    FilmeEntity filmeEntitySalvo = filmeRepository.adicionar(filmeEntityTransform);
+                    FilmeDTO filmeDTO = objectMapper.convertValue(filmeEntitySalvo, FilmeDTO.class);
                     return filmeDTO;
             } else {
                 throw new RegraDeNegocioException("Erro!Nome do filme já consta em nossa lista de cadastros!");
@@ -47,11 +47,11 @@ public class FilmeService {
 
         try {
             String filmeNome = filmeCapturado.getNome();
-            Optional<Filme> filmePorNome = filmeRepository.listarPorNome(filmeNome);
+            Optional<FilmeEntity> filmePorNome = filmeRepository.listarPorNome(filmeNome);
             if (filmePorNome.isEmpty()) {
-            Filme filmeTransf = objectMapper.convertValue(filmeCapturado, Filme.class);
-            Filme filmeSalvo = filmeRepository.editar(id, filmeTransf);
-            FilmeDTO filmeDTO = objectMapper.convertValue(filmeSalvo, FilmeDTO.class);
+            FilmeEntity filmeEntityTransf = objectMapper.convertValue(filmeCapturado, FilmeEntity.class);
+            FilmeEntity filmeEntitySalvo = filmeRepository.editar(id, filmeEntityTransf);
+            FilmeDTO filmeDTO = objectMapper.convertValue(filmeEntitySalvo, FilmeDTO.class);
             return filmeDTO;} else {
                 throw new RegraDeNegocioException("Erro!Nome do filme já consta em nossa lista de cadastros!");
             }
@@ -62,9 +62,9 @@ public class FilmeService {
     public List<FilmeDTO> listarTodosFilmes() throws RegraDeNegocioException {
 
         try {
-            List<Filme> filmeList = filmeRepository.listar();
-            return filmeList.stream()
-                    .map(filme -> objectMapper.convertValue(filme, FilmeDTO.class))
+            List<FilmeEntity> filmeEntityList = filmeRepository.listar();
+            return filmeEntityList.stream()
+                    .map(filmeEntity -> objectMapper.convertValue(filmeEntity, FilmeDTO.class))
                     .toList();
         } catch (BancoDeDadosException e) {
             throw new RegraDeNegocioException("Erro na comunicação com o Banco de Dados!Não foi possivel realizar listagem.");
@@ -73,8 +73,8 @@ public class FilmeService {
     public FilmeDTO findById(Integer id) throws RegraDeNegocioException {
 
         try {
-            Filme filmeEncontrado = filmeRepository.findById(id);
-            FilmeDTO filmeDTO = objectMapper.convertValue(filmeEncontrado, FilmeDTO.class);
+            FilmeEntity filmeEntityEncontrado = filmeRepository.findById(id);
+            FilmeDTO filmeDTO = objectMapper.convertValue(filmeEntityEncontrado, FilmeDTO.class);
             return filmeDTO;
         } catch (BancoDeDadosException e) {
             throw new RegraDeNegocioException("Erro na comunicação com o Banco de Dados!Não foi possivel realizar listagem.");

@@ -13,6 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity(name = "cinema")
 public class CinemaEntity {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CINEMA_SEQ")
     @SequenceGenerator(name = "CINEMA_SEQ", sequenceName = "seq_id_cinema", allocationSize = 1)

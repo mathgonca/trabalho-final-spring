@@ -45,14 +45,14 @@ public interface OperationControllerIngresso {
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     ResponseEntity<IngressoDTO> createIngresso(@Valid @RequestBody IngressoCreateDTO ingresso) throws RegraDeNegocioException;
 
-    @Operation(summary = "Realiza a compra de Ingressos", description = " Realiza a compra do Ingresso, considerando a IdCliente que ira realizar a compra, e o IdIngresso que será comprado")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Atualização de Ingresso realizada com sucesso!"),
+    @Operation(summary = "Realiza a compra de Ingressos", description = " Realiza a compra do IngressoEntity, considerando a IdCliente que ira realizar a compra, e o IdIngresso que será comprado")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Atualização de IngressoEntity realizada com sucesso!"),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     ResponseEntity<IngressoCompradoDTO>  comprarIngresso(@PathVariable("idCliente") Integer idCliente,@PathVariable("idIngresso") Integer idIngresso) throws RegraDeNegocioException;
 
-    @Operation(summary = "Remoção de Ingressos por ID. ", description = "Remoção do Ingresso  partir do 'id'!")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remoção do Ingresso realizada com sucesso!"),
+    @Operation(summary = "Remoção de Ingressos por ID. ", description = "Remoção do IngressoEntity  partir do 'id'!")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remoção do IngressoEntity realizada com sucesso!"),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     ResponseEntity<Void> removeIngresso(@PathVariable("idIngresso") Integer id) throws RegraDeNegocioException;

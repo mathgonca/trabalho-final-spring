@@ -5,7 +5,7 @@ import br.com.dbc.vemser.cinedev.dto.IngressoCompradoDTO;
 import br.com.dbc.vemser.cinedev.dto.IngressoCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.IngressoDTO;
 import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
-import br.com.dbc.vemser.cinedev.entity.Ingresso;
+import br.com.dbc.vemser.cinedev.entity.IngressoEntity;
 import br.com.dbc.vemser.cinedev.entity.enums.Disponibilidade;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
@@ -30,9 +30,9 @@ public class IngressoService {
 
     public List<IngressoDTO> listarIngressos() throws RegraDeNegocioException {
         try {
-            List<Ingresso> ingressoslist = ingressoRepository.listarIngressos();
+            List<IngressoEntity> ingressoslist = ingressoRepository.listarIngressos();
             return ingressoslist.stream()
-                    .map(ingresso -> objectMapper.convertValue(ingresso, IngressoDTO.class))
+                    .map(ingressoEntity -> objectMapper.convertValue(ingressoEntity, IngressoDTO.class))
                     .toList();
         } catch (BancoDeDadosException e) {
             throw new RegraDeNegocioException("Erro de comunicação com o Banco de Dados!" +
@@ -41,9 +41,9 @@ public class IngressoService {
     }
     public List<IngressoDTO> listarIngressosComprados() throws RegraDeNegocioException {
         try {
-            List<Ingresso> ingressoslist = ingressoRepository.listarIngressosComprados();
+            List<IngressoEntity> ingressoslist = ingressoRepository.listarIngressosComprados();
             return ingressoslist.stream()
-                    .map(ingresso -> objectMapper.convertValue(ingresso, IngressoDTO.class))
+                    .map(ingressoEntity -> objectMapper.convertValue(ingressoEntity, IngressoDTO.class))
                     .toList();
         } catch (BancoDeDadosException e) {
             throw new RegraDeNegocioException("Erro de comunicação com o Banco de Dados!" +
@@ -63,9 +63,9 @@ public class IngressoService {
     public IngressoDTO createIngresso(IngressoCreateDTO ingressoCreateDTO) throws RegraDeNegocioException {
 
         try {
-            Ingresso ingresso = objectMapper.convertValue(ingressoCreateDTO, Ingresso.class);
-            Ingresso ingressoSalvo = ingressoRepository.adicionar(ingresso);
-            IngressoDTO ingressoDTO = objectMapper.convertValue(ingressoSalvo, IngressoDTO.class);
+            IngressoEntity ingressoEntity = objectMapper.convertValue(ingressoCreateDTO, IngressoEntity.class);
+            IngressoEntity ingressoEntitySalvo = ingressoRepository.adicionar(ingressoEntity);
+            IngressoDTO ingressoDTO = objectMapper.convertValue(ingressoEntitySalvo, IngressoDTO.class);
             return ingressoDTO;
         } catch (BancoDeDadosException e) {
             throw new RegraDeNegocioException("Erro de comunicação com o Banco de Dados!" +

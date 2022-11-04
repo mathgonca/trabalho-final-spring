@@ -66,7 +66,7 @@ VALUES (SEQ_ID_FILME.nextval, 'Morte, Morte, Morte', 'DUBLADO', 16, 95);
 INSERT INTO FILME 
 VALUES (SEQ_ID_FILME.nextval, 'As Aventuras de Tadeo e a Tábua de Esmeralda', 'LEGENDADO', 0, 90);
 INSERT INTO FILME 
-VALUES (SEQ_ID_FILME.nextval, 'Os Suburbanos - O Filme', 'DUBLADO', 14, 85);
+VALUES (SEQ_ID_FILME.nextval, 'Os Suburbanos - O FilmeEntity', 'DUBLADO', 14, 85);
 INSERT INTO FILME 
 VALUES (SEQ_ID_FILME.nextval, 'Órfã 2: A Origem', 'LEGENDADO', 16, 98);
 INSERT INTO FILME 
@@ -74,7 +74,7 @@ VALUES (SEQ_ID_FILME.nextval, 'Minions 2: A Origem de Gru', 'DUBLADO', 0, 94);
 INSERT INTO FILME 
 VALUES (SEQ_ID_FILME.nextval, 'A Liga dos Superpets', 'LEGENDADO', 0, 106);
 INSERT INTO FILME 
-VALUES (SEQ_ID_FILME.nextval, 'Ingresso Para o Paraíso', 'DUBLADO', 12, 102);
+VALUES (SEQ_ID_FILME.nextval, 'IngressoEntity Para o Paraíso', 'DUBLADO', 12, 102);
 INSERT INTO FILME 
 VALUES (SEQ_ID_FILME.nextval, 'A Mulher Rei', 'LEGENDADO', 14, 134);
 INSERT INTO FILME 
