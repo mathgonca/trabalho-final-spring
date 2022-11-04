@@ -19,6 +19,7 @@ public class CinemaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CINEMA_SEQ")
     @SequenceGenerator(name = "CINEMA_SEQ", sequenceName = "seq_id_cinema", allocationSize = 1)
+    @Column(name = "id_cinema")
     private Integer idCinema;
 
     @Column(name = "nome")
@@ -32,5 +33,5 @@ public class CinemaEntity {
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cinema")
-    private Set<IngressoEntity> ingressos;
+    private Set<IngressoEntity> ingresso;
 }

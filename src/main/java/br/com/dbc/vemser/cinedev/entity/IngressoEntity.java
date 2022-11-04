@@ -22,16 +22,15 @@ public class IngressoEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_INGRESSO")
     @SequenceGenerator(name = "SEQ_INGRESSO", sequenceName = "seq_id_ingresso", allocationSize = 1)
     @Column(name = "id_ingresso")
-    private int idIngresso;
+    private Integer idIngresso;
 
-    @Column(name = "id_filme")
-    private int idFilme;
+    @Column(name = "id_filme", insertable = false, updatable = false)
+    private Integer idFilme;
 
-    @Column(name = "id_cinema")
-    private int idCinema;
-
-    @Column(name = "id_cliente")
-    private int idCliente;
+    @Column(name = "id_cinema", insertable = false, updatable = false)
+    private Integer idCinema;
+    @Column(name = "id_cliente", insertable = false, updatable = false)
+    private Integer idCliente;
 
     @Column(name = "valor")
     private double preco;

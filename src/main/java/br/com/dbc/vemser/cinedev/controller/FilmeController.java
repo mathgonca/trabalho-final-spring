@@ -32,7 +32,7 @@ public class FilmeController implements OperationControllerFilme {
     @Override
     @GetMapping("/{idFilme}")
     public FilmeDTO listarByIdFilme(@PathVariable("idFilme") Integer idFilme) throws RegraDeNegocioException {
-        return filmeService.findById(idFilme);
+        return filmeService.listarDTOPeloId(idFilme);
     }
 
     @Override

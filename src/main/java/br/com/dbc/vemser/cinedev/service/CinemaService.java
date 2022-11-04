@@ -59,7 +59,7 @@ public class CinemaService {
         CinemaEntity cinemaEntity = objectMapper.convertValue(cinemaCreateDTO, CinemaEntity.class);
 //        listarCinemaID(idCinema);
 
-        cinemaPego.setIngressos(cinemaEntity.getIngressos());
+        cinemaPego.setIngresso(cinemaEntity.getIngresso());
         cinemaPego.setNome(cinemaCreateDTO.getNome());
         cinemaPego.setCidade(cinemaCreateDTO.getCidade());
         cinemaPego.setEstado(cinemaCreateDTO.getEstado());

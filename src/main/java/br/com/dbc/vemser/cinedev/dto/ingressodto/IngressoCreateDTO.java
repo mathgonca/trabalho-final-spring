@@ -20,7 +20,7 @@ public class IngressoCreateDTO {
     @NotNull
     @NotEmpty
     @Schema(description = "id do cliente ", example = "1")
-    private int idCliente;
+    private Integer idCliente;
 
     @NotNull
     @NotEmpty

@@ -19,6 +19,7 @@ public class ClienteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLIENTE_SEQ")
     @SequenceGenerator(name = "CLIENTE_SEQ", sequenceName = "seq_id_cliente", allocationSize = 1)
+    @Column(name = "id_cliente")
     private Integer idCliente;
 
     @Column(name = "primeiro_nome")
