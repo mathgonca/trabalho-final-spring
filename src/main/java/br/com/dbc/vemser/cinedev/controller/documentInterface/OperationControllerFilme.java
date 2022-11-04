@@ -29,21 +29,21 @@ public interface OperationControllerFilme {
     FilmeDTO listarByIdFilme(@PathVariable("idFilme") Integer idFilme) throws RegraDeNegocioException;
 
 
-    @Operation(summary = "Realiza o Cadastro do Filme.", description = "Realiza o dadastramento de dados do Filme")
+    @Operation(summary = "Realiza o Cadastro do FilmeEntity.", description = "Realiza o dadastramento de dados do FilmeEntity")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Cadastro realizado com Sucesso!"),
             @ApiResponse(responseCode = "403", description = "Erro na inserção de dados!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
      ResponseEntity<FilmeDTO> cadastrarFilme(@Valid @RequestBody FilmeCreateDTO filmeCreateDTO) throws RegraDeNegocioException,
             RegraDeNegocioException, BancoDeDadosException;
 
-    @Operation(summary = "Realiza a atualização de dados do Filme ", description = "Realiza a alteração de dados dos Filmes a partir da referencia de pesquisa 'ID'!")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = " A atualização do Filme foi realizada com sucesso!"),
+    @Operation(summary = "Realiza a atualização de dados do FilmeEntity ", description = "Realiza a alteração de dados dos Filmes a partir da referencia de pesquisa 'ID'!")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = " A atualização do FilmeEntity foi realizada com sucesso!"),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     ResponseEntity<FilmeDTO> update(@PathVariable("idPessoa") Integer id,
                                            @Valid @RequestBody FilmeCreateDTO filmeCreateDTO) throws RegraDeNegocioException, BancoDeDadosException;
 
-    @Operation(summary = "Realiza a remoção do Filme", description = "Realiza a remoção de filmes a partir do 'ID'!")
+    @Operation(summary = "Realiza a remoção do FilmeEntity", description = "Realiza a remoção de filmes a partir do 'ID'!")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remoção de dados realizada!"),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})

@@ -1,7 +1,5 @@
 package br.com.dbc.vemser.cinedev.repository;
 
-import br.com.dbc.vemser.cinedev.entity.Filme;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;

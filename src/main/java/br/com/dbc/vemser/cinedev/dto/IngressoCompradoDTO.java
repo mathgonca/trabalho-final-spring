@@ -19,7 +19,7 @@ public class IngressoCompradoDTO {
     private String nomeCliente;
     @NotNull
     @NotEmpty
-    @Schema(description = "Filme escolhido", example = "Adão Negro")
+    @Schema(description = "FilmeEntity escolhido", example = "Adão Negro")
     private String nomeFilme;
     @NotNull
     @NotEmpty
@@ -32,10 +32,10 @@ public class IngressoCompradoDTO {
 
     @Override
     public String toString() {
-        return "Informações do Ingresso : " +
-                "ID do Ingresso=" + idIngressoComprado + '\'' +
+        return "Informações do IngressoEntity : " +
+                "ID do IngressoEntity=" + idIngressoComprado + '\'' +
                 ", Cliente = " + nomeCliente + '\'' +
-                ", Filme ='" + nomeFilme + '\'' +
+                ", FilmeEntity ='" + nomeFilme + '\'' +
                 ", Cinema ='" + nomeCinema + '\'' +
                 ", Data e Horario =" + DataHora +
                 '}';

@@ -8,13 +8,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 import java.util.List;
 
 public interface OperationControllerCliente {
-
 
     @Operation(summary = "Realiza Listagem dos Clientes Cadastrados", description = "Realiza a Listagem dos dados referente a busca por Clientes.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Listagem realizada com sucesso!"),
@@ -40,11 +40,11 @@ public interface OperationControllerCliente {
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     ResponseEntity<ClienteDTO> update(@PathVariable("idPessoa") Integer id,
-                                             @Valid @RequestBody ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException, BancoDeDadosException;
+                                      @Valid @RequestBody ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException, BancoDeDadosException;
 
     @Operation(summary = "Realiza a remoção de dados cliente", description = "Realiza a remoção dos Cliente a partir do 'ID'!")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remoção do Cliente realizada com sucesso!"),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
-   void delete(@PathVariable("idCliente") Integer id) throws RegraDeNegocioException, BancoDeDadosException;
+    void delete(@PathVariable("idCliente") Integer id) throws RegraDeNegocioException, BancoDeDadosException;
 }

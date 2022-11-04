@@ -3,7 +3,6 @@ package br.com.dbc.vemser.cinedev.controller;
 import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerCinema;
 import br.com.dbc.vemser.cinedev.dto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.CinemaDTO;
-import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.CinemaService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,7 @@ public class CinemaController implements OperationControllerCinema {
 
     @Override
     @GetMapping("/{idCinema}")
-    public CinemaDTO listaPorId(@PathVariable("idCinema")Integer id) throws RegraDeNegocioException{
+    public CinemaDTO listaPorId(@PathVariable("idCinema") Integer id) throws RegraDeNegocioException {
         return cinemaService.listarCinemaPorId(id);
     }
 
@@ -43,8 +42,9 @@ public class CinemaController implements OperationControllerCinema {
     }
 
     @Override
-    public ResponseEntity<CinemaDTO> update(Integer id, CinemaCreateDTO cinemaCreateDTO) throws  RegraDeNegocioException {
-        return new ResponseEntity<>(cinemaService.atualizarCinema(id, cinemaCreateDTO), HttpStatus.OK);
+    @PutMapping("/{idCinema}")
+    public ResponseEntity<CinemaDTO> update(@PathVariable Integer idCinema, @Valid @RequestBody CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
+        return new ResponseEntity<>(cinemaService.atualizarCinema(idCinema, cinemaCreateDTO), HttpStatus.OK);
     }
 
     @Override

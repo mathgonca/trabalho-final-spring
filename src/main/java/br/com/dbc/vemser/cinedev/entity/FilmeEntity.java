@@ -1,0 +1,37 @@
+package br.com.dbc.vemser.cinedev.entity;
+
+import br.com.dbc.vemser.cinedev.entity.enums.Idioma;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity(name = "Filme")
+public class FilmeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_FILME")
+    @SequenceGenerator(name = "SEQ_FILME", sequenceName = "seq_id_filme", allocationSize = 1)
+    @Column(name = "id_filme")
+    private Integer idFilme;
+
+    @Column(name = "nome")
+    private String nome;
+
+    @Column(name = "idioma")
+    private Idioma idioma;
+
+    @Column(name = "classificacao")
+    private int classificacaoEtaria;
+
+    @Column(name = "duracao")
+    private int duracao;
+
+}
