@@ -1,7 +1,7 @@
 package br.com.dbc.vemser.cinedev.service;
 
-import br.com.dbc.vemser.cinedev.dto.ClienteCreateDTO;
-import br.com.dbc.vemser.cinedev.dto.ClienteDTO;
+import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
+import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.ClienteRepository;
@@ -79,7 +79,11 @@ public class ClienteService {
 
         emailService.sendEmail(clienteDTO, TipoEmails.DELETE);
         clienteRepository.delete(clienteEntity);
+    }
 
+    ClienteEntity findById(Integer id) throws RegraDeNegocioException {
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Cliente não encontrado"));
     }
 
 }

@@ -1,13 +1,12 @@
 package br.com.dbc.vemser.cinedev.controller.documentInterface;
 
-import br.com.dbc.vemser.cinedev.dto.FilmeCreateDTO;
-import br.com.dbc.vemser.cinedev.dto.FilmeDTO;
+import br.com.dbc.vemser.cinedev.dto.filmedto.FilmeCreateDTO;
+import br.com.dbc.vemser.cinedev.dto.filmedto.FilmeDTO;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

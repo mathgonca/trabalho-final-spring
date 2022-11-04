@@ -1,4 +1,4 @@
-package br.com.dbc.vemser.cinedev.dto;
+package br.com.dbc.vemser.cinedev.dto.ingressodto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

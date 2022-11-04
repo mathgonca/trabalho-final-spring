@@ -1,7 +1,7 @@
 package br.com.dbc.vemser.cinedev.service;
 
-import br.com.dbc.vemser.cinedev.dto.FilmeCreateDTO;
-import br.com.dbc.vemser.cinedev.dto.FilmeDTO;
+import br.com.dbc.vemser.cinedev.dto.filmedto.FilmeCreateDTO;
+import br.com.dbc.vemser.cinedev.dto.filmedto.FilmeDTO;
 import br.com.dbc.vemser.cinedev.entity.FilmeEntity;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,65 +19,42 @@ public class FilmeService {
     private final ObjectMapper objectMapper;
 
     public FilmeDTO adicionarFilme(FilmeCreateDTO filmeCapturado) throws RegraDeNegocioException {
-        try {
-            String filmeNome = filmeCapturado.getNome();
-            Optional<FilmeEntity> filmePorNome = filmeRepository.listarPorNome(filmeNome);
+        String filmeNome = filmeCapturado.getNome();
+        FilmeEntity filmePorNome = filmeRepository.findByNome(filmeNome)
+                .orElseThrow(() -> new RegraDeNegocioException("Erro! Nome do filme já consta em nossa lista de cadastros!"));
 
-            if (filmePorNome.isEmpty()) {
-                    FilmeEntity filmeEntityTransform = objectMapper.convertValue(filmeCapturado, FilmeEntity.class);
-                    FilmeEntity filmeEntitySalvo = filmeRepository.adicionar(filmeEntityTransform);
-                    FilmeDTO filmeDTO = objectMapper.convertValue(filmeEntitySalvo, FilmeDTO.class);
-                    return filmeDTO;
-            } else {
-                throw new RegraDeNegocioException("Erro!Nome do filme já consta em nossa lista de cadastros!");
-            }
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro de verificação no banco de dados!");
-        }
+        FilmeEntity filmeEntityTransform = objectMapper.convertValue(filmeCapturado, FilmeEntity.class);
+        FilmeEntity filmeEntitySalvo = filmeRepository.save(filmeEntityTransform);
+        FilmeDTO filmeDTO = objectMapper.convertValue(filmeEntitySalvo, FilmeDTO.class);
+        return filmeDTO;
     }
+
     public void removerFilme(Integer id) throws RegraDeNegocioException {
-        try {
-             filmeRepository.remover(id);
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro! Não foi possível realizar a remoção de dados");
-        }
+        FilmeEntity filme = listarPeloId(id);
+        filmeRepository.delete(filme);
     }
+
     public FilmeDTO editarFilme(Integer id, FilmeCreateDTO filmeCapturado) throws RegraDeNegocioException {
+        FilmeEntity filme = listarPeloId(id);
 
-        try {
-            String filmeNome = filmeCapturado.getNome();
-            Optional<FilmeEntity> filmePorNome = filmeRepository.listarPorNome(filmeNome);
-            if (filmePorNome.isEmpty()) {
-            FilmeEntity filmeEntityTransf = objectMapper.convertValue(filmeCapturado, FilmeEntity.class);
-            FilmeEntity filmeEntitySalvo = filmeRepository.editar(id, filmeEntityTransf);
-            FilmeDTO filmeDTO = objectMapper.convertValue(filmeEntitySalvo, FilmeDTO.class);
-            return filmeDTO;} else {
-                throw new RegraDeNegocioException("Erro!Nome do filme já consta em nossa lista de cadastros!");
-            }
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro!Não foi possivel realizar a alteração de dados!");
-        }
+        FilmeEntity filmeEntityTransf = objectMapper.convertValue(filmeCapturado, FilmeEntity.class);
+        FilmeEntity filmeEntitySalvo = filmeRepository.save(filmeEntityTransf);
+        FilmeDTO filmeDTO = objectMapper.convertValue(filmeEntitySalvo, FilmeDTO.class);
+        return filmeDTO;
     }
+
     public List<FilmeDTO> listarTodosFilmes() throws RegraDeNegocioException {
-
-        try {
-            List<FilmeEntity> filmeEntityList = filmeRepository.listar();
-            return filmeEntityList.stream()
-                    .map(filmeEntity -> objectMapper.convertValue(filmeEntity, FilmeDTO.class))
-                    .toList();
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro na comunicação com o Banco de Dados!Não foi possivel realizar listagem.");
-        }
+        return filmeRepository.findAll().stream()
+                .map(filmeEntity -> objectMapper.convertValue(filmeEntity, FilmeDTO.class))
+                .toList();
     }
-    public FilmeDTO findById(Integer id) throws RegraDeNegocioException {
 
-        try {
-            FilmeEntity filmeEntityEncontrado = filmeRepository.findById(id);
-            FilmeDTO filmeDTO = objectMapper.convertValue(filmeEntityEncontrado, FilmeDTO.class);
-            return filmeDTO;
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro na comunicação com o Banco de Dados!Não foi possivel realizar listagem.");
-        }
+    public FilmeEntity listarPeloId(Integer idFilme) throws RegraDeNegocioException {
+        return filmeRepository.findById(idFilme)
+                .orElseThrow(() -> new RegraDeNegocioException("Filme não encontrado com Id procurado."));
+    }
 
+    public FilmeDTO listarDTOPeloId(Integer id) throws RegraDeNegocioException {
+        return objectMapper.convertValue(listarPeloId(id), FilmeDTO.class);
     }
 }

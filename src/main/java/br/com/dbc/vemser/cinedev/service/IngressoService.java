@@ -1,13 +1,12 @@
 package br.com.dbc.vemser.cinedev.service;
 
-import br.com.dbc.vemser.cinedev.dto.ClienteDTO;
-import br.com.dbc.vemser.cinedev.dto.IngressoCompradoDTO;
-import br.com.dbc.vemser.cinedev.dto.IngressoCreateDTO;
-import br.com.dbc.vemser.cinedev.dto.IngressoDTO;
+import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
+import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCompradoDTO;
+import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCreateDTO;
+import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoDTO;
 import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
 import br.com.dbc.vemser.cinedev.entity.IngressoEntity;
 import br.com.dbc.vemser.cinedev.entity.enums.Disponibilidade;
-import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.IngressoRepository;
 import br.com.dbc.vemser.cinedev.service.emails.EmailService;
@@ -29,82 +28,55 @@ public class IngressoService {
 
 
     public List<IngressoDTO> listarIngressos() throws RegraDeNegocioException {
-        try {
-            List<IngressoEntity> ingressoslist = ingressoRepository.listarIngressos();
-            return ingressoslist.stream()
-                    .map(ingressoEntity -> objectMapper.convertValue(ingressoEntity, IngressoDTO.class))
-                    .toList();
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro de comunicação com o Banco de Dados!" +
-                    "Não foi possivel obter a lista requisitada.");
-        }
+        List<IngressoEntity> ingressoslist = ingressoRepository.findAll();
+        return ingressoslist.stream()
+                .map(ingressoEntity -> objectMapper.convertValue(ingressoEntity, IngressoDTO.class))
+                .toList();
     }
     public List<IngressoDTO> listarIngressosComprados() throws RegraDeNegocioException {
-        try {
-            List<IngressoEntity> ingressoslist = ingressoRepository.listarIngressosComprados();
-            return ingressoslist.stream()
-                    .map(ingressoEntity -> objectMapper.convertValue(ingressoEntity, IngressoDTO.class))
-                    .toList();
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro de comunicação com o Banco de Dados!" +
-                    "Não foi possivel obter a lista requisitada.");
-        }
+        List<IngressoEntity> ingressoslist = ingressoRepository.findIngressoComprados();
+        return ingressoslist.stream()
+                .map(ingressoEntity -> objectMapper.convertValue(ingressoEntity, IngressoDTO.class))
+                .toList();
     }
 
     public List<IngressoCompradoDTO> listarIngressosCompradosPorCliente(Integer id) throws RegraDeNegocioException {
-        try {
-            return ingressoRepository.listarIngressoCompradoPorCliente(id);
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro de comunicação com o Banco de Dados!" +
-                    "Verifique se a inserção ID está correta.");
-        }
+        return ingressoRepository.findIngressoCompradosPorCliente(id)
+                .stream()
+                .map(ingressoEntity -> objectMapper.convertValue(ingressoEntity, IngressoCompradoDTO.class))
+                .toList();
     }
 
     public IngressoDTO createIngresso(IngressoCreateDTO ingressoCreateDTO) throws RegraDeNegocioException {
 
-        try {
-            IngressoEntity ingressoEntity = objectMapper.convertValue(ingressoCreateDTO, IngressoEntity.class);
-            IngressoEntity ingressoEntitySalvo = ingressoRepository.adicionar(ingressoEntity);
-            IngressoDTO ingressoDTO = objectMapper.convertValue(ingressoEntitySalvo, IngressoDTO.class);
-            return ingressoDTO;
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro de comunicação com o Banco de Dados!" +
-                    "Não foi possível realizar a inserção desse novo ingresso.");
-        }
+        IngressoEntity ingressoEntity = objectMapper.convertValue(ingressoCreateDTO, IngressoEntity.class);
+        IngressoEntity ingressoEntitySalvo = ingressoRepository.save(ingressoEntity);
+        IngressoDTO ingressoDTO = objectMapper.convertValue(ingressoEntitySalvo, IngressoDTO.class);
+        return ingressoDTO;
     }
 
     public IngressoCompradoDTO comprarIngresso(Integer idCliente, Integer idIngresso) throws RegraDeNegocioException {
+        IngressoEntity ingressoRecuperado = objectMapper.convertValue(findById(idIngresso), IngressoEntity.class);
+        ClienteEntity clienteRecuperado = clienteService.listarClientePeloId(idCliente);
 
-        try {
-            Disponibilidade disponibilidade = findById(idIngresso).getDisponibilidade();
-            if (disponibilidade.getDisponibilidade().equals("S")) {
-                ClienteEntity cliente = clienteService.listarClientePeloId(idCliente);
-                ClienteDTO clienteDTO = objectMapper.convertValue(cliente, ClienteDTO.class);
-                emailService.sendEmail(clienteDTO, TipoEmails.ING_COMPRADO);
-                return ingressoRepository.editar(idCliente, idIngresso);
-            } else {
-                throw new RegraDeNegocioException("Erro!Este ingresso não está disponível");
-            }
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro de comunicação com o Banco de Dados");
-        }
+        ingressoRecuperado.setIdCliente(clienteRecuperado.getIdCliente());
+        ingressoRecuperado.setDisponibilidade(Disponibilidade.N);
+        ingressoRecuperado.setPreco(30.00);
+        ingressoRecuperado = ingressoRepository.save(ingressoRecuperado);
+
+        IngressoCompradoDTO ingressoCompradoDTO = objectMapper.convertValue(ingressoRecuperado, IngressoCompradoDTO.class);
+        ClienteDTO clienteDTO = objectMapper.convertValue(clienteRecuperado, ClienteDTO.class);
+
+        emailService.sendEmail(clienteDTO,TipoEmails.ING_COMPRADO);
+        return ingressoCompradoDTO;
     }
 
     public IngressoDTO findById(Integer id) throws RegraDeNegocioException {
-        try {
-            IngressoDTO ingressoDTO = objectMapper.convertValue(ingressoRepository.listarIngressoPeloId(id), IngressoDTO.class);
-            return ingressoDTO;
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro de comunicação com o Banco de Dados!" +
-                    "O IdIngresso informado não pode ser encontrado!");
-        }
+        IngressoDTO ingressoDTO = objectMapper.convertValue(ingressoRepository.findById(id), IngressoDTO.class);
+        return ingressoDTO;
     }
 
     public void removeIngresso(Integer id) throws RegraDeNegocioException {
-        try {
-            ingressoRepository.remover(id);
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro!Não foi possivel realizar essa remoção de dados!");
-        }
+        ingressoRepository.deleteById(id);
     }
 }

@@ -1,9 +1,9 @@
 package br.com.dbc.vemser.cinedev.controller;
 
 import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerIngresso;
-import br.com.dbc.vemser.cinedev.dto.IngressoCompradoDTO;
-import br.com.dbc.vemser.cinedev.dto.IngressoCreateDTO;
-import br.com.dbc.vemser.cinedev.dto.IngressoDTO;
+import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCompradoDTO;
+import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCreateDTO;
+import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoDTO;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.IngressoService;
 import lombok.RequiredArgsConstructor;

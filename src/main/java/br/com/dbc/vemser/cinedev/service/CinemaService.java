@@ -1,7 +1,7 @@
 package br.com.dbc.vemser.cinedev.service;
 
-import br.com.dbc.vemser.cinedev.dto.CinemaCreateDTO;
-import br.com.dbc.vemser.cinedev.dto.CinemaDTO;
+import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
+import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.CinemaRepository;
@@ -55,18 +55,36 @@ public class CinemaService {
     }
 
     public CinemaDTO atualizarCinema(Integer idCinema, CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
-        listarCinemaID(idCinema);
-
+        CinemaEntity cinemaPego = findById(idCinema);
         CinemaEntity cinemaEntity = objectMapper.convertValue(cinemaCreateDTO, CinemaEntity.class);
-        cinemaEntity.setIdCinema(idCinema);
+//        listarCinemaID(idCinema);
 
-        CinemaEntity cinemaEntityAtualizado = cinemaRepository.save(cinemaEntity);
+        cinemaPego.setIngressos(cinemaEntity.getIngressos());
+        cinemaPego.setNome(cinemaCreateDTO.getNome());
+        cinemaPego.setCidade(cinemaCreateDTO.getCidade());
+        cinemaPego.setEstado(cinemaCreateDTO.getEstado());
+//        cinemaEntityRecuperado.setIngressos(cinemaCreateDTO.getIngressos());
 
-        return objectMapper.convertValue(cinemaEntityAtualizado, CinemaDTO.class);
+        cinemaRepository.save(cinemaPego);
+
+        CinemaDTO cinemaDTO = objectMapper.convertValue(cinemaPego, CinemaDTO.class);
+//        CinemaEntity cinemaEntityAtualizado = cinemaRepository.save(cinemaEntity);
+
+//        return objectMapper.convertValue(cinemaEntityAtualizado, CinemaDTO.class);
+        return cinemaDTO;
     }
 
     public void deletarCinema(Integer idCinema) throws RegraDeNegocioException {
-        CinemaEntity cinema = listarCinemaID(idCinema);
+//        CinemaEntity cinema = listarCinemaID(idCinema);
+        CinemaEntity cinema = null;
+        cinema = findById(idCinema);
         cinemaRepository.delete(cinema);
+    }
+
+    public CinemaEntity findById(Integer id) throws RegraDeNegocioException {
+        CinemaEntity cinemaEntityRecuperado = null;
+        cinemaEntityRecuperado = cinemaRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Cinema não encontrado!"));
+        return cinemaEntityRecuperado;
     }
 }

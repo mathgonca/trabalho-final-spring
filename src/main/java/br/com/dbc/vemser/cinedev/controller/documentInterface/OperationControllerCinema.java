@@ -1,7 +1,7 @@
 package br.com.dbc.vemser.cinedev.controller.documentInterface;
 
-import br.com.dbc.vemser.cinedev.dto.CinemaCreateDTO;
-import br.com.dbc.vemser.cinedev.dto.CinemaDTO;
+import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
+import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;

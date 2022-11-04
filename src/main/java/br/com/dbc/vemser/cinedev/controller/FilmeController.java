@@ -2,8 +2,8 @@ package br.com.dbc.vemser.cinedev.controller;
 
 
 import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerFilme;
-import br.com.dbc.vemser.cinedev.dto.FilmeCreateDTO;
-import br.com.dbc.vemser.cinedev.dto.FilmeDTO;
+import br.com.dbc.vemser.cinedev.dto.filmedto.FilmeCreateDTO;
+import br.com.dbc.vemser.cinedev.dto.filmedto.FilmeDTO;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.FilmeService;
 import lombok.RequiredArgsConstructor;

@@ -1,12 +1,14 @@
 package br.com.dbc.vemser.cinedev.entity;
 
 import br.com.dbc.vemser.cinedev.entity.enums.Idioma;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 @Getter
@@ -33,5 +35,10 @@ public class FilmeEntity {
 
     @Column(name = "duracao")
     private int duracao;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "filme")
+    private Set<IngressoEntity> ingresso;
+
 
 }

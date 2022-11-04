@@ -1,4 +1,4 @@
-package br.com.dbc.vemser.cinedev.dto;
+package br.com.dbc.vemser.cinedev.dto.clientedto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -17,6 +17,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClienteCreateDTO {
+
     @NotNull
     @NotEmpty
     @Size(min = 2, max = 25)

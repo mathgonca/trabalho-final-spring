@@ -1,4 +1,4 @@
-package br.com.dbc.vemser.cinedev.dto;
+package br.com.dbc.vemser.cinedev.dto.filmedto;
 
 import br.com.dbc.vemser.cinedev.entity.enums.Idioma;
 import io.swagger.v3.oas.annotations.media.Schema;

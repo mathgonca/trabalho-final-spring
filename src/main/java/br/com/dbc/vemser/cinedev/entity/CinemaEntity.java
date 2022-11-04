@@ -1,11 +1,13 @@
 package br.com.dbc.vemser.cinedev.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -27,4 +29,8 @@ public class CinemaEntity {
 
     @Column(name = "cidade")
     private String cidade;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cinema")
+    private Set<IngressoEntity> ingressos;
 }
