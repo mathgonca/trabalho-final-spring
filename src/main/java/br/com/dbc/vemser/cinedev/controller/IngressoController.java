@@ -32,7 +32,8 @@ public class IngressoController implements OperationControllerIngresso {
     @Override
     @GetMapping("/{idIngresso}")
     public IngressoDTO listarIngressosPorId(@PathVariable("idIngresso") Integer id) throws RegraDeNegocioException {
-        return ingressoService.findById(id);
+//        return ingressoService.findById(id);
+        return null;
     }
 
     @Override
@@ -55,8 +56,8 @@ public class IngressoController implements OperationControllerIngresso {
 
     @Override
     @PutMapping("/comprar/{idCliente}/ingresso/{idIngresso}")
-    public ResponseEntity<IngressoCompradoDTO> comprarIngresso(@PathVariable("idCliente") Integer idCliente,
-                                                               @PathVariable("idIngresso") Integer idIngresso) throws RegraDeNegocioException{
+    public ResponseEntity<IngressoDTO> comprarIngresso(@PathVariable("idCliente") Integer idCliente,
+                                                       @PathVariable("idIngresso") Integer idIngresso) throws RegraDeNegocioException{
         return new ResponseEntity<>(ingressoService.comprarIngresso(idCliente, idIngresso), HttpStatus.OK);
     }
 

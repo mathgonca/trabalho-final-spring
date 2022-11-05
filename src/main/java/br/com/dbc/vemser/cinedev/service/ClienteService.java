@@ -83,7 +83,7 @@ public class ClienteService {
         clienteRepository.delete(clienteEntity);
     }
 
-    ClienteEntity findById(Integer id) throws RegraDeNegocioException {
+    public ClienteEntity findById(Integer id) throws RegraDeNegocioException {
         return clienteRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Cliente não encontrado"));
     }
