@@ -25,36 +25,13 @@ public class EmailService {
     private final freemarker.template.Configuration fmConfiguration;
     @Value("${spring.mail.username}")
     private String from;
-    private static final String TO = "moises.noah@dbccompany.com.br";
     private final JavaMailSender emailSender;
-    public void sendSimpleMessage() {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(from);
-        message.setTo(TO);
-        message.setSubject("Assunto");
-        message.setText("Teste \n minha mensagem \n\nAtt,\nSistema.");
-        emailSender.send(message);
-    }
-    public void sendWithAttachment() throws MessagingException {
-        MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message,
-                true);
-        helper.setFrom(from);
-        helper.setTo(TO);
-        helper.setSubject("Subject");
-        helper.setText("Teste\n minha mensagem \n\nAtt,\nSistema.");
-        File file1 = new File("imagem.jpg");
-        FileSystemResource file
-                = new FileSystemResource(file1);
-        helper.addAttachment(file1.getName(), file);
-        emailSender.send(message);
-    }
+
     public void sendEmail(ClienteDTO clienteDTO, TipoEmails tipoEmails) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(from);
-//            mimeMessageHelper.setTo("mrmoisesnoah@gmail.com");
             mimeMessageHelper.setTo(clienteDTO.getEmail());
             mimeMessageHelper.setSubject(tipoEmails.getDescricao());
             mimeMessageHelper.setText(geContentFromTemplate(clienteDTO, tipoEmails), true);
@@ -63,6 +40,7 @@ public class EmailService {
             e.printStackTrace();
         }
     }
+
     public String geContentFromTemplate(ClienteDTO clienteDTO, TipoEmails tipoEmails) throws IOException, TemplateException {
         Map<String, Object> dados = new HashMap<>();
         dados.put("nome", clienteDTO.getPrimeiroNome());
