@@ -15,6 +15,15 @@ public interface IngressoRepository extends JpaRepository<IngressoEntity,Integer
     @Query("SELECT i FROM Ingresso i WHERE i.disponibilidade = 'N'")
     List<IngressoEntity> findIngressoComprados();
 
-    @Query("SELECT i FROM Ingresso i WHERE i.disponibilidade = 'N' and i.idCliente = :idCliente ")
+    @Query("SELECT i, " +
+            "t.primeiroNome, " +
+            "c.nome, " +
+            "f.nome " +
+            "FROM Ingresso i " +
+            "inner join i.cinema c " +
+            "inner join i.filme f " +
+            "inner join i.cliente t " +
+            "where i.idCliente = :idCliente and i.disponibilidade = 'N'")
     List<IngressoEntity> findIngressoCompradosPorCliente(@Param("idCliente")Integer idCliente);
 }
+//    WHERE i. = 'N' and i.idCliente = :idCliente

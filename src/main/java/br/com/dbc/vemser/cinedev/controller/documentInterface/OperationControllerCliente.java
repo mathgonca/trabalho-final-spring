@@ -47,4 +47,10 @@ public interface OperationControllerCliente {
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     void delete(@PathVariable("idCliente") Integer id) throws RegraDeNegocioException, BancoDeDadosException;
+
+    @Operation(summary = "Realiza a listagem do relatório de clientes ", description = "Realiza a listagens dos filmes e ingressos do cliente selecionado pelo 'id'!")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remoção de dados realizada!"),
+            @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
+            @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
+    public List<RelatorioCadastroIngressoClienteDTO> listarRelatorioPersonalizado(@RequestParam(required = false, name = "idCliente") Integer idCliente);
 }

@@ -1,6 +1,5 @@
 package br.com.dbc.vemser.cinedev.dto.ingressodto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -29,6 +28,6 @@ public class IngressoCompradoDTO extends IngressoDTO {
     @NotNull
     @NotEmpty
     @Schema(description = " horario e a data escolhido ", example = "'21/10/2022 21:30")
-    private LocalDateTime DataHora;
+    private LocalDateTime dataHora;
 
 }

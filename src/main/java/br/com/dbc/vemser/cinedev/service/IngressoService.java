@@ -48,10 +48,11 @@ public class IngressoService {
     }
 
     public List<IngressoCompradoDTO> listarIngressosCompradosPorCliente(Integer id) throws RegraDeNegocioException {
-        return ingressoRepository.findIngressoCompradosPorCliente(id)
+        List<IngressoCompradoDTO> ingressoCompradoDTO = ingressoRepository.findIngressoCompradosPorCliente(id)
                 .stream()
                 .map(ingressoEntity -> objectMapper.convertValue(ingressoEntity, IngressoCompradoDTO.class))
                 .toList();
+        return ingressoCompradoDTO;
     }
 
     public IngressoDTO createIngresso(IngressoCreateDTO ingressoCreateDTO) throws RegraDeNegocioException {
@@ -61,11 +62,7 @@ public class IngressoService {
         IngressoDTO ingressoDTO = objectMapper.convertValue(ingressoEntitySalvo, IngressoDTO.class);
         return ingressoDTO;
     }
-    public IngressoDTO getIngresso(IngressoEntity ingressoEntity){
-        IngressoDTO ingressoDTO = objectMapper.convertValue(ingressoEntity, IngressoDTO.class);
-        ingressoDTO.setIdCinema(ingressoEntity.getIdCinema());
-        return ingressoDTO;
-    }
+
     public IngressoCompradoDTO comprarIngresso(Integer idCliente, Integer idIngresso) throws RegraDeNegocioException {
 
         IngressoEntity ingressoRecuperado = findById(idIngresso);
@@ -91,8 +88,7 @@ public class IngressoService {
 
 
     public IngressoEntity findById(Integer id) throws RegraDeNegocioException {
-        IngressoEntity ingressoEntity = null;
-        ingressoEntity = ingressoRepository.findById(id)
+        IngressoEntity ingressoEntity = ingressoRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Cinema não encontrado!"));
         return ingressoEntity;
     }
