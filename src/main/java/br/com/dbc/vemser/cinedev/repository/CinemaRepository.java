@@ -1,7 +1,10 @@
 package br.com.dbc.vemser.cinedev.repository;
 
+import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
+import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroCinemaFilmeDTO;
 import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -31,6 +34,4 @@ public interface CinemaRepository extends JpaRepository<CinemaEntity, Integer> {
             " left join c.ingresso i " +
             " where (:idCinema is null or c.idCinema = :idCinema and i.idIngresso is not null)")
     List<RelatorioCadastroCinemaFilmeDTO> listarRelatorioPersonalizado(Integer idCinema);
-
-
 }

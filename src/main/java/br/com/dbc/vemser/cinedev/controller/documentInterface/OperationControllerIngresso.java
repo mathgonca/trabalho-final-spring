@@ -3,6 +3,7 @@ package br.com.dbc.vemser.cinedev.controller.documentInterface;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCompradoDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoDTO;
+import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -57,5 +58,11 @@ public interface OperationControllerIngresso {
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     ResponseEntity<Void> removeIngresso(@PathVariable("idIngresso") Integer id) throws RegraDeNegocioException;
+
+    @Operation(summary = "Listagem de Ingressos por Página. ", description = "Listagens dos ingressos por página de acordo com o usuário!")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Listagens de ingressos realizada com sucesso!"),
+            @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
+            @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
+    PageDTO<IngressoDTO> listarIngressoPaginado(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina);
 
 }

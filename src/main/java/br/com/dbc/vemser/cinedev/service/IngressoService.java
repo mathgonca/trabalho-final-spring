@@ -4,6 +4,7 @@ import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCompradoDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoDTO;
+import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
 import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
 import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
 import br.com.dbc.vemser.cinedev.entity.FilmeEntity;
@@ -15,6 +16,8 @@ import br.com.dbc.vemser.cinedev.service.emails.EmailService;
 import br.com.dbc.vemser.cinedev.service.emails.TipoEmails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -95,5 +98,20 @@ public class IngressoService {
 
     public void removeIngresso(Integer id) throws RegraDeNegocioException {
         ingressoRepository.deleteById(id);
+    }
+
+    public PageDTO<IngressoDTO> listIngressoPaginas(Integer pagina, Integer tamanho) {
+        PageRequest pageRequest = PageRequest.of(pagina, tamanho);
+        Page<IngressoEntity> paginaDoRepositorio = ingressoRepository.findAll(pageRequest);
+        List<IngressoDTO> ingressosPaginas = paginaDoRepositorio.getContent().stream()
+                .map(ingressoEntity -> objectMapper.convertValue(ingressoEntity, IngressoDTO.class))
+                .toList();
+
+        return new PageDTO<>(paginaDoRepositorio.getTotalElements(),
+                paginaDoRepositorio.getTotalPages(),
+                pagina,
+                tamanho,
+                ingressosPaginas
+        );
     }
 }
