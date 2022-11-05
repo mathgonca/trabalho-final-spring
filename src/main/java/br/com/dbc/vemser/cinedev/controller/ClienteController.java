@@ -3,6 +3,8 @@ package br.com.dbc.vemser.cinedev.controller;
 import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerCliente;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
+import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroCinemaFilmeDTO;
+import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.ClienteService;
@@ -52,6 +54,11 @@ public class ClienteController implements OperationControllerCliente {
     @DeleteMapping("/{idCliente}")
     public void delete(@PathVariable Integer idCliente) throws RegraDeNegocioException {
         clienteService.deletarCliente(idCliente);
+    }
+
+    @GetMapping("/cliente-relatorio")
+    public List<RelatorioCadastroIngressoClienteDTO> listarRelatorioPersonalizado(@RequestParam(required = false, name = "idCliente") Integer idCliente){
+        return clienteService.listarRelatorioPersonalizado(idCliente);
     }
 }
 

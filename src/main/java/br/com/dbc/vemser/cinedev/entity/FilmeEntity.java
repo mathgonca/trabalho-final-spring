@@ -28,13 +28,14 @@ public class FilmeEntity {
     private String nome;
 
     @Column(name = "idioma")
+    @Enumerated(EnumType.STRING)
     private Idioma idioma;
 
     @Column(name = "classificacao")
-    private int classificacaoEtaria;
+    private Integer classificacaoEtaria;
 
     @Column(name = "duracao")
-    private int duracao;
+    private Integer duracao;
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "filme")

@@ -14,8 +14,9 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "cliente")
+@Entity(name = "Cliente")
 public class ClienteEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLIENTE_SEQ")
     @SequenceGenerator(name = "CLIENTE_SEQ", sequenceName = "seq_id_cliente", allocationSize = 1)

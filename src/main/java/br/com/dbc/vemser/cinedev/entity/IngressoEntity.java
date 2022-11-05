@@ -33,12 +33,13 @@ public class IngressoEntity {
     private Integer idCliente;
 
     @Column(name = "valor")
-    private double preco;
+    private Double preco;
 
     @Column(name = "data_hora")
     private LocalDateTime dataHora;
 
     @Column(name = "disponibilidade")
+    @Enumerated(EnumType.STRING)
     private Disponibilidade disponibilidade;
 
     @JsonIgnore
@@ -55,7 +56,7 @@ public class IngressoEntity {
     @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
     @JoinColumn(name = "id_filme", referencedColumnName = "id_filme")
     private FilmeEntity filme;
-    
+
     @Override
     public String toString() {
         return "IngressoEntity{" +

@@ -23,8 +23,8 @@ public class FilmeCreateDTO {
     private Idioma idioma;
     @NotNull
     @Schema(description = "Sensura, ou limite da faixa etaria permitido pelo filme.", example = "13")
-    private int classificacaoEtaria;
+    private Integer classificacaoEtaria;
     @NotNull
     @Schema(description = "Duração do filme em minutos.", example = "120")
-    private int duracao;
+    private Integer duracao;
 }

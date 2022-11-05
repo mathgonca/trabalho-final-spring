@@ -3,7 +3,6 @@ package br.com.dbc.vemser.cinedev.service;
 import br.com.dbc.vemser.cinedev.dto.filmedto.FilmeCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.filmedto.FilmeDTO;
 import br.com.dbc.vemser.cinedev.entity.FilmeEntity;
-import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.FilmeRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;

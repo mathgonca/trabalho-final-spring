@@ -3,6 +3,7 @@ package br.com.dbc.vemser.cinedev.controller;
 import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerCinema;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
+import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroCinemaFilmeDTO;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.CinemaService;
 import lombok.RequiredArgsConstructor;
@@ -53,5 +54,10 @@ public class CinemaController implements OperationControllerCinema {
             RegraDeNegocioException {
         cinemaService.deletarCinema(idCinema);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/cinema-relatorio")
+    public List<RelatorioCadastroCinemaFilmeDTO> listarRelatorioPersonalizado(@RequestParam(required = false, name = "idCinema") Integer idCinema){
+        return cinemaService.listarRelatorioPersonalizado(idCinema);
     }
 }

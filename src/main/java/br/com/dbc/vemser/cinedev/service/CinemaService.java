@@ -2,6 +2,7 @@ package br.com.dbc.vemser.cinedev.service;
 
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
+import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroCinemaFilmeDTO;
 import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.CinemaRepository;
@@ -86,5 +87,9 @@ public class CinemaService {
         cinemaEntityRecuperado = cinemaRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Cinema não encontrado!"));
         return cinemaEntityRecuperado;
+    }
+
+    public List<RelatorioCadastroCinemaFilmeDTO> listarRelatorioPersonalizado(Integer idCinema){
+        return cinemaRepository.listarRelatorioPersonalizado(idCinema);
     }
 }
