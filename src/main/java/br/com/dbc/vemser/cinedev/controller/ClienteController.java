@@ -31,6 +31,8 @@ public class ClienteController implements OperationControllerCliente {
         return clienteService.listarTodosClientes();
     }
 
+
+
     @GetMapping("/{idCliente}")
     public ClienteDTO listarClientePeloId(@PathVariable Integer idCliente) throws RegraDeNegocioException {
         return clienteService.listarClienteDTOPeloId(idCliente);

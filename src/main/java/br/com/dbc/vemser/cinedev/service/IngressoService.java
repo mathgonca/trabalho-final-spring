@@ -5,6 +5,7 @@ import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCompradoDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoDTO;
 import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
+import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
 import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
 import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
 import br.com.dbc.vemser.cinedev.entity.FilmeEntity;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -38,7 +40,8 @@ public class IngressoService {
 
 
     public List<IngressoDTO> listarIngressos() throws RegraDeNegocioException {
-        List<IngressoEntity> ingressoslist = ingressoRepository.findAll();
+
+        List<IngressoEntity> ingressoslist = ingressoRepository.findIngressoDisponiveis();
         return ingressoslist.stream()
                 .map(ingressoEntity -> objectMapper.convertValue(ingressoEntity, IngressoDTO.class))
                 .toList();
@@ -50,12 +53,8 @@ public class IngressoService {
                 .toList();
     }
 
-    public List<IngressoCompradoDTO> listarIngressosCompradosPorCliente(Integer id) throws RegraDeNegocioException {
-        List<IngressoCompradoDTO> ingressoCompradoDTO = ingressoRepository.findIngressoCompradosPorCliente(id)
-                .stream()
-                .map(ingressoEntity -> objectMapper.convertValue(ingressoEntity, IngressoCompradoDTO.class))
-                .toList();
-        return ingressoCompradoDTO;
+    public List<RelatorioCadastroIngressoClienteDTO> listarIngressosCompradosPorCliente(Integer id) throws RegraDeNegocioException {
+            return clienteService.listarRelatorioPersonalizado(id);
     }
 
     public IngressoDTO createIngresso(IngressoCreateDTO ingressoCreateDTO) throws RegraDeNegocioException {
@@ -87,6 +86,9 @@ public class IngressoService {
         emailService.sendEmail(clienteDTO,TipoEmails.ING_COMPRADO);
         return ingressoDTO;
 
+    }
+    public IngressoDTO ingressoDTOporId(Integer id) throws RegraDeNegocioException {
+        return objectMapper.convertValue(findById(id),IngressoDTO.class);
     }
 
 

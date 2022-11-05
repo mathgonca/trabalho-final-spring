@@ -4,6 +4,7 @@ import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCompradoDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoDTO;
 import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
+import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -38,7 +39,7 @@ public interface OperationControllerIngresso {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Listagem executada com sucesso!"),
             @ApiResponse(responseCode = "403", description = "A algo de errado com as inserções de sua pesquisa"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
-    List<IngressoCompradoDTO> listarIngressosCompradosPorCliente(Integer id) throws RegraDeNegocioException;
+    List<RelatorioCadastroIngressoClienteDTO> listarIngressosCompradosPorCliente(Integer id) throws RegraDeNegocioException;
 
 
     @Operation(summary = "Cadastro dos ingressos pelos cinemas.", description = "Area para cadastro e disponibiliação dos ingressos pelos cinemas")

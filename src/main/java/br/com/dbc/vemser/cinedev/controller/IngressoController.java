@@ -5,6 +5,7 @@ import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCompradoDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoDTO;
 import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
+import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.IngressoService;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +34,7 @@ public class IngressoController implements OperationControllerIngresso {
     @Override
     @GetMapping("/{idIngresso}")
     public IngressoDTO listarIngressosPorId(@PathVariable("idIngresso") Integer id) throws RegraDeNegocioException {
-//        return ingressoService.findById(id);
-        return null;
+        return ingressoService.ingressoDTOporId(id);
     }
 
     @Override
@@ -42,12 +42,11 @@ public class IngressoController implements OperationControllerIngresso {
     public List<IngressoDTO> listarIngressosComprados() throws RegraDeNegocioException {
         return ingressoService.listarIngressosComprados();
     }
-
-    @Override
-    @GetMapping("/comprado/{idCliente}")
-    public List<IngressoCompradoDTO> listarIngressosCompradosPorCliente(@PathVariable("idCliente") Integer id) throws RegraDeNegocioException {
-        return ingressoService.listarIngressosCompradosPorCliente(id);
+    @GetMapping("/ingressosComprados-byCliente")
+    public List<RelatorioCadastroIngressoClienteDTO> listarIngressosCompradosPorCliente(@RequestParam("idCliente") Integer idCliente) throws RegraDeNegocioException {
+        return ingressoService.listarIngressosCompradosPorCliente(idCliente);
     }
+
 
     @Override
     @PostMapping
