@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +20,11 @@ public class FilmeService {
 
     public FilmeDTO adicionarFilme(FilmeCreateDTO filmeCapturado) throws RegraDeNegocioException {
         String filmeNome = filmeCapturado.getNome();
-        FilmeEntity filmePorNome = filmeRepository.findByNome(filmeNome)
-                .orElseThrow(() -> new RegraDeNegocioException("Erro! Nome do filme já consta em nossa lista de cadastros!"));
+        Optional<FilmeEntity> filmePorNome = filmeRepository.findByNome(filmeNome);
+
+        if (filmePorNome.isPresent()) {
+            throw new RegraDeNegocioException("Erro! Nome do filme já consta em nossa lista de cadastros!");
+        }
 
         FilmeEntity filmeEntityTransform = objectMapper.convertValue(filmeCapturado, FilmeEntity.class);
         FilmeEntity filmeEntitySalvo = filmeRepository.save(filmeEntityTransform);
