@@ -1,11 +1,7 @@
 package br.com.dbc.vemser.cinedev.repository;
 
-import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
-import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroCinemaFilmeDTO;
 import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
-import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +14,7 @@ import java.util.Optional;
 public interface CinemaRepository extends JpaRepository<CinemaEntity, Integer> {
 
     Optional<CinemaEntity> findByNome(String nome);
+
     @Query("select c from Cinema c where c.ativo like 'S' and c.idCinema = :idCinema")
     Optional<CinemaEntity> findById(Integer idCinema);
 

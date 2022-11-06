@@ -31,6 +31,7 @@ public class IngressoController implements OperationControllerIngresso {
     public List<IngressoDTO> listarIngressos() throws RegraDeNegocioException {
         return ingressoService.listarIngressos();
     }
+
     @Override
     @GetMapping("/{idIngresso}")
     public IngressoDTO listarIngressosPorId(@PathVariable("idIngresso") Integer id) throws RegraDeNegocioException {
@@ -42,6 +43,7 @@ public class IngressoController implements OperationControllerIngresso {
     public List<IngressoDTO> listarIngressosComprados() throws RegraDeNegocioException {
         return ingressoService.listarIngressosComprados();
     }
+
     @GetMapping("/ingressosComprados-byCliente")
     public List<RelatorioCadastroIngressoClienteDTO> listarIngressosCompradosPorCliente(@RequestParam("idCliente") Integer idCliente) throws RegraDeNegocioException {
         return ingressoService.listarIngressosCompradosPorCliente(idCliente);
@@ -57,7 +59,7 @@ public class IngressoController implements OperationControllerIngresso {
     @Override
     @PutMapping("/comprar/{idCliente}/ingresso/{idIngresso}")
     public ResponseEntity<IngressoCompradoDTO> comprarIngresso(@PathVariable("idCliente") Integer idCliente,
-                                                               @PathVariable("idIngresso") Integer idIngresso) throws RegraDeNegocioException{
+                                                               @PathVariable("idIngresso") Integer idIngresso) throws RegraDeNegocioException {
         return new ResponseEntity<>(ingressoService.comprarIngresso(idCliente, idIngresso), HttpStatus.OK);
     }
 
@@ -69,7 +71,7 @@ public class IngressoController implements OperationControllerIngresso {
     }
 
     @GetMapping("/find-ingresso-paginado")
-    public ResponseEntity<PageDTO<IngressoDTO>> listarIngressoPaginado(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina){
+    public ResponseEntity<PageDTO<IngressoDTO>> listarIngressoPaginado(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina) {
         return new ResponseEntity<>(ingressoService.listIngressoPaginas(paginaQueEuQuero, tamanhoDeRegistrosPorPagina), HttpStatus.OK);
     }
 }

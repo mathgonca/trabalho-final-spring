@@ -22,12 +22,12 @@ public class ControllerTeste {
     private final CinemaRepository cinemaRepository;
 
     @GetMapping("/cinema-relatorio")
-    public List<RelatorioCadastroCinemaFilmeDTO> listarRelatorioPersonalizado(@RequestParam(required = false, name = "idCinema") Integer idCinema){
+    public List<RelatorioCadastroCinemaFilmeDTO> listarRelatorioPersonalizado(@RequestParam(required = false, name = "idCinema") Integer idCinema) {
         return cinemaService.listarRelatorioPersonalizado(idCinema);
     }
 
     @GetMapping("/cinema-relatorio-rep")
-    public List<RelatorioCadastroCinemaFilmeDTO> listarRelatorioPersonalizadoRep(@RequestParam(required = false, name = "idCinema") Integer idCinema){
+    public List<RelatorioCadastroCinemaFilmeDTO> listarRelatorioPersonalizadoRep(@RequestParam(required = false, name = "idCinema") Integer idCinema) {
         return cinemaRepository.listarRelatorioPersonalizado(idCinema);
     }
 

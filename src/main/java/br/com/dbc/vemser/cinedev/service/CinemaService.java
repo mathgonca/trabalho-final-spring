@@ -92,7 +92,7 @@ public class CinemaService {
         return cinemaEntityRecuperado;
     }
 
-    public List<RelatorioCadastroCinemaFilmeDTO> listarRelatorioPersonalizado(Integer idCinema){
+    public List<RelatorioCadastroCinemaFilmeDTO> listarRelatorioPersonalizado(Integer idCinema) {
         return cinemaRepository.listarRelatorioPersonalizado(idCinema);
     }
 

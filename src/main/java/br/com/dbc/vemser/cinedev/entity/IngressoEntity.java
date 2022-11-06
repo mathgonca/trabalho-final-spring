@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
-@Entity(name= "Ingresso")
+@Entity(name = "Ingresso")
 public class IngressoEntity {
 
     @Id
@@ -39,17 +39,17 @@ public class IngressoEntity {
     private String ativo = "S";
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_cinema", referencedColumnName = "id_cinema")
     private CinemaEntity cinema;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_cliente", referencedColumnName = "id_cliente")
     private ClienteEntity cliente;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_filme", referencedColumnName = "id_filme")
     private FilmeEntity filme;
 
