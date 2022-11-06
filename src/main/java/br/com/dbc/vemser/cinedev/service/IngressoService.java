@@ -26,14 +26,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class IngressoService {
-
     private final IngressoRepository ingressoRepository;
     private final CinemaService cinemaService;
     private final FilmeService filmeService;
     private final ClienteService clienteService;
     private final EmailService emailService;
     private final ObjectMapper objectMapper;
-
 
     public List<IngressoDTO> listarIngressos() throws RegraDeNegocioException {
 
@@ -75,8 +73,6 @@ public class IngressoService {
         ingressoRecuperado.setPreco(30.00);
         ingressoRecuperado = ingressoRepository.save(ingressoRecuperado);
 
-
-
         IngressoCompradoDTO ingressoDTO = objectMapper.convertValue(ingressoRecuperado, IngressoCompradoDTO.class);
         ClienteDTO clienteDTO = objectMapper.convertValue(clienteRecuperado, ClienteDTO.class);
         ingressoDTO.setNomeCinema(ingressoRecuperado.getCinema().getNome());
@@ -98,7 +94,6 @@ public class IngressoService {
     }
 
     public void removeIngresso(Integer id) throws RegraDeNegocioException {
-
         ingressoRepository.deleteById(id);
     }
 
