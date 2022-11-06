@@ -25,6 +25,7 @@ public class RelatorioCadastroIngressoClienteDTO {
     private String nomeCinema; // cinema
     private String estado; // cinema
     private String cidade; // cinema
+    private String ativo;
 }
 
 //Clientes cadastrados e ingresso comprados pelos mesmos

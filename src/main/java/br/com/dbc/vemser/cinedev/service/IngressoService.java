@@ -99,6 +99,7 @@ public class IngressoService {
     }
 
     public void removeIngresso(Integer id) throws RegraDeNegocioException {
+
         ingressoRepository.deleteById(id);
     }
 

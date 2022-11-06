@@ -52,7 +52,7 @@ public interface OperationControllerIngresso {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Atualização de IngressoEntity realizada com sucesso!"),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
-    ResponseEntity<IngressoDTO> comprarIngresso(@PathVariable("idCliente") Integer idCliente,@PathVariable("idIngresso") Integer idIngresso) throws RegraDeNegocioException;
+    ResponseEntity<IngressoCompradoDTO> comprarIngresso(@PathVariable("idCliente") Integer idCliente,@PathVariable("idIngresso") Integer idIngresso) throws RegraDeNegocioException;
 
     @Operation(summary = "Remoção de Ingressos por ID. ", description = "Remoção do IngressoEntity  partir do 'id'!")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remoção do IngressoEntity realizada com sucesso!"),
@@ -64,6 +64,6 @@ public interface OperationControllerIngresso {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Listagens de ingressos realizada com sucesso!"),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
-    PageDTO<IngressoDTO> listarIngressoPaginado(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina);
+    ResponseEntity<PageDTO<IngressoDTO>> listarIngressoPaginado(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina);
 
 }

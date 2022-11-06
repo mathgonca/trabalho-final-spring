@@ -57,11 +57,11 @@ public interface OperationControllerCinema {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remoção de dados realizada!"),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
-    List<RelatorioCadastroCinemaFilmeDTO> listarRelatorioPersonalizado(@RequestParam(required = false, name = "idCinema") Integer idCinema);
+    ResponseEntity<List<RelatorioCadastroCinemaFilmeDTO>> listarRelatorioPersonalizado(@RequestParam(required = false, name = "idCinema") Integer idCinema);
 
     @Operation(summary = "Listagem de Cinemas por Página. ", description = "Listagens dos cinemas por página de acordo com o usuário!")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Listagens de cinemas realizada com sucesso!"),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
-    PageDTO<CinemaDTO> listarCinemasPaginados(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina);
+    ResponseEntity<PageDTO<CinemaDTO>> listarCinemasPaginados(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina);
 }

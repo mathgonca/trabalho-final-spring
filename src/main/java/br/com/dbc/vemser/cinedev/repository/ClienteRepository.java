@@ -3,6 +3,7 @@ package br.com.dbc.vemser.cinedev.repository;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
 import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,15 @@ public interface ClienteRepository extends JpaRepository<ClienteEntity, Integer>
 
     Optional<ClienteEntity> findByEmail(String email);
 
+    @Query("select c from Cliente c where c.ativo like 'S' and c.idCliente = :idCliente")
+    Optional<ClienteEntity> findById(Integer idCliente);
+
+    @Query("select c from Cliente c where c.ativo like 'S'")
+    List<ClienteEntity> findAll();
+
+    @Modifying
+    @Query("update Cliente set ativo = 'n' where idCliente = :idCliente")
+    void deleteById(Integer idCliente);
     @Query(" select new br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO(" +
             " c.idCliente, " +
             " c.primeiroNome, " +
@@ -29,7 +39,8 @@ public interface ClienteRepository extends JpaRepository<ClienteEntity, Integer>
             " ci.dataHora, " +
             " ci.cinema.nome, " +
             " ci.cinema.estado, " +
-            " ci.cinema.cidade " +
+            " ci.cinema.cidade, " +
+            " ci.ativo " +
             ")" +
             " from Cliente c " +
             " left join c.ingresso ci " +

@@ -56,8 +56,8 @@ public class IngressoController implements OperationControllerIngresso {
 
     @Override
     @PutMapping("/comprar/{idCliente}/ingresso/{idIngresso}")
-    public ResponseEntity<IngressoDTO> comprarIngresso(@PathVariable("idCliente") Integer idCliente,
-                                                       @PathVariable("idIngresso") Integer idIngresso) throws RegraDeNegocioException{
+    public ResponseEntity<IngressoCompradoDTO> comprarIngresso(@PathVariable("idCliente") Integer idCliente,
+                                                               @PathVariable("idIngresso") Integer idIngresso) throws RegraDeNegocioException{
         return new ResponseEntity<>(ingressoService.comprarIngresso(idCliente, idIngresso), HttpStatus.OK);
     }
 
@@ -69,8 +69,8 @@ public class IngressoController implements OperationControllerIngresso {
     }
 
     @GetMapping("/find-ingresso-paginado")
-    public PageDTO<IngressoDTO> listarIngressoPaginado(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina){
-        return ingressoService.listIngressoPaginas(paginaQueEuQuero, tamanhoDeRegistrosPorPagina);
+    public ResponseEntity<PageDTO<IngressoDTO>> listarIngressoPaginado(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina){
+        return new ResponseEntity<>(ingressoService.listIngressoPaginas(paginaQueEuQuero, tamanhoDeRegistrosPorPagina), HttpStatus.OK);
     }
 }
 

@@ -58,12 +58,12 @@ public class CinemaController implements OperationControllerCinema {
     }
 
     @GetMapping("/cinema-relatorio")
-    public List<RelatorioCadastroCinemaFilmeDTO> listarRelatorioPersonalizado(@RequestParam(required = false, name = "idCinema") Integer idCinema){
-        return cinemaService.listarRelatorioPersonalizado(idCinema);
+    public ResponseEntity<List<RelatorioCadastroCinemaFilmeDTO>> listarRelatorioPersonalizado(@RequestParam(required = false, name = "idCinema") Integer idCinema){
+        return new ResponseEntity<>(cinemaService.listarRelatorioPersonalizado(idCinema), HttpStatus.OK);
     }
 
     @GetMapping("/find-cinema-paginado")
-    public PageDTO<CinemaDTO> listarCinemasPaginados(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina){
-        return cinemaService.listCinemaPaginado(paginaQueEuQuero, tamanhoDeRegistrosPorPagina);
+    public ResponseEntity<PageDTO<CinemaDTO>> listarCinemasPaginados(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina){
+        return new ResponseEntity<>(cinemaService.listCinemaPaginado(paginaQueEuQuero, tamanhoDeRegistrosPorPagina), HttpStatus.OK);
     }
 }

@@ -37,10 +37,12 @@ public class IngressoEntity {
 
     @Column(name = "data_hora")
     private LocalDateTime dataHora;
-    @JsonIgnore
+
     @Column(name = "disponibilidade")
     @Enumerated(EnumType.STRING)
     private Disponibilidade disponibilidade;
+    @Column(name = "ativo")
+    private String ativo = "S";
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)

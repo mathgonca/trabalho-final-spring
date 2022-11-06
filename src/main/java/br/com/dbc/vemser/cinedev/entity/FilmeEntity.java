@@ -37,6 +37,9 @@ public class FilmeEntity {
     @Column(name = "duracao")
     private Integer duracao;
 
+    @Column(name = "ativo")
+    private String ativo = "S";
+
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "filme")
     private Set<IngressoEntity> ingresso;

@@ -21,6 +21,7 @@ public class RelatorioCadastroCinemaFilmeDTO {
     private Double preco; // ingresso
     private LocalDateTime dataHora; // ingresso
     private Disponibilidade disponibilidade; // ingresso
+    private String ativo;
 }
 
 //Cinemas cadastrados, seus filmes e ingressos

@@ -34,7 +34,7 @@ public class FilmeService {
 
     public void removerFilme(Integer id) throws RegraDeNegocioException {
         FilmeEntity filme = listarPeloId(id);
-        filmeRepository.delete(filme);
+        filmeRepository.deleteById(id);
     }
 
     public FilmeDTO editarFilme(Integer id, FilmeCreateDTO filmeCapturado) throws RegraDeNegocioException {
