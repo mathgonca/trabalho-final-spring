@@ -2,41 +2,31 @@ package br.com.dbc.vemser.cinedev.dto.ingressodto;
 
 import br.com.dbc.vemser.cinedev.entity.enums.Disponibilidade;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class IngressoCreateDTO {
 
+    @Schema(description = "Id do filme", example = "1")
+    private Integer idFilme;
 
-    @Schema(description = "id do cliente ", example = "1")
-    private Integer idCliente;
+    @Schema(description = "Id do cinema", example = "1")
+    private Integer idCinema;
 
-    @NotNull
-    @NotEmpty
-    @Schema(description = "Valor do ingresso ", example = "30")
-    private double preco;
+    @Schema(description = "Valor do ingresso ", example = "30.00")
+    private Double preco;
 
-    @NotNull
-    @NotEmpty
     @Schema(description = "Data e Hora ", example = "31/10/2022 21:30")
     private LocalDateTime dataHora;
-
 
     @Schema(description = "Disponibilidade", example = "S")
     @Enumerated(EnumType.STRING)
     private Disponibilidade disponibilidade;
 
+    @Schema(description = "Ativo", example = "S")
     private String ativo;
 }

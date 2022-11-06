@@ -2,19 +2,12 @@ package br.com.dbc.vemser.cinedev.entity;
 
 import br.com.dbc.vemser.cinedev.entity.enums.Disponibilidade;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @Entity(name= "Ingresso")
 public class IngressoEntity {
 
@@ -29,6 +22,7 @@ public class IngressoEntity {
 
     @Column(name = "id_cinema", insertable = false, updatable = false)
     private Integer idCinema;
+
     @Column(name = "id_cliente", insertable = false, updatable = false)
     private Integer idCliente;
 
@@ -58,17 +52,6 @@ public class IngressoEntity {
     @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
     @JoinColumn(name = "id_filme", referencedColumnName = "id_filme")
     private FilmeEntity filme;
-    
-    @Override
-    public String toString() {
-        return "IngressoEntity{" +
-                "idIngresso=" + idIngresso +
-                ", idCliente=" + idCliente +
-                ", preco=" + preco +
-                ", dataHora=" + dataHora +
-                ", disponibilidade=" + disponibilidade +
-                '}';
 
-    }
 
 }

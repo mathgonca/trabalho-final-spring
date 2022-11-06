@@ -58,8 +58,11 @@ public class IngressoService {
     }
 
     public IngressoDTO createIngresso(IngressoCreateDTO ingressoCreateDTO) throws RegraDeNegocioException {
-
+        FilmeEntity filme = filmeService.listarPeloId(ingressoCreateDTO.getIdFilme());
+        CinemaEntity cinema = cinemaService.findById(ingressoCreateDTO.getIdCinema());
         IngressoEntity ingressoEntity = objectMapper.convertValue(ingressoCreateDTO, IngressoEntity.class);
+        ingressoEntity.setFilme(filme);
+        ingressoEntity.setCinema(cinema);
         IngressoEntity ingressoEntitySalvo = ingressoRepository.save(ingressoEntity);
         IngressoDTO ingressoDTO = objectMapper.convertValue(ingressoEntitySalvo, IngressoDTO.class);
         return ingressoDTO;
