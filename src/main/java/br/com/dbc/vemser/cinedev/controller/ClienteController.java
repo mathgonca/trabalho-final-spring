@@ -3,7 +3,6 @@ package br.com.dbc.vemser.cinedev.controller;
 import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerCliente;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
-import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroCinemaFilmeDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
@@ -31,6 +30,7 @@ public class ClienteController implements OperationControllerCliente {
         return clienteService.listarTodosClientes();
     }
 
+
     @GetMapping("/{idCliente}")
     public ClienteDTO listarClientePeloId(@PathVariable Integer idCliente) throws RegraDeNegocioException {
         return clienteService.listarClienteDTOPeloId(idCliente);
@@ -51,14 +51,15 @@ public class ClienteController implements OperationControllerCliente {
     }
 
     @Override
-    @DeleteMapping("/{idCliente}")
+    @DeleteMapping("/delete/{idCliente}")
     public void delete(@PathVariable Integer idCliente) throws RegraDeNegocioException {
         clienteService.deletarCliente(idCliente);
     }
 
     @GetMapping("/cliente-relatorio")
-    public List<RelatorioCadastroIngressoClienteDTO> listarRelatorioPersonalizado(@RequestParam(required = false, name = "idCliente") Integer idCliente){
-        return clienteService.listarRelatorioPersonalizado(idCliente);
+    public ResponseEntity<List<RelatorioCadastroIngressoClienteDTO>> listarRelatorioCadastroIngressoClienteDTO(@RequestParam(required = false, name = "idCliente") Integer idCliente) {
+        List<RelatorioCadastroIngressoClienteDTO> relatorioCadastroIngressoClienteDTO = clienteService.listarRelatorioPersonalizado(idCliente);
+        return new ResponseEntity<>(relatorioCadastroIngressoClienteDTO, HttpStatus.OK);
     }
 }
 

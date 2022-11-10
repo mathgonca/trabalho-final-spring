@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Cadastro de Informações</title>
+    <title>Ingresso comprado</title>
     <style>
         body {
             padding: 35px;
@@ -49,13 +49,22 @@
 
 <body>
 <header>
-    <h1>Olá querido Cliente!</h1>
-    <h2>${texto1}</h2>
+    <h1>Sua compra foi concluída!</h1>
+    <h2>Mostre esse ingresso na entrada da sessão</h2>
 </header>
 <main>
     <div class="container">
-            <p>${texto2}</p>
+        <h2>${nomeFilme}</h2>
+        <h3>Sessão</h3>
+        <div class="sessao">
+            <p>${dataHora}</p>
+            <p>${idioma}</p>
         </div>
+        <div>
+            <p>A diversão já está garantida! Compre seu balde pipoca e seu refrigente por que sua sessão já vai
+                começar.</p>
+        </div>
+    </div>
 </main>
 <footer>
     <div class="container">

@@ -38,6 +38,9 @@ public class ClienteEntity {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "ativo")
+    private String ativo = "S";
+
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
     private Set<IngressoEntity> ingresso;

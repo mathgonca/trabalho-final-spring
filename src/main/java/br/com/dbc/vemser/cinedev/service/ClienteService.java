@@ -2,7 +2,6 @@ package br.com.dbc.vemser.cinedev.service;
 
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
-import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroCinemaFilmeDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
 import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
@@ -80,7 +79,7 @@ public class ClienteService {
         ClienteDTO clienteDTO = objectMapper.convertValue(clienteEntity, ClienteDTO.class);
 
         emailService.sendEmail(clienteDTO, TipoEmails.DELETE);
-        clienteRepository.delete(clienteEntity);
+        clienteRepository.deleteById(clienteEntity.getIdCliente());
     }
 
     public ClienteEntity findById(Integer id) throws RegraDeNegocioException {

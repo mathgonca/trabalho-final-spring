@@ -2,6 +2,8 @@ package br.com.dbc.vemser.cinedev.controller.documentInterface;
 
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
+import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
+import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroCinemaFilmeDTO;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -49,4 +52,16 @@ public interface OperationControllerCinema {
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     ResponseEntity<Void> delete(@PathVariable("idCinema") Integer id) throws RegraDeNegocioException;
+
+    @Operation(summary = "Realiza a listagem do relatório de cinemas ", description = "Realiza a listagens dos filmes e ingressos disponíveis pelo cinema selecionado pelo 'id'!")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remoção de dados realizada!"),
+            @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
+            @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
+    ResponseEntity<List<RelatorioCadastroCinemaFilmeDTO>> listarRelatorioPersonalizado(@RequestParam(required = false, name = "idCinema") Integer idCinema);
+
+    @Operation(summary = "Listagem de Cinemas por Página. ", description = "Listagens dos cinemas por página de acordo com o usuário!")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Listagens de cinemas realizada com sucesso!"),
+            @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
+            @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
+    ResponseEntity<PageDTO<CinemaDTO>> listarCinemasPaginados(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina);
 }
