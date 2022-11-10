@@ -35,10 +35,6 @@ public class ClienteEntity extends UsuarioEntity {
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
 
-    //fazer associacao login
-    @Column(name = "idUsuario")
-    private Integer idUsuario;
-
     @Column(name = "ativo")
     private String ativo = "S";
 
@@ -47,6 +43,7 @@ public class ClienteEntity extends UsuarioEntity {
     private Set<IngressoEntity> ingresso;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "cliente")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private UsuarioEntity usuario;
 }
