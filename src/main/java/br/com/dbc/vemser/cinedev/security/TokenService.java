@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,8 @@ public class TokenService {
         LocalDateTime dataExpiracao = dataAtual.plusDays(Long.parseLong(expiration));
         Date exp = Date.from(dataExpiracao.atZone(ZoneId.systemDefault()).toInstant());
 
+//        Date now = new Date();
+//        Date exp = new Date(now.getTime() + 864000000);
 
         List<String> cargosDoUsuario = usuarioEntity.getCargos().stream()
                 .map(CargoEntity::getAuthority)
@@ -51,6 +54,10 @@ public class TokenService {
                 .compact();
 
         return meuToken;
+
+//        String tokenTexto = usuarioEntity.getLogin() + ";" + usuarioEntity.getSenha();
+//        String token = Base64.getEncoder().encodeToString(tokenTexto.getBytes());
+//        return token;
     }
 
 
@@ -61,10 +68,14 @@ public class TokenService {
 
             Claims chaves = Jwts.parser()
                     .setSigningKey(secret)
-                    .parseClaimsJws(token)
+                    .parseClaimsJws(token) // validar e retornar as chaves;
                     .getBody();
 
+            //usuário e senha válidos...
 
+
+
+//        String idUsuario = chaves.get("jti", String.class);
             String idUsuario = chaves.get(Claims.ID, String.class);
             List<String> cargos = chaves.get(KEY_CARGOS, List.class);
 

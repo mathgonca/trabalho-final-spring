@@ -35,7 +35,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authz) ->
                         authz.antMatchers("/auth/**").permitAll()
 
-                                //EDITAR AQUI
+
                                 //ao meio - nossas regras especificas
                                 .antMatchers(HttpMethod.DELETE, "/pessoa", "/endereco").hasRole("ADMIN") // pro usuario n poder deletar, nem o marketing.
                                 .antMatchers("/contato/**").hasRole("ADMIN")
@@ -76,7 +76,6 @@ public class SecurityConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-
         return new SCryptPasswordEncoder();
     }
 
@@ -85,5 +84,4 @@ public class SecurityConfiguration {
         return configuration.getAuthenticationManager();
     }
 }
-
 

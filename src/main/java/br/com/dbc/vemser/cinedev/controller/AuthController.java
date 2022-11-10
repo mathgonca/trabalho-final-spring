@@ -28,21 +28,28 @@ public class AuthController {
 
     private final ObjectMapper objectMapper;
 
+    //FIXME injetar AuthenticationManager
     private final AuthenticationManager authenticationManager;
 
     @PostMapping
     public String autenticar(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
+        // FIXME adicionar mecanismo de autenticação para verificar se o usuário é válido e retornar o token
 
+        //FIXME criar objeto UsernamePasswordAuthenticationToken com o usuário e senha
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(
                         loginDTO.getLogin(),
                         loginDTO.getSenha()
                 );
 
+        //FIXME utilizar AuthenticationManager para se autenticar
         Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
+        // UsuarioEntity
+        //FIXME recuperar usuário após da autenticação (getPrincipal())
         Object principal = authenticate.getPrincipal();
 
+        //FIXME GERAR TOKEN (trocar null por usuarioEntity da autenticação)
         UsuarioEntity usuarioEntity = (UsuarioEntity) principal;
 
         String token = tokenService.getToken(usuarioEntity);
