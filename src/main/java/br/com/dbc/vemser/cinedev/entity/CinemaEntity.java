@@ -14,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "Cinema")
-public class CinemaEntity {
+public class CinemaEntity extends UsuarioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CINEMA_SEQ")
@@ -34,7 +34,17 @@ public class CinemaEntity {
     @Column(name = "ativo")
     private String ativo = "S";
 
+    //fazer associacao login
+    @Column(name = "idUsuario")
+    private Integer idUsuario;
+
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cinema")
     private Set<IngressoEntity> ingresso;
+
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "cinema")
+    private UsuarioEntity usuario;
+
+
 }
