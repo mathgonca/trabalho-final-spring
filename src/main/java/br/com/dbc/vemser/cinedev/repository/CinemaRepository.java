@@ -32,5 +32,4 @@ public interface CinemaRepository extends JpaRepository<CinemaEntity, Integer> {
             " where (:idCinema is null or c.idCinema = :idCinema and i.idIngresso is not null)")
     List<RelatorioCadastroCinemaFilmeDTO> listarRelatorioPersonalizado(Integer idCinema);
 
-
 }

@@ -1,9 +1,11 @@
 package br.com.dbc.vemser.cinedev.controller;
 
 import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerIngresso;
+import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCompradoDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoDTO;
+import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.IngressoService;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +68,11 @@ public class IngressoController implements OperationControllerIngresso {
     public ResponseEntity<Void> removeIngresso(@PathVariable("idIngresso") Integer id) throws RegraDeNegocioException {
         ingressoService.removeIngresso(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/find-ingresso-paginado")
+    public PageDTO<IngressoDTO> listarIngressoPaginado(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina){
+        return ingressoService.listIngressoPaginas(paginaQueEuQuero, tamanhoDeRegistrosPorPagina);
     }
 }
 

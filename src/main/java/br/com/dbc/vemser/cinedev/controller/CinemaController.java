@@ -3,10 +3,12 @@ package br.com.dbc.vemser.cinedev.controller;
 import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerCinema;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
+import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroCinemaFilmeDTO;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.CinemaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -59,5 +61,10 @@ public class CinemaController implements OperationControllerCinema {
     @GetMapping("/cinema-relatorio")
     public List<RelatorioCadastroCinemaFilmeDTO> listarRelatorioPersonalizado(@RequestParam(required = false, name = "idCinema") Integer idCinema){
         return cinemaService.listarRelatorioPersonalizado(idCinema);
+    }
+
+    @GetMapping("/find-cinema-paginado")
+    public PageDTO<CinemaDTO> listarCinemasPaginados(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina){
+        return cinemaService.listCinemaPaginado(paginaQueEuQuero, tamanhoDeRegistrosPorPagina);
     }
 }
