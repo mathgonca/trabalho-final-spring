@@ -21,11 +21,9 @@ public class CargoEntity implements GrantedAuthority {
 
     @Column(name = "nome")
     private String nome ;
-
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_cargo", referencedColumnName = "id_cargo")
-    private UsuarioEntity usuario;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cargo")
+    private Set<UsuarioEntity> usuario;
 
     @Override
     public String getAuthority() {

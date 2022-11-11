@@ -22,6 +22,9 @@ public class CinemaEntity extends UsuarioEntity {
     @Column(name = "id_cinema")
     private Integer idCinema;
 
+    @Column(name = "id_usuario", insertable = false, updatable = false)
+    private Integer idUsuario;
+
     @Column(name = "nome")
     private String nome;
 

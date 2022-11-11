@@ -1,18 +1,20 @@
 package br.com.dbc.vemser.cinedev.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Getter
 @Setter
+@RequiredArgsConstructor
+@AllArgsConstructor
 @Entity(name = "Usuario")
 public class UsuarioEntity implements UserDetails {
 
@@ -29,7 +31,8 @@ public class UsuarioEntity implements UserDetails {
     private String senha;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cargo", referencedColumnName = "id_cargo")
     private CargoEntity cargo;
 
     @JsonIgnore
@@ -47,6 +50,7 @@ public class UsuarioEntity implements UserDetails {
     // FIXME implementar métodos de UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<CargoEntity> cargo = new ArrayList<>();
         return cargo; // por enquanto
     }
 

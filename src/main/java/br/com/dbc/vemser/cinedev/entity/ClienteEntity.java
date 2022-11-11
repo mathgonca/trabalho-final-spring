@@ -23,6 +23,9 @@ public class ClienteEntity extends UsuarioEntity {
     @Column(name = "id_cliente")
     private Integer idCliente;
 
+    @Column(name = "id_usuario", insertable = false, updatable = false)
+    private Integer idUsuario;
+
     @Column(name = "primeiro_nome")
     private String primeiroNome;
 
@@ -34,6 +37,9 @@ public class ClienteEntity extends UsuarioEntity {
 
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
+
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "ativo")
     private String ativo = "S";
