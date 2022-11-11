@@ -2,12 +2,18 @@ package br.com.dbc.vemser.cinedev.entity;
 
 import br.com.dbc.vemser.cinedev.entity.enums.Disponibilidade;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
+@AllArgsConstructor
 @Entity(name = "Ingresso")
 public class IngressoEntity {
 
@@ -41,17 +47,27 @@ public class IngressoEntity {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_cinema", referencedColumnName = "id_cinema")
+    @ToString.Exclude
     private CinemaEntity cinema;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_cliente", referencedColumnName = "id_cliente")
+    @ToString.Exclude
     private ClienteEntity cliente;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_filme", referencedColumnName = "id_filme")
+    @ToString.Exclude
     private FilmeEntity filme;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        IngressoEntity that = (IngressoEntity) o;
+        return idIngresso != null && Objects.equals(idIngresso, that.idIngresso);
+    }
 
 }

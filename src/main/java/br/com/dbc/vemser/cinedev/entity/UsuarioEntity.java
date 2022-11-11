@@ -3,6 +3,7 @@ package br.com.dbc.vemser.cinedev.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,7 +13,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@Entity(name = "USUARIO")
+@Entity(name = "Usuario")
 public class UsuarioEntity implements UserDetails {
 
     @Id
@@ -28,24 +29,25 @@ public class UsuarioEntity implements UserDetails {
     private String senha;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "USUARIO_CARGO",
-            joinColumns = @JoinColumn(name = "ID_USUARIO"),
-            inverseJoinColumns = @JoinColumn(name = "ID_CARGO"))
-    private Set<CargoEntity> cargos;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")
+    private CargoEntity cargo;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "usuario")
-    private ClienteEntity cliente;
-
-    @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "usuario")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    @ToString.Exclude
     private CinemaEntity cinema;
+
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    @ToString.Exclude
+    private ClienteEntity cliente;
 
     // FIXME implementar métodos de UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return cargos; // por enquanto
+        return cargo; // por enquanto
     }
 
     @Override

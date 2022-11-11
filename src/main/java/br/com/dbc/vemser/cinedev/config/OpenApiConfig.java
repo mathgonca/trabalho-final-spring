@@ -9,18 +9,9 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.bind.annotation.GetMapping;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @Configuration
 public class OpenApiConfig {
-
-    @GetMapping(value = "/")
-    public void index(HttpServletResponse response) throws IOException {
-        response.sendRedirect("/swagger-ui/index.html");
-    }
 
     @Bean
     public OpenAPI springShopOpenAPI() {

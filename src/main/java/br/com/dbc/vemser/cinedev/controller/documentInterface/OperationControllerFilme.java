@@ -1,11 +1,7 @@
 package br.com.dbc.vemser.cinedev.controller.documentInterface;
 
-import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.dto.filmedto.FilmeCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.filmedto.FilmeDTO;
-import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoDTO;
-import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
-import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroCinemaFilmeDTO;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;

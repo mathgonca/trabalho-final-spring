@@ -1,11 +1,11 @@
 package br.com.dbc.vemser.cinedev.controller;
 
 import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerIngresso;
-import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCompradoDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoDTO;
 import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
+import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.IngressoService;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +31,11 @@ public class IngressoController implements OperationControllerIngresso {
     public List<IngressoDTO> listarIngressos() throws RegraDeNegocioException {
         return ingressoService.listarIngressos();
     }
+
     @Override
     @GetMapping("/{idIngresso}")
     public IngressoDTO listarIngressosPorId(@PathVariable("idIngresso") Integer id) throws RegraDeNegocioException {
-//        return ingressoService.findById(id);
-        return null;
+        return ingressoService.ingressoDTOporId(id);
     }
 
     @Override
@@ -44,11 +44,11 @@ public class IngressoController implements OperationControllerIngresso {
         return ingressoService.listarIngressosComprados();
     }
 
-    @Override
-    @GetMapping("/comprado/{idCliente}")
-    public List<IngressoCompradoDTO> listarIngressosCompradosPorCliente(@PathVariable("idCliente") Integer id) throws RegraDeNegocioException {
-        return ingressoService.listarIngressosCompradosPorCliente(id);
+    @GetMapping("/ingressosComprados-byCliente")
+    public List<RelatorioCadastroIngressoClienteDTO> listarIngressosCompradosPorCliente(@RequestParam("idCliente") Integer idCliente) throws RegraDeNegocioException {
+        return ingressoService.listarIngressosCompradosPorCliente(idCliente);
     }
+
 
     @Override
     @PostMapping
@@ -58,8 +58,8 @@ public class IngressoController implements OperationControllerIngresso {
 
     @Override
     @PutMapping("/comprar/{idCliente}/ingresso/{idIngresso}")
-    public ResponseEntity<IngressoDTO> comprarIngresso(@PathVariable("idCliente") Integer idCliente,
-                                                       @PathVariable("idIngresso") Integer idIngresso) throws RegraDeNegocioException{
+    public ResponseEntity<IngressoCompradoDTO> comprarIngresso(@PathVariable("idCliente") Integer idCliente,
+                                                               @PathVariable("idIngresso") Integer idIngresso) throws RegraDeNegocioException {
         return new ResponseEntity<>(ingressoService.comprarIngresso(idCliente, idIngresso), HttpStatus.OK);
     }
 
@@ -71,8 +71,8 @@ public class IngressoController implements OperationControllerIngresso {
     }
 
     @GetMapping("/find-ingresso-paginado")
-    public PageDTO<IngressoDTO> listarIngressoPaginado(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina){
-        return ingressoService.listIngressoPaginas(paginaQueEuQuero, tamanhoDeRegistrosPorPagina);
+    public ResponseEntity<PageDTO<IngressoDTO>> listarIngressoPaginado(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina) {
+        return new ResponseEntity<>(ingressoService.listIngressoPaginas(paginaQueEuQuero, tamanhoDeRegistrosPorPagina), HttpStatus.OK);
     }
 }
 

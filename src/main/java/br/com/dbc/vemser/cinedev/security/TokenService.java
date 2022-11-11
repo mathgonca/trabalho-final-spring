@@ -40,7 +40,7 @@ public class TokenService {
 //        Date now = new Date();
 //        Date exp = new Date(now.getTime() + 864000000);
 
-        List<String> cargosDoUsuario = usuarioEntity.getCargos().stream()
+        List<String> cargosDoUsuario = usuarioEntity.getCargo().stream()
                 .map(CargoEntity::getAuthority)
                 .toList();
 

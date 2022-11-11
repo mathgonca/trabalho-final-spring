@@ -43,7 +43,6 @@ public class ClienteEntity extends UsuarioEntity {
     private Set<IngressoEntity> ingresso;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "cliente")
     private UsuarioEntity usuario;
 }

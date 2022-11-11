@@ -2,6 +2,7 @@ package br.com.dbc.vemser.cinedev.controller.documentInterface;
 
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
+import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -52,5 +54,5 @@ public interface OperationControllerCliente {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remoção de dados realizada!"),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
-    public List<RelatorioCadastroIngressoClienteDTO> listarRelatorioPersonalizado(@RequestParam(required = false, name = "idCliente") Integer idCliente);
+    public ResponseEntity<List<RelatorioCadastroIngressoClienteDTO>> listarRelatorioCadastroIngressoClienteDTO(@RequestParam(required = false, name = "idCliente") Integer idCliente);
 }

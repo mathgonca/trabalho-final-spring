@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.cinedev.security;
 
 import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
+import br.com.dbc.vemser.cinedev.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
