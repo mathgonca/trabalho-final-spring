@@ -40,7 +40,9 @@ public class TokenService {
 //        Date now = new Date();
 //        Date exp = new Date(now.getTime() + 864000000);
 
-        String cargosDoUsuario = usuarioEntity.getCargo().toString();
+        List<String> cargosDoUsuario = usuarioEntity.getCargos().stream()
+                .map(CargoEntity::getAuthority)
+                .toList();
 
         String meuToken = Jwts.builder()
                 .setIssuer("pessoaapi")

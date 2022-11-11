@@ -24,16 +24,22 @@ public class UsuarioEntity implements UserDetails {
     @Column(name = "id_usuario")
     private Integer idUsuario;
 
-    @Column(name = "login")
+    @Column(name = "email")
     private String login;
 
     @Column(name = "senha")
     private String senha;
 
+    @Column(name = "ativo")
+    private String ativo = "S";
+
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_cargo", referencedColumnName = "id_cargo")
-    private CargoEntity cargo;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "USUARIO_CARGO",
+            joinColumns = @JoinColumn(name = "ID_USUARIO"),
+            inverseJoinColumns = @JoinColumn(name = "ID_CARGO"))
+    private Set<CargoEntity> cargos;
+
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -50,8 +56,7 @@ public class UsuarioEntity implements UserDetails {
     // FIXME implementar métodos de UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<CargoEntity> cargo = new ArrayList<>();
-        return cargo; // por enquanto
+        return cargos; // por enquanto
     }
 
     @Override

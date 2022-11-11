@@ -34,14 +34,15 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->
                         authz.antMatchers("/auth/**").permitAll()
+                        .antMatchers("/auth/novo-cliente").permitAll()
 
 
-                                //ao meio - nossas regras especificas
-                                .antMatchers(HttpMethod.DELETE, "/pessoa", "/endereco").hasRole("ADMIN") // pro usuario n poder deletar, nem o marketing.
-                                .antMatchers("/contato/**").hasRole("ADMIN")
-                                .antMatchers("/endereco/**").hasAnyRole("MARKETING", "USUARIO")
-
-
+//                                //ao meio - nossas regras especificas
+//                                .antMatchers(HttpMethod.DELETE, "/pessoa", "/endereco").hasRole("ADMIN") // pro usuario n poder deletar, nem o marketing.
+//                                .antMatchers("/contato/**").hasRole("ADMIN")
+//                                .antMatchers("/endereco/**").hasAnyRole("MARKETING", "USUARIO")
+//
+//
 
 
                                 .anyRequest().authenticated()

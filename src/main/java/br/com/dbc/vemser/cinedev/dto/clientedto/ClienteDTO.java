@@ -10,8 +10,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClienteDTO extends ClienteCreateDTO {
+public class ClienteDTO extends UsuarioCreateClienteDTO {
 
     @Schema(description = "Id do cliente", example = "1")
     private Integer idCliente;
+
+    @Schema(description = "Id do Usuario", example = "1")
+    private Integer idUsuario;
 }

@@ -10,20 +10,26 @@ import java.util.Set;
 
 @Getter
 @Setter
-@Entity(name = "Cargo")
+@Entity
+@Table(name = "CARGO")
 public class CargoEntity implements GrantedAuthority {
-
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CARGO_SEQ")
-    @SequenceGenerator(name = "CARGO_SEQ", sequenceName = "seq_cargo", allocationSize = 1)
     @Id
-    @Column(name = "id_cargo")
-    private int idCargo;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CARGO_SEQUENCIA")
+    @SequenceGenerator(name = "CARGO_SEQUENCIA", sequenceName = "SEQ_CARGO", allocationSize = 1)
+    @Column(name = "ID_CARGO")
+    private Integer idCargo;
 
-    @Column(name = "nome")
-    private String nome ;
+    @Column(name = "NOME")
+    private String nome;
+
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cargo")
-    private Set<UsuarioEntity> usuario;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "USUARIO_CARGO",
+            joinColumns = @JoinColumn(name = "ID_CARGO"),
+            inverseJoinColumns = @JoinColumn(name = "ID_USUARIO")
+    )
+    private Set<UsuarioEntity> usuarios;
 
     @Override
     public String getAuthority() {

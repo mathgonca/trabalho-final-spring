@@ -1,6 +1,8 @@
 package br.com.dbc.vemser.cinedev.controller;
 
 import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
+import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
+import br.com.dbc.vemser.cinedev.dto.clientedto.UsuarioCreateClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.login.LoginDTO;
 import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
@@ -68,5 +70,13 @@ public class AuthController {
     @GetMapping("/usuario-logado")
     public ResponseEntity<UsuarioDTO> retornarUsuario() throws RegraDeNegocioException {
         return new ResponseEntity<>(objectMapper.convertValue(usuarioService.getLoggedUser(), UsuarioDTO.class), HttpStatus.OK);
+    }
+
+    @PostMapping("/novo-cliente")
+    public ResponseEntity<ClienteDTO> criarUsuario(@RequestBody @Valid UsuarioCreateClienteDTO criarClienteDTO) throws RegraDeNegocioException {
+
+        ClienteDTO usuarioDTO = usuarioService.cadastrarCliente(criarClienteDTO);
+
+        return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
     }
 }

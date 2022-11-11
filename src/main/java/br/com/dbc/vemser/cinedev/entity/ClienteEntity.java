@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "Cliente")
-public class ClienteEntity extends UsuarioEntity {
+public class ClienteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLIENTE_SEQ")
@@ -38,9 +38,6 @@ public class ClienteEntity extends UsuarioEntity {
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
 
-    @Column(name = "email")
-    private String email;
-
     @Column(name = "ativo")
     private String ativo = "S";
 
@@ -49,6 +46,7 @@ public class ClienteEntity extends UsuarioEntity {
     private Set<IngressoEntity> ingresso;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "cliente")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private UsuarioEntity usuario;
 }

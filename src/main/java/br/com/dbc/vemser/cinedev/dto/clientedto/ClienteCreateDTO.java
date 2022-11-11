@@ -40,9 +40,4 @@ public class ClienteCreateDTO {
     @NotNull
     @Schema(description = "Data de Nascimento do usuário", example = "1999/02/20")
     private LocalDate dataNascimento;
-
-    @NotNull
-    @NotEmpty
-    @Schema(description = "Email do usuário - o mesmo não pode ser usado para mais de um cadastro!", example = "noahbispo@yahoo.com.br")
-    private String email;
 }

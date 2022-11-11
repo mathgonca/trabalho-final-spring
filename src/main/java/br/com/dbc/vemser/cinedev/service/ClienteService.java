@@ -19,7 +19,7 @@ import java.util.Optional;
 @Service
 public class ClienteService {
     private final ClienteRepository clienteRepository;
-    private final EmailService emailService;
+//    private final EmailService emailService;
     private final ObjectMapper objectMapper;
 
     public List<ClienteDTO> listarTodosClientes() {
@@ -33,17 +33,17 @@ public class ClienteService {
         String clienteCadastroCPF = clienteCreateDTO.getCpf();
         Optional<ClienteEntity> clientePorCPF = clienteRepository.findByCpf(clienteCadastroCPF);
 
-        String clienteCadastroEmail = clienteCreateDTO.getEmail();
-        Optional<ClienteEntity> clientePorEmail = clienteRepository.findByEmail(clienteCadastroEmail);
-
-        if (clientePorCPF.isPresent() || clientePorEmail.isPresent()) {
-            throw new RegraDeNegocioException("Cliente já cadastrado com os mesmos dados");
-        }
+//        String clienteCadastroEmail = clienteCreateDTO.getEmail();
+//        Optional<ClienteEntity> clientePorEmail = clienteRepository.findByEmail(clienteCadastroEmail);
+//
+//        if (clientePorCPF.isPresent() || clientePorEmail.isPresent()) {
+//            throw new RegraDeNegocioException("Cliente já cadastrado com os mesmos dados");
+//        }
 
         ClienteEntity clienteEntity = objectMapper.convertValue(clienteCreateDTO, ClienteEntity.class);
         ClienteEntity clienteEntityCadastrado = clienteRepository.save(clienteEntity);
         ClienteDTO clienteDTO = objectMapper.convertValue(clienteEntityCadastrado, ClienteDTO.class);
-        emailService.sendEmail(clienteDTO, TipoEmails.CREATE);
+//        emailService.sendEmail(clienteDTO, TipoEmails.CREATE);
         return clienteDTO;
     }
 
@@ -69,7 +69,7 @@ public class ClienteService {
 
         ClienteEntity clienteEntityAtualizado = clienteRepository.save(clienteEntity);
         ClienteDTO clienteDTO = objectMapper.convertValue(clienteEntityAtualizado, ClienteDTO.class);
-        emailService.sendEmail(clienteDTO, TipoEmails.UPDATE);
+//        emailService.sendEmail(clienteDTO, TipoEmails.UPDATE);
 
         return clienteDTO;
     }
@@ -78,7 +78,7 @@ public class ClienteService {
         ClienteEntity clienteEntity = listarClientePeloId(idCliente);
         ClienteDTO clienteDTO = objectMapper.convertValue(clienteEntity, ClienteDTO.class);
 
-        emailService.sendEmail(clienteDTO, TipoEmails.DELETE);
+//        emailService.sendEmail(clienteDTO, TipoEmails.DELETE);
         clienteRepository.deleteById(clienteEntity.getIdCliente());
     }
 

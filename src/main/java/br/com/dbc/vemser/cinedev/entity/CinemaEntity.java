@@ -14,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "Cinema")
-public class CinemaEntity extends UsuarioEntity {
+public class CinemaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CINEMA_SEQ")
@@ -42,8 +42,8 @@ public class CinemaEntity extends UsuarioEntity {
     private Set<IngressoEntity> ingresso;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "cinema")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private UsuarioEntity usuario;
-
 
 }
