@@ -1,15 +1,20 @@
 package br.com.dbc.vemser.cinedev.service;
 
 import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
+import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
+import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
+import br.com.dbc.vemser.cinedev.dto.cinemadto.UsuarioCreateCinemaDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.UsuarioCreateClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.login.LoginDTO;
 import br.com.dbc.vemser.cinedev.entity.CargoEntity;
+import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
 import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
 import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.CargoRepository;
+import br.com.dbc.vemser.cinedev.repository.CinemaRepository;
 import br.com.dbc.vemser.cinedev.repository.ClienteRepository;
 import br.com.dbc.vemser.cinedev.repository.UsuarioRepository;
 import br.com.dbc.vemser.cinedev.service.emails.EmailService;
@@ -33,6 +38,9 @@ public class UsuarioService {
 
 
     private final ClienteRepository clienteRepository;
+
+    private final CinemaRepository cinemaRepository;
+
     private final EmailService emailService;
 
     private final CargoRepository cargoRepository;
@@ -104,5 +112,29 @@ public class UsuarioService {
         ClienteDTO clienteDTO = objectMapper.convertValue(clienteEntityCadastrado, ClienteDTO.class);
 //        emailService.sendEmail(clienteDTO, TipoEmails.CREATE);
         return clienteDTO;
+    }
+
+    public CinemaDTO cadastrarCinema(UsuarioCreateCinemaDTO cinemaCapturado) throws RegraDeNegocioException {
+        String cinemaNome = cinemaCapturado.getNome();
+        Optional<CinemaEntity> cinemaPorNome = cinemaRepository.findByNome(cinemaNome);
+
+        if (cinemaPorNome.isPresent()) {
+            throw new RegraDeNegocioException("Erro! Nome do Cinema já consta em nossa lista de cadastros!");
+        }
+        Optional<CargoEntity> cargo = cargoRepository.findById(1);
+        UsuarioEntity usuarioEntity = new UsuarioEntity();
+        usuarioEntity.setLogin(cinemaCapturado.getLogin());
+        usuarioEntity.setSenha(cinemaCapturado.getSenha());
+        usuarioEntity.setCargos(Set.of(cargo.get()));
+        usuarioRepository.save(usuarioEntity);
+        CinemaEntity cinema = new CinemaEntity();
+        cinema.setUsuario(usuarioEntity);
+        cinema.setNome(cinemaCapturado.getNome());
+        cinema.setEstado(cinemaCapturado.getEstado());
+        cinema.setCidade(cinemaCapturado.getCidade());
+        CinemaEntity cinemaEntitySalvo = cinemaRepository.save(cinema);
+        CinemaDTO cinemaDTO = objectMapper.convertValue(cinemaEntitySalvo, CinemaDTO.class);
+
+        return cinemaDTO;
     }
 }

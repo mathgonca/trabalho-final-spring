@@ -34,7 +34,17 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->
                         authz.antMatchers("/auth/**").permitAll()
-                        .antMatchers("/auth/novo-cliente").permitAll()
+                            .antMatchers(HttpMethod.DELETE,"/**").hasRole("ADMIN")
+                                .antMatchers("/**").hasRole("ADMIN")
+                                .antMatchers("/cinema/**").hasRole("CINEMA")
+                                .antMatchers(HttpMethod.POST,"/ingresso/cadastro").hasRole("CINEMA")
+                                .antMatchers("/ingresso/ingressosComprados-byCliente").hasRole("CLIENTE")
+                                .antMatchers("/ingresso/find-ingresso-paginado").hasRole("CLIENTE")
+                                .antMatchers("/ingresso/comprado").hasAnyRole("CINEMA","ADMIN")
+                                .antMatchers(HttpMethod.GET,"/filme").hasAnyRole("CINEMA", "CLIENTE","ADMIN")
+                                .antMatchers(HttpMethod.PUT,"/cliente/**").hasRole("CLIENTE")
+                                
+
 
 
 //                                //ao meio - nossas regras especificas

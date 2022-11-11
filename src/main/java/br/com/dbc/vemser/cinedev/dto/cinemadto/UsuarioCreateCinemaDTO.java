@@ -1,0 +1,28 @@
+package br.com.dbc.vemser.cinedev.dto.cinemadto;
+
+import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class UsuarioCreateCinemaDTO extends CinemaCreateDTO {
+
+    @NotNull
+    @NotEmpty
+    @Schema(description = "Email do usuário - o mesmo não pode ser usado para mais de um cadastro!", example = "noahbispo@yahoo.com.br")
+    private String login;
+
+    @NotBlank
+    @Schema(description = "Senha não pode conter espaços!", example = "123")
+    private String senha;
+}

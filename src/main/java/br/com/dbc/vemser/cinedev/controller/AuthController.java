@@ -1,6 +1,8 @@
 package br.com.dbc.vemser.cinedev.controller;
 
 import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
+import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
+import br.com.dbc.vemser.cinedev.dto.cinemadto.UsuarioCreateCinemaDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.UsuarioCreateClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.login.LoginDTO;
@@ -59,24 +61,24 @@ public class AuthController {
         return token;
     }
 
-    @PostMapping("/novo-usuario")
-    public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
-
-        UsuarioDTO usuarioDTO = usuarioService.create(loginDTO);
-
-        return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
-    }
-
     @GetMapping("/usuario-logado")
     public ResponseEntity<UsuarioDTO> retornarUsuario() throws RegraDeNegocioException {
         return new ResponseEntity<>(objectMapper.convertValue(usuarioService.getLoggedUser(), UsuarioDTO.class), HttpStatus.OK);
     }
 
     @PostMapping("/novo-cliente")
-    public ResponseEntity<ClienteDTO> criarUsuario(@RequestBody @Valid UsuarioCreateClienteDTO criarClienteDTO) throws RegraDeNegocioException {
+    public ResponseEntity<ClienteDTO> criarCliente(@RequestBody @Valid UsuarioCreateClienteDTO criarClienteDTO) throws RegraDeNegocioException {
 
         ClienteDTO usuarioDTO = usuarioService.cadastrarCliente(criarClienteDTO);
 
         return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("/novo-cinema")
+    public ResponseEntity<CinemaDTO> criarcinema(@RequestBody @Valid UsuarioCreateCinemaDTO criarCinema) throws RegraDeNegocioException {
+
+        CinemaDTO cinemaDTO = usuarioService.cadastrarCinema(criarCinema);
+
+        return new ResponseEntity<>(cinemaDTO, HttpStatus.OK);
     }
 }
