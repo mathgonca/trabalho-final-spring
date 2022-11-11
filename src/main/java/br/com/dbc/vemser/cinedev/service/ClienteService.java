@@ -4,8 +4,10 @@ import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
 import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
+import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.ClienteRepository;
+import br.com.dbc.vemser.cinedev.repository.UsuarioRepository;
 import br.com.dbc.vemser.cinedev.service.emails.EmailService;
 import br.com.dbc.vemser.cinedev.service.emails.TipoEmails;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +21,8 @@ import java.util.Optional;
 @Service
 public class ClienteService {
     private final ClienteRepository clienteRepository;
+
+    private final UsuarioRepository usuarioRepository;
 //    private final EmailService emailService;
     private final ObjectMapper objectMapper;
 
@@ -77,9 +81,24 @@ public class ClienteService {
     public void deletarCliente(Integer idCliente) throws RegraDeNegocioException {
         ClienteEntity clienteEntity = listarClientePeloId(idCliente);
         ClienteDTO clienteDTO = objectMapper.convertValue(clienteEntity, ClienteDTO.class);
+        UsuarioEntity usuario = new UsuarioEntity();
+        UsuarioEntity usuarioEntity = clienteEntity.getUsuario();
+
 
 //        emailService.sendEmail(clienteDTO, TipoEmails.DELETE);
         clienteRepository.deleteById(clienteEntity.getIdCliente());
+        usuarioEntity.isEnabled();
+    }
+
+    public void deletarUsuarioCliente(Integer idCliente) throws RegraDeNegocioException {
+        ClienteEntity clienteEntity = listarClientePeloId(idCliente);
+        UsuarioEntity usuario = new UsuarioEntity();
+        UsuarioEntity usuarioEntity = clienteEntity.getUsuario();
+
+//        emailService.sendEmail(clienteDTO, TipoEmails.DELETE);
+        clienteRepository.deleteById(clienteEntity.getIdCliente());
+        usuarioEntity.setAtivo("N");
+
     }
 
     public ClienteEntity findById(Integer id) throws RegraDeNegocioException {

@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface ClienteRepository extends JpaRepository<ClienteEntity, Integer> {
     Optional<ClienteEntity> findByCpf(String cpf);
 
-    Optional<ClienteEntity> findByUsuarioLogin(String email);
+//    Optional<ClienteEntity> findByUsuarioEmail(String email);
 
     @Query("select c from Cliente c where c.ativo like 'S' and c.idCliente = :idCliente")
     Optional<ClienteEntity> findById(Integer idCliente);
@@ -25,13 +25,14 @@ public interface ClienteRepository extends JpaRepository<ClienteEntity, Integer>
     @Modifying
     @Query("update Cliente set ativo = 'n' where idCliente = :idCliente")
     void deleteById(Integer idCliente);
+    
     @Query(" select new br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO(" +
             " c.idCliente, " +
             " c.primeiroNome, " +
             " c.ultimoNome, " +
             " c.cpf, " +
             " c.dataNascimento, " +
-            " c.usuario.login, " +
+            " c.usuario.email, " +
             " ci.idIngresso, " +
             " ci.idFilme, " +
             " ci.filme.nome, " +

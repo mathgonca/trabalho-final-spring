@@ -72,9 +72,6 @@ public class TokenService {
                     .getBody();
 
             //usuário e senha válidos...
-
-
-
 //        String idUsuario = chaves.get("jti", String.class);
             String idUsuario = chaves.get(Claims.ID, String.class);
             List<String> cargos = chaves.get(KEY_CARGOS, List.class);

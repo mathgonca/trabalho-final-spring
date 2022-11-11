@@ -17,7 +17,7 @@ public class UsuarioCreateClienteDTO extends ClienteCreateDTO {
     @NotNull
     @NotEmpty
     @Schema(description = "Email do usuário - o mesmo não pode ser usado para mais de um cadastro!", example = "noahbispo@yahoo.com.br")
-    private String login;
+    private String email;
 
     @NotBlank
     @Schema(description = "Senha não pode conter espaços!", example = "123")

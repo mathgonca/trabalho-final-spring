@@ -18,9 +18,9 @@ public class AuthenticationService implements UserDetailsService {
 
     // FIXME buscar usuário pelo login
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UsuarioEntity> usuarioOptional = usuarioService.findByLogin(username);
-        return usuarioOptional.orElseThrow(() -> new UsernameNotFoundException("Usuário inválido"));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<UsuarioEntity> usuarioOptional = usuarioService.findByEmail(email);
+        return usuarioOptional.orElseThrow(() -> new UsernameNotFoundException("E-mail inválido"));
     }
 
 

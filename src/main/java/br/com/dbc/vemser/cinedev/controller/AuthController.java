@@ -42,7 +42,7 @@ public class AuthController {
         //FIXME criar objeto UsernamePasswordAuthenticationToken com o usuário e senha
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(
-                        loginDTO.getLogin(),
+                        loginDTO.getEmail(),
                         loginDTO.getSenha()
                 );
 

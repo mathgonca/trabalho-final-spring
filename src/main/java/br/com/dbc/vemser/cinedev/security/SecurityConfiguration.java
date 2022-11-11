@@ -3,7 +3,6 @@ package br.com.dbc.vemser.cinedev.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,16 +33,16 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->
                         authz.antMatchers("/auth/**").permitAll()
-                            .antMatchers(HttpMethod.DELETE,"/**").hasRole("ADMIN")
-                                .antMatchers("/**").hasRole("ADMIN")
-                                .antMatchers("/cinema/**").hasRole("CINEMA")
-                                .antMatchers(HttpMethod.POST,"/ingresso/cadastro").hasRole("CINEMA")
-                                .antMatchers("/ingresso/ingressosComprados-byCliente").hasRole("CLIENTE")
-                                .antMatchers("/ingresso/find-ingresso-paginado").hasRole("CLIENTE")
-                                .antMatchers("/ingresso/comprado").hasAnyRole("CINEMA","ADMIN")
-                                .antMatchers(HttpMethod.GET,"/filme").hasAnyRole("CINEMA", "CLIENTE","ADMIN")
-                                .antMatchers(HttpMethod.PUT,"/cliente/**").hasRole("CLIENTE")
-                                
+//                            .antMatchers(HttpMethod.DELETE,"/**").hasRole("ADMIN")
+//                                .antMatchers("/**").hasRole("ADMIN")
+//                                .antMatchers("/cinema/**").hasRole("CINEMA")
+//                                .antMatchers(HttpMethod.POST,"/ingresso/cadastro").hasRole("CINEMA")
+//                                .antMatchers("/ingresso/ingressosComprados-byCliente").hasRole("CLIENTE")
+//                                .antMatchers("/ingresso/find-ingresso-paginado").hasRole("CLIENTE")
+//                                .antMatchers("/ingresso/comprado").hasAnyRole("CINEMA","ADMIN")
+//                                .antMatchers(HttpMethod.GET,"/filme").hasAnyRole("CINEMA", "CLIENTE","ADMIN")
+//                                .antMatchers(HttpMethod.PUT,"/cliente/**").hasRole("CLIENTE")
+
 
 
 

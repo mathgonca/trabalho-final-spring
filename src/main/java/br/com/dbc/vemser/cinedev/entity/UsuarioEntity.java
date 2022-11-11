@@ -6,9 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -25,13 +23,13 @@ public class UsuarioEntity implements UserDetails {
     private Integer idUsuario;
 
     @Column(name = "email")
-    private String login;
+    private String email;
 
     @Column(name = "senha")
     private String senha;
 
     @Column(name = "ativo")
-    private String ativo = "S";
+    private String ativo;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
@@ -66,7 +64,7 @@ public class UsuarioEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return login;
+        return email;
     }
 
     @Override
@@ -86,6 +84,6 @@ public class UsuarioEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return ativo == "S";
     }
 }

@@ -16,7 +16,7 @@ public class RelatorioCadastroIngressoClienteDTO {
     private String ultimoNome; // cliente
     private String cpf; // cliente
     private LocalDate dataNascimento; // cliente
-    private String login; // cliente
+    private String email; // cliente
     private int idIngresso; // ingresso
     private int idFilme; // ingresso
     private String nome; // filme

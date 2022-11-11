@@ -1,10 +1,8 @@
 package br.com.dbc.vemser.cinedev.service;
 
 import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
-import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.UsuarioCreateCinemaDTO;
-import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.UsuarioCreateClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.login.LoginDTO;
@@ -18,7 +16,6 @@ import br.com.dbc.vemser.cinedev.repository.CinemaRepository;
 import br.com.dbc.vemser.cinedev.repository.ClienteRepository;
 import br.com.dbc.vemser.cinedev.repository.UsuarioRepository;
 import br.com.dbc.vemser.cinedev.service.emails.EmailService;
-import br.com.dbc.vemser.cinedev.service.emails.TipoEmails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,13 +43,14 @@ public class UsuarioService {
     private final CargoRepository cargoRepository;
 
     private final PasswordEncoder passwordEncoder;
+
     // FIXME construir métodoss necessários para o usuário
 
 
 
 
     public Optional<UsuarioEntity> findByLoginAndSenha(String login, String senha){
-        return usuarioRepository.findByLoginAndSenha(login, senha);
+        return usuarioRepository.findByEmailAndSenha(login, senha);
     }
 
     public Optional<UsuarioEntity> findByID(Integer idUsuario) {
@@ -60,8 +58,8 @@ public class UsuarioService {
     }
 
     // FIXME CRIAR FIND POR LOGIN
-    public Optional<UsuarioEntity> findByLogin(String login) {
-        return usuarioRepository.findByLogin(login);
+    public Optional<UsuarioEntity> findByEmail(String login) {
+        return usuarioRepository.findByEmail(login);
     }
 
     public UsuarioDTO create(LoginDTO loginDTO)throws RegraDeNegocioException {
@@ -90,9 +88,11 @@ public class UsuarioService {
 //        Optional<ClienteEntity> clientePorCPF = clienteRepository.findByCpf(clienteCadastroCPF);
         Optional<CargoEntity> cargo = cargoRepository.findById(2);
         UsuarioEntity usuarioEntity = new UsuarioEntity();
-        usuarioEntity.setLogin(clienteCreateDTO.getLogin());
-        usuarioEntity.setSenha(clienteCreateDTO.getSenha());
+        String senha = passwordEncoder.encode(clienteCreateDTO.getSenha());
+        usuarioEntity.setEmail(clienteCreateDTO.getEmail());
+        usuarioEntity.setSenha(senha);
         usuarioEntity.setCargos(Set.of(cargo.get()));
+        usuarioEntity.setAtivo("S");
         usuarioRepository.save(usuarioEntity);
 
 //        String clienteCadastroEmail = clienteCreateDTO.getEmail();
@@ -123,9 +123,11 @@ public class UsuarioService {
         }
         Optional<CargoEntity> cargo = cargoRepository.findById(1);
         UsuarioEntity usuarioEntity = new UsuarioEntity();
-        usuarioEntity.setLogin(cinemaCapturado.getLogin());
-        usuarioEntity.setSenha(cinemaCapturado.getSenha());
+        String senha = passwordEncoder.encode(cinemaCapturado.getSenha());
+        usuarioEntity.setEmail(cinemaCapturado.getEmail());
+        usuarioEntity.setSenha(senha);
         usuarioEntity.setCargos(Set.of(cargo.get()));
+        usuarioEntity.setAtivo("S");
         usuarioRepository.save(usuarioEntity);
         CinemaEntity cinema = new CinemaEntity();
         cinema.setUsuario(usuarioEntity);

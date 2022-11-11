@@ -56,6 +56,11 @@ public class ClienteController implements OperationControllerCliente {
         clienteService.deletarCliente(idCliente);
     }
 
+    @DeleteMapping("/delete/usuario-cliente")
+    public void deletarUsuarioCliente(@PathVariable Integer idCliente) throws RegraDeNegocioException {
+        clienteService.deletarUsuarioCliente(idCliente);
+    }
+
     @GetMapping("/cliente-relatorio")
     public ResponseEntity<List<RelatorioCadastroIngressoClienteDTO>> listarRelatorioCadastroIngressoClienteDTO(@RequestParam(required = false, name = "idCliente") Integer idCliente) {
         List<RelatorioCadastroIngressoClienteDTO> relatorioCadastroIngressoClienteDTO = clienteService.listarRelatorioPersonalizado(idCliente);
