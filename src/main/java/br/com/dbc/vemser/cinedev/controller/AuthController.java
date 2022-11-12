@@ -26,24 +26,21 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class AuthController {
     private final UsuarioService usuarioService;
-    private final TokenService tokenService;
 
     private final ObjectMapper objectMapper;
 
-    private final AuthenticationService authenticationService;
 
     //FIXME injetar AuthenticationManager
-    private final AuthenticationManager authenticationManager;
 
     @PostMapping("/fazer-login")
     public ResponseEntity<String> autenticar(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
-       String token = authenticationService.autenticar(loginDTO);
+       String token = usuarioService.autenticar(loginDTO);
        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     @PostMapping("/recuperar-senha")
     public ResponseEntity<Void> recuperarSenha(@Valid @RequestBody RecuperarSenhaDTO email) throws RegraDeNegocioException {
-       authenticationService.recuperarSenha(email);
+       usuarioService.recuperarSenha(email);
        return ResponseEntity.noContent().build();
     }
 

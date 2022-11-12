@@ -1,7 +1,7 @@
 package br.com.dbc.vemser.cinedev.controller.documentInterface;
 
+import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
-import br.com.dbc.vemser.cinedev.dto.clientedto.UsuarioDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;

@@ -1,6 +1,6 @@
 package br.com.dbc.vemser.cinedev.service;
 
-import br.com.dbc.vemser.cinedev.dto.clientedto.UsuarioDTO;
+import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCompradoDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoDTO;
@@ -78,7 +78,7 @@ public class IngressoService {
         ingressoDTO.setNomeCinema(ingressoRecuperado.getCinema().getNome());
         ingressoDTO.setNomeCliente(ingressoRecuperado.getCliente().getPrimeiroNome());
         ingressoDTO.setNomeFilme(ingressoRecuperado.getFilme().getNome());
-        emailService.sendEmail(usuarioDTO,TipoEmails.ING_COMPRADO);
+        emailService.sendEmail(usuarioDTO,TipoEmails.ING_COMPRADO, null);
         return ingressoDTO;
 
     }
