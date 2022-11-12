@@ -49,6 +49,11 @@ public class CinemaController implements OperationControllerCinema {
         return new ResponseEntity<>(cinemaService.atualizarCinema(idCinema, cinemaCreateDTO), HttpStatus.OK);
     }
 
+    @PutMapping("/atualizar-cinema-usuario")
+    public ResponseEntity<CinemaDTO> updateCinemaPorUsuario(@Valid @RequestBody CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
+        return new ResponseEntity<>(cinemaService.atualizarCinemaUsuario(cinemaCreateDTO), HttpStatus.OK);
+    }
+
     @Override
     @DeleteMapping("/{idCinema}")
     public ResponseEntity<Void> delete(@PathVariable Integer idCinema) throws

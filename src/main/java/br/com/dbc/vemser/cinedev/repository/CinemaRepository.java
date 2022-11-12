@@ -15,6 +15,8 @@ public interface CinemaRepository extends JpaRepository<CinemaEntity, Integer> {
 
     Optional<CinemaEntity> findByNome(String nome);
 
+    Optional<CinemaEntity> findByIdUsuario(Integer idUsuario);
+
     @Query("select c from Cinema c where c.ativo like 'S' and c.idCinema = :idCinema")
     Optional<CinemaEntity> findById(Integer idCinema);
 

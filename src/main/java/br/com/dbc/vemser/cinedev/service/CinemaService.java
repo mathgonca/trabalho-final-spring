@@ -23,7 +23,7 @@ import java.util.Optional;
 public class CinemaService {
     private final CinemaRepository cinemaRepository;
     private final ObjectMapper objectMapper;
-
+    private final UsuarioService usuarioService;
     private final UsuarioRepository usuarioRepository;
 
     public List<CinemaDTO> listarCinema() {
@@ -58,11 +58,22 @@ public class CinemaService {
         return cinemaOptional.get();
     }
 
+    public CinemaEntity listarCinemaIdUsuario(Integer idUsuario) throws RegraDeNegocioException {
+        Optional<CinemaEntity> cinemaOptional = cinemaRepository.findByIdUsuario(idUsuario);
+
+        if (cinemaOptional.isEmpty()) {
+            throw new RegraDeNegocioException("cinema não cadastrado");
+        }
+
+        return cinemaOptional.get();
+    }
+
     public CinemaDTO listarCinemaPorId(Integer idCinema) throws RegraDeNegocioException {
         return objectMapper.convertValue(listarCinemaID(idCinema), CinemaDTO.class);
     }
 
     public CinemaDTO atualizarCinema(Integer idCinema, CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
+
         CinemaEntity cinemaPego = findById(idCinema);
         CinemaEntity cinemaEntity = objectMapper.convertValue(cinemaCreateDTO, CinemaEntity.class);
 //        listarCinemaID(idCinema);
@@ -78,6 +89,20 @@ public class CinemaService {
         CinemaDTO cinemaDTO = objectMapper.convertValue(cinemaPego, CinemaDTO.class);
 //        CinemaEntity cinemaEntityAtualizado = cinemaRepository.save(cinemaEntity);
 
+//        return objectMapper.convertValue(cinemaEntityAtualizado, CinemaDTO.class);
+        return cinemaDTO;
+    }
+
+    public CinemaDTO atualizarCinemaUsuario(CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
+        CinemaEntity cinemaPego = listarCinemaIdUsuario(usuarioService.getIdLoggedUser());
+//        listarCinemaID(idCinema);
+        cinemaPego.setNome(cinemaCreateDTO.getNome());
+        cinemaPego.setCidade(cinemaCreateDTO.getCidade());
+        cinemaPego.setEstado(cinemaCreateDTO.getEstado());
+//        cinemaEntityRecuperado.setIngressos(cinemaCreateDTO.getIngressos());
+        cinemaRepository.save(cinemaPego);
+        CinemaDTO cinemaDTO = objectMapper.convertValue(cinemaPego, CinemaDTO.class);
+//        CinemaEntity cinemaEntityAtualizado = cinemaRepository.save(cinemaEntity);
 //        return objectMapper.convertValue(cinemaEntityAtualizado, CinemaDTO.class);
         return cinemaDTO;
     }
