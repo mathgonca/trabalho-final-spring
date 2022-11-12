@@ -26,6 +26,8 @@ public class ClienteService {
 //    private final EmailService emailService;
     private final ObjectMapper objectMapper;
 
+    private final UsuarioService usuarioService;
+
     public List<ClienteDTO> listarTodosClientes() {
         List<ClienteEntity> clienteEntityList = clienteRepository.findAll();
         return clienteEntityList.stream()
@@ -60,6 +62,10 @@ public class ClienteService {
 
         return clienteOptional.get();
     }
+    public ClienteEntity listarClientePorUsuario(Integer idUsuario) throws RegraDeNegocioException {
+       return clienteRepository.findByIdUsuario(usuarioService.getIdLoggedUser())
+               .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado"));
+    }
 
     public ClienteDTO listarClienteDTOPeloId(Integer idCliente) throws RegraDeNegocioException {
         return objectMapper.convertValue(listarClientePeloId(idCliente), ClienteDTO.class);
@@ -72,6 +78,21 @@ public class ClienteService {
         clienteEntity.setIdCliente(idCliente);
 
         ClienteEntity clienteEntityAtualizado = clienteRepository.save(clienteEntity);
+        ClienteDTO clienteDTO = objectMapper.convertValue(clienteEntityAtualizado, ClienteDTO.class);
+//        emailService.sendEmail(clienteDTO, TipoEmails.UPDATE);
+
+        return clienteDTO;
+    }
+
+    public ClienteDTO atualizarClientePorUsuario(ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
+
+        ClienteEntity clienteRecuperado = listarClientePorUsuario(usuarioService.getIdLoggedUser());
+        clienteRecuperado.setPrimeiroNome(clienteCreateDTO.getPrimeiroNome());
+        clienteRecuperado.setUltimoNome(clienteCreateDTO.getUltimoNome());
+        clienteRecuperado.setDataNascimento(clienteRecuperado.getDataNascimento());
+        clienteRecuperado.setCpf(clienteRecuperado.getCpf());
+
+        ClienteEntity clienteEntityAtualizado = clienteRepository.save(clienteRecuperado);
         ClienteDTO clienteDTO = objectMapper.convertValue(clienteEntityAtualizado, ClienteDTO.class);
 //        emailService.sendEmail(clienteDTO, TipoEmails.UPDATE);
 

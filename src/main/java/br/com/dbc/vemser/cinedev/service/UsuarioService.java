@@ -79,8 +79,8 @@ public class UsuarioService {
         return findById(getIdLoggedUser());
     }
 
-    public UsuarioEntity findById(Integer idUsuario) throws RegraDeNegocioException{
-        return usuarioRepository.findById(idUsuario).orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado!"));
+    public UsuarioEntity findById(Integer idLoggedUser) throws RegraDeNegocioException{
+        return usuarioRepository.findById(idLoggedUser).orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado!"));
     }
 
     public ClienteDTO cadastrarCliente(UsuarioCreateClienteDTO clienteCreateDTO) throws RegraDeNegocioException {
@@ -139,4 +139,5 @@ public class UsuarioService {
 
         return cinemaDTO;
     }
+
 }

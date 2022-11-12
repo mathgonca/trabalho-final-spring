@@ -22,6 +22,9 @@ public interface ClienteRepository extends JpaRepository<ClienteEntity, Integer>
     @Query("select c from Cliente c where c.ativo like 'S'")
     List<ClienteEntity> findAll();
 
+
+    Optional<ClienteEntity> findByIdUsuario(Integer idUsuario);
+
     @Modifying
     @Query("update Cliente set ativo = 'N' where idCliente = :idCliente")
     void deleteById(Integer idCliente);

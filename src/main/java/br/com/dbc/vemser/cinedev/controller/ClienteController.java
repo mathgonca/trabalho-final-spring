@@ -50,6 +50,13 @@ public class ClienteController implements OperationControllerCliente {
         return new ResponseEntity<>(clienteService.atualizarCliente(idCliente, clienteCreateDTO), HttpStatus.OK);
     }
 
+
+    @PutMapping("/atualizar-cliente-usuario")
+    public ResponseEntity<ClienteDTO> updateUsuario(@Valid @RequestBody ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
+
+        return new ResponseEntity<>(clienteService.atualizarClientePorUsuario(clienteCreateDTO), HttpStatus.OK);
+    }
+
     @Override
     @DeleteMapping("/delete/{idCliente}")
     public void delete(@PathVariable Integer idCliente) throws RegraDeNegocioException {
