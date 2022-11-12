@@ -23,9 +23,9 @@ public interface ClienteRepository extends JpaRepository<ClienteEntity, Integer>
     List<ClienteEntity> findAll();
 
     @Modifying
-    @Query("update Cliente set ativo = 'n' where idCliente = :idCliente")
+    @Query("update Cliente set ativo = 'N' where idCliente = :idCliente")
     void deleteById(Integer idCliente);
-    
+
     @Query(" select new br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO(" +
             " c.idCliente, " +
             " c.primeiroNome, " +

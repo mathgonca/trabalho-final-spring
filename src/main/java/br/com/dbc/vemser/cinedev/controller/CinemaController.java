@@ -57,6 +57,13 @@ public class CinemaController implements OperationControllerCinema {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @DeleteMapping("/deletar-cinema/{idCinema}")
+    public ResponseEntity<Void> deletarCinema(@PathVariable Integer idCinema) throws
+            RegraDeNegocioException {
+        cinemaService.deletarCinemaLogin(idCinema);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @GetMapping("/cinema-relatorio")
     public ResponseEntity<List<RelatorioCadastroCinemaFilmeDTO>> listarRelatorioPersonalizado(@RequestParam(required = false, name = "idCinema") Integer idCinema) {
         return new ResponseEntity<>(cinemaService.listarRelatorioPersonalizado(idCinema), HttpStatus.OK);

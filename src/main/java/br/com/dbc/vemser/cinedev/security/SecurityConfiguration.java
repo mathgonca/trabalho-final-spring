@@ -52,8 +52,6 @@ public class SecurityConfiguration {
 //                                .antMatchers("/endereco/**").hasAnyRole("MARKETING", "USUARIO")
 //
 //
-
-
                                 .anyRequest().authenticated()
                 );
         // 1 - verifica token

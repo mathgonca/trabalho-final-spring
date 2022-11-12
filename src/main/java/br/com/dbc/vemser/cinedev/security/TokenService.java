@@ -45,7 +45,7 @@ public class TokenService {
                 .toList();
 
         String meuToken = Jwts.builder()
-                .setIssuer("pessoaapi")
+                .setIssuer("MATHEUS_GONCALVES")
                 .claim(Claims.ID, usuarioEntity.getIdUsuario().toString())
                 .claim(KEY_CARGOS, cargosDoUsuario)
                 .setIssuedAt(now)

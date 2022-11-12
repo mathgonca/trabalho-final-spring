@@ -56,7 +56,7 @@ public class ClienteController implements OperationControllerCliente {
         clienteService.deletarCliente(idCliente);
     }
 
-    @DeleteMapping("/delete/usuario-cliente")
+    @DeleteMapping("/delete/usuario-cliente/{idCliente}")
     public void deletarUsuarioCliente(@PathVariable Integer idCliente) throws RegraDeNegocioException {
         clienteService.deletarUsuarioCliente(idCliente);
     }

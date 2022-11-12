@@ -92,7 +92,7 @@ public class UsuarioService {
         usuarioEntity.setEmail(clienteCreateDTO.getEmail());
         usuarioEntity.setSenha(senha);
         usuarioEntity.setCargos(Set.of(cargo.get()));
-        usuarioEntity.setAtivo("S");
+        usuarioEntity.setAtivo('S');
         usuarioRepository.save(usuarioEntity);
 
 //        String clienteCadastroEmail = clienteCreateDTO.getEmail();
@@ -127,7 +127,7 @@ public class UsuarioService {
         usuarioEntity.setEmail(cinemaCapturado.getEmail());
         usuarioEntity.setSenha(senha);
         usuarioEntity.setCargos(Set.of(cargo.get()));
-        usuarioEntity.setAtivo("S");
+        usuarioEntity.setAtivo('S');
         usuarioRepository.save(usuarioEntity);
         CinemaEntity cinema = new CinemaEntity();
         cinema.setUsuario(usuarioEntity);

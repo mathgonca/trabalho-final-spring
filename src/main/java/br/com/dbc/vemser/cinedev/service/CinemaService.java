@@ -5,8 +5,10 @@ import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroCinemaFilmeDTO;
 import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
+import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.CinemaRepository;
+import br.com.dbc.vemser.cinedev.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,8 @@ import java.util.Optional;
 public class CinemaService {
     private final CinemaRepository cinemaRepository;
     private final ObjectMapper objectMapper;
+
+    private final UsuarioRepository usuarioRepository;
 
     public List<CinemaDTO> listarCinema() {
         List<CinemaEntity> cinemaEntityList = cinemaRepository.findAll();
@@ -83,6 +87,16 @@ public class CinemaService {
         CinemaEntity cinema = null;
         cinema = findById(idCinema);
         cinemaRepository.delete(cinema);
+    }
+
+    public void deletarCinemaLogin(Integer idCinema) throws RegraDeNegocioException {
+//        CinemaEntity cinema = listarCinemaID(idCinema);
+        CinemaEntity cinema = null;
+        cinema = findById(idCinema);
+        UsuarioEntity usuarioEntity = cinema.getUsuario();
+        cinemaRepository.delete(cinema);
+        usuarioEntity.setAtivo('N');
+        usuarioRepository.save(usuarioEntity);
     }
 
     public CinemaEntity findById(Integer id) throws RegraDeNegocioException {

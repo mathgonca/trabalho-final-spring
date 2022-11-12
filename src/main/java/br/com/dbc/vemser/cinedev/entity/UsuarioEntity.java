@@ -29,7 +29,7 @@ public class UsuarioEntity implements UserDetails {
     private String senha;
 
     @Column(name = "ativo")
-    private String ativo;
+    private char ativo;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
@@ -84,6 +84,6 @@ public class UsuarioEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return ativo == "S";
+        return ativo == 'S';
     }
 }

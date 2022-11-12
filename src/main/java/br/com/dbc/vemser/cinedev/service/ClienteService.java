@@ -97,7 +97,8 @@ public class ClienteService {
 
 //        emailService.sendEmail(clienteDTO, TipoEmails.DELETE);
         clienteRepository.deleteById(clienteEntity.getIdCliente());
-        usuarioEntity.setAtivo("N");
+        usuarioEntity.setAtivo('N');
+        usuarioRepository.save(usuarioEntity);
 
     }
 

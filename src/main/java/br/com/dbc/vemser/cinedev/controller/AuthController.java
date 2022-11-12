@@ -35,7 +35,7 @@ public class AuthController {
     //FIXME injetar AuthenticationManager
     private final AuthenticationManager authenticationManager;
 
-    @PostMapping
+    @PostMapping("/fazer-login")
     public String autenticar(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
         // FIXME adicionar mecanismo de autenticação para verificar se o usuário é válido e retornar o token
 
