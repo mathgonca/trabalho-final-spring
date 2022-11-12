@@ -77,8 +77,7 @@ public class UsuarioService {
 
     public void recuperarSenhaCliente(RecuperarSenhaDTO emailDTO) throws RegraDeNegocioException {
         // FIXME adicionar mecanismo de autenticação para verificar se o usuário é válido e retornar o token
-        UsuarioEntity usuarioEntity = findByEmail(emailDTO.getEmail()).orElseThrow(() ->
-                new RegraDeNegocioException(USUARIO_NAO_ENCONTRADO));
+        UsuarioEntity usuarioEntity = findByEmail(emailDTO.getEmail());
 
         String token = tokenService.getTokenTrocarSenha(usuarioEntity);
 
@@ -96,8 +95,7 @@ public class UsuarioService {
     public void recuperarSenhaCinema(RecuperarSenhaDTO emailDTO) throws RegraDeNegocioException {
         // FIXME adicionar mecanismo de autenticação para verificar se o usuário é válido e retornar o token
 
-        UsuarioEntity usuarioEntity = findByEmail(emailDTO.getEmail()).orElseThrow(() ->
-                new RegraDeNegocioException(USUARIO_NAO_ENCONTRADO));
+        UsuarioEntity usuarioEntity = findByEmail(emailDTO.getEmail());
 
         String token = tokenService.getTokenTrocarSenha(usuarioEntity);
 
@@ -115,8 +113,7 @@ public class UsuarioService {
     }
 
     public void mudarSenhaCliente(String senha) throws RegraDeNegocioException {
-        UsuarioEntity usuarioEntity = this.findByEmail(getLoggedUser().getEmail())
-                .orElseThrow(() -> new RegraDeNegocioException(USUARIO_NAO_ENCONTRADO));
+        UsuarioEntity usuarioEntity = this.findByEmail(getLoggedUser().getEmail());
 
         CargoEntity cargoRemovido = cargoService.findById(ROLE_RECCLIENTE_ID);
 
@@ -132,8 +129,7 @@ public class UsuarioService {
     }
 
     public void mudarSenhaCinema(String senha) throws RegraDeNegocioException {
-        UsuarioEntity usuarioEntity = this.findByEmail(getLoggedUser().getEmail()).orElseThrow(()
-                -> new RegraDeNegocioException(USUARIO_NAO_ENCONTRADO));
+        UsuarioEntity usuarioEntity = this.findByEmail(getLoggedUser().getEmail());
 
         CargoEntity cargoRemovido = cargoService.findById(ROLE_RECCINEMA_ID);
 
@@ -161,8 +157,9 @@ public class UsuarioService {
     }
 
     // FIXME CRIAR FIND POR LOGIN
-    public Optional<UsuarioEntity> findByEmail(String login) {
-        return usuarioRepository.findByEmail(login);
+    public UsuarioEntity findByEmail(String login) throws RegraDeNegocioException {
+        return usuarioRepository.findByEmail(login)
+                .orElseThrow(() -> new RegraDeNegocioException(USUARIO_NAO_ENCONTRADO));
     }
 
     public UsuarioDTO create(LoginDTO loginDTO) {
