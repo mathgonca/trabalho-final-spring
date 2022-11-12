@@ -33,6 +33,8 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->
                         authz.antMatchers("/auth/**").permitAll()
+                                .antMatchers("/atualizar-senha-cinema").hasRole("CINEMA")
+                                .antMatchers("/atualizar-senha-cliente").hasRole("CLIENTE")
 //                            .antMatchers(HttpMethod.DELETE,"/**").hasRole("ADMIN")
 //                                .antMatchers("/**").hasRole("ADMIN")
 //                                .antMatchers("/cinema/**").hasRole("CINEMA")

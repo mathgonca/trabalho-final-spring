@@ -38,10 +38,28 @@ public class AuthController {
        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
-    @PostMapping("/recuperar-senha")
-    public ResponseEntity<Void> recuperarSenha(@Valid @RequestBody RecuperarSenhaDTO email) throws RegraDeNegocioException {
-       usuarioService.recuperarSenha(email);
+    @PostMapping("/recuperar-senha-cliente")
+    public ResponseEntity<Void> recuperarSenhaCliente(@Valid @RequestBody RecuperarSenhaDTO email) throws RegraDeNegocioException {
+       usuarioService.recuperarSenhaCliente(email);
        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/recuperar-senha-cinema")
+    public ResponseEntity<Void> recuperarSenhaCinema(@Valid @RequestBody RecuperarSenhaDTO email) throws RegraDeNegocioException {
+        usuarioService.recuperarSenhaCinema(email);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/atualizar-senha-cinema")
+    public ResponseEntity<Void> atualizarSenhaCinema(@Valid @RequestBody String senha) throws RegraDeNegocioException {
+        usuarioService.mudarSenhaCinema(senha);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/atualizar-senha-cliente")
+    public ResponseEntity<Void> atualizarSenhaCliente(@Valid @RequestBody String senha) throws RegraDeNegocioException {
+        usuarioService.mudarSenhaCliente(senha);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/usuario-logado")
