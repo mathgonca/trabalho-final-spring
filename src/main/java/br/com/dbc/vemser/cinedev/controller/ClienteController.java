@@ -2,7 +2,7 @@ package br.com.dbc.vemser.cinedev.controller;
 
 import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerCliente;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
-import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
+import br.com.dbc.vemser.cinedev.dto.clientedto.UsuarioDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
 import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
@@ -26,26 +26,26 @@ public class ClienteController implements OperationControllerCliente {
 
     @Override
     @GetMapping
-    public List<ClienteDTO> list() throws RegraDeNegocioException {
+    public List<UsuarioDTO> list() throws RegraDeNegocioException {
         return clienteService.listarTodosClientes();
     }
 
 
     @GetMapping("/{idCliente}")
-    public ClienteDTO listarClientePeloId(@PathVariable Integer idCliente) throws RegraDeNegocioException {
+    public UsuarioDTO listarClientePeloId(@PathVariable Integer idCliente) throws RegraDeNegocioException {
         return clienteService.listarClienteDTOPeloId(idCliente);
     }
 
     @Override
     @PostMapping
-    public ResponseEntity<ClienteDTO> cadastrarCliente(@Valid @RequestBody ClienteCreateDTO clienteCreateDTO)
+    public ResponseEntity<UsuarioDTO> cadastrarCliente(@Valid @RequestBody ClienteCreateDTO clienteCreateDTO)
             throws BancoDeDadosException, RegraDeNegocioException {
         return new ResponseEntity<>(clienteService.cadastrarCliente(clienteCreateDTO), HttpStatus.OK);
     }
 
     @Override
     @PutMapping("/{idCliente}")
-    public ResponseEntity<ClienteDTO> update(@PathVariable Integer idCliente,
+    public ResponseEntity<UsuarioDTO> update(@PathVariable Integer idCliente,
                                              @Valid @RequestBody ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(clienteService.atualizarCliente(idCliente, clienteCreateDTO), HttpStatus.OK);
     }

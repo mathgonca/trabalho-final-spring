@@ -1,6 +1,6 @@
 package br.com.dbc.vemser.cinedev.service.emails;
 
-import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
+import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import lombok.RequiredArgsConstructor;
@@ -24,27 +24,31 @@ public class EmailService {
     private String from;
     private final JavaMailSender emailSender;
 
-    public void sendEmail(ClienteDTO clienteDTO, TipoEmails tipoEmails) {
+    public void sendEmail(UsuarioDTO usuarioDTO, TipoEmails tipoEmails, String token) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(from);
-            mimeMessageHelper.setTo(clienteDTO.getEmail());
+            mimeMessageHelper.setTo(usuarioDTO.getEmail());
             mimeMessageHelper.setSubject(tipoEmails.getDescricao());
-            mimeMessageHelper.setText(geContentFromTemplate(clienteDTO, tipoEmails), true);
+            if(token == null){
+                mimeMessageHelper.setText(geContentFromTemplate(usuarioDTO, tipoEmails), true);
+                emailSender.send(mimeMessageHelper.getMimeMessage());
+            }
+            mimeMessageHelper.setText(geContentFromTemplateToken(usuarioDTO, tipoEmails, token), true);
             emailSender.send(mimeMessageHelper.getMimeMessage());
         } catch (MessagingException | IOException | TemplateException e) {
             e.printStackTrace();
         }
     }
 
-    public String geContentFromTemplate(ClienteDTO clienteDTO, TipoEmails tipoEmails) throws IOException, TemplateException {
+    public String geContentFromTemplate(UsuarioDTO usuarioDTO, TipoEmails tipoEmails) throws IOException, TemplateException {
         Map<String, Object> dados = new HashMap<>();
-        dados.put("nome", clienteDTO.getPrimeiroNome());
+        dados.put("nome", usuarioDTO.getEmail());
         dados.put("email", from);
         if (tipoEmails.equals(TipoEmails.CREATE)) {
             dados.put("texto1", "Estamos felizes em ter você em nosso sistema!");
-            dados.put("texto2", "Seu cadastro foi realizado com sucesso, seu identificador é: " + clienteDTO.getIdCliente() + "!");
+            dados.put("texto2", "Seu cadastro foi realizado com sucesso!");
         } else if (tipoEmails.equals(TipoEmails.UPDATE)) {
             dados.put("texto1", "Você atualizou seus dados com sucesso! ");
             dados.put("texto2", "--------------------------------------");
@@ -54,6 +58,19 @@ public class EmailService {
         } else if (tipoEmails.equals(TipoEmails.ING_COMPRADO)) {
             dados.put("texto1", "A compra do seu ingresso foi realizada com sucesso!");
             dados.put("texto2", "Obrigado!");
+        }
+        Template template = fmConfiguration.getTemplate("email-template.html");
+        String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
+        return html;
+    }
+
+    public String geContentFromTemplateToken(UsuarioDTO usuarioDTO, TipoEmails tipoEmails, String token) throws IOException, TemplateException {
+        Map<String, Object> dados = new HashMap<>();
+        dados.put("nome", usuarioDTO.getEmail());
+        dados.put("email", from);
+        if (tipoEmails.equals(TipoEmails.REC_SENHA)) {
+            dados.put("texto1", "Solicitação de recuperação de senha feita com sucesso!" );
+            dados.put("texto2", "Seu token de recuperação é: " + token);
         }
         Template template = fmConfiguration.getTemplate("email-template.html");
         String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);

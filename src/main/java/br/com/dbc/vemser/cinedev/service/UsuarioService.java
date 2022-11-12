@@ -3,7 +3,6 @@ package br.com.dbc.vemser.cinedev.service;
 import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.UsuarioCreateCinemaDTO;
-import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.UsuarioCreateClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.login.LoginDTO;
 import br.com.dbc.vemser.cinedev.entity.CargoEntity;
@@ -33,7 +32,6 @@ public class UsuarioService {
 
     private final ObjectMapper objectMapper;
 
-
     private final ClienteRepository clienteRepository;
 
     private final CinemaRepository cinemaRepository;
@@ -62,13 +60,13 @@ public class UsuarioService {
         return usuarioRepository.findByEmail(login);
     }
 
-    public UsuarioDTO create(LoginDTO loginDTO)throws RegraDeNegocioException {
+    public br.com.dbc.vemser.cinedev.dto.UsuarioDTO create(LoginDTO loginDTO)throws RegraDeNegocioException {
         UsuarioEntity usuarioEntity = objectMapper.convertValue(loginDTO, UsuarioEntity.class);
 
         String senha = passwordEncoder.encode(usuarioEntity.getSenha()); //p codificar a senha
         usuarioEntity.setSenha(senha);
         usuarioRepository.save(usuarioEntity);
-        return objectMapper.convertValue(usuarioEntity, UsuarioDTO.class);
+        return objectMapper.convertValue(usuarioEntity, br.com.dbc.vemser.cinedev.dto.UsuarioDTO.class);
     }
 
     public Integer getIdLoggedUser(){
@@ -83,7 +81,7 @@ public class UsuarioService {
         return usuarioRepository.findById(idUsuario).orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado!"));
     }
 
-    public ClienteDTO cadastrarCliente(UsuarioCreateClienteDTO clienteCreateDTO) throws RegraDeNegocioException {
+    public UsuarioDTO cadastrarCliente(UsuarioCreateClienteDTO clienteCreateDTO) throws RegraDeNegocioException {
 //        String clienteCadastroCPF = clienteCreateDTO.getCpf();
 //        Optional<ClienteEntity> clientePorCPF = clienteRepository.findByCpf(clienteCadastroCPF);
         Optional<CargoEntity> cargo = cargoRepository.findById(2);
@@ -109,9 +107,9 @@ public class UsuarioService {
         clienteEntity.setPrimeiroNome(clienteCreateDTO.getPrimeiroNome());
         clienteEntity.setUltimoNome(clienteCreateDTO.getUltimoNome());
         ClienteEntity clienteEntityCadastrado = clienteRepository.save(clienteEntity);
-        ClienteDTO clienteDTO = objectMapper.convertValue(clienteEntityCadastrado, ClienteDTO.class);
+        UsuarioDTO usuarioDTO = objectMapper.convertValue(clienteEntityCadastrado, UsuarioDTO.class);
 //        emailService.sendEmail(clienteDTO, TipoEmails.CREATE);
-        return clienteDTO;
+        return usuarioDTO;
     }
 
     public CinemaDTO cadastrarCinema(UsuarioCreateCinemaDTO cinemaCapturado) throws RegraDeNegocioException {

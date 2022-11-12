@@ -24,6 +24,9 @@ public class TokenService {
     @Value("${jwt.expiration}")
     private String expiration;
 
+    @Value("${jwt.expiration}")
+    private String expirationChangePassword;
+
     @Value("${jwt.secret}")
     private String secret;
 
@@ -60,6 +63,34 @@ public class TokenService {
 //        return token;
     }
 
+    public String getTokenTrocarSenha(UsuarioEntity usuarioEntity) {
+        // FIXME por meio do usuário, gerar um token
+
+
+        LocalDateTime dataAtual = LocalDateTime.now();
+        Date now = Date.from(dataAtual.atZone(ZoneId.systemDefault()).toInstant());
+
+        LocalDateTime dataExpiracao = dataAtual.plusMinutes(Long.parseLong(expirationChangePassword));
+        Date exp = Date.from(dataExpiracao.atZone(ZoneId.systemDefault()).toInstant());
+
+//        Date now = new Date();
+//        Date exp = new Date(now.getTime() + 864000000);
+
+        List<String> cargosDoUsuario = usuarioEntity.getCargos().stream()
+                .map(CargoEntity::getAuthority)
+                .toList();
+
+        String meuToken = Jwts.builder()
+                .setIssuer("MATHEUS_GONCALVES")
+                .claim(Claims.ID, usuarioEntity.getIdUsuario().toString())
+                .claim(KEY_CARGOS, cargosDoUsuario)
+                .setIssuedAt(now)
+                .setExpiration(exp)
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
+
+        return meuToken;
+    }
 
     public UsernamePasswordAuthenticationToken isValid(String token) {
         // FIXME validar se o token é válido e retornar o usuário se for válido
