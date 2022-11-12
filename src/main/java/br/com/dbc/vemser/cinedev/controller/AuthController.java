@@ -3,11 +3,11 @@ package br.com.dbc.vemser.cinedev.controller;
 import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.UsuarioCreateCinemaDTO;
-import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.UsuarioCreateClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.login.LoginDTO;
-import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
+import br.com.dbc.vemser.cinedev.dto.recuperarsenhadto.RecuperarSenhaDTO;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
+import br.com.dbc.vemser.cinedev.security.AuthenticationService;
 import br.com.dbc.vemser.cinedev.security.TokenService;
 import br.com.dbc.vemser.cinedev.service.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,8 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,44 +30,32 @@ public class AuthController {
 
     private final ObjectMapper objectMapper;
 
+    private final AuthenticationService authenticationService;
+
     //FIXME injetar AuthenticationManager
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/fazer-login")
-    public String autenticar(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
-        // FIXME adicionar mecanismo de autenticação para verificar se o usuário é válido e retornar o token
+    public ResponseEntity<String> autenticar(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
+       String token = authenticationService.autenticar(loginDTO);
+       return new ResponseEntity<>(token, HttpStatus.OK);
+    }
 
-        //FIXME criar objeto UsernamePasswordAuthenticationToken com o usuário e senha
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(
-                        loginDTO.getEmail(),
-                        loginDTO.getSenha()
-                );
-
-        //FIXME utilizar AuthenticationManager para se autenticar
-        Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-
-        // UsuarioEntity
-        //FIXME recuperar usuário após da autenticação (getPrincipal())
-        Object principal = authenticate.getPrincipal();
-
-        //FIXME GERAR TOKEN (trocar null por usuarioEntity da autenticação)
-        UsuarioEntity usuarioEntity = (UsuarioEntity) principal;
-
-        String token = tokenService.getToken(usuarioEntity);
-
-        return token;
+    @PostMapping("/recuperar-senha")
+    public ResponseEntity<Void> recuperarSenha(@Valid @RequestBody RecuperarSenhaDTO email) throws RegraDeNegocioException {
+       authenticationService.recuperarSenha(email);
+       return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/usuario-logado")
-    public ResponseEntity<UsuarioDTO> retornarUsuario() throws RegraDeNegocioException {
-        return new ResponseEntity<>(objectMapper.convertValue(usuarioService.getLoggedUser(), UsuarioDTO.class), HttpStatus.OK);
+    public ResponseEntity<br.com.dbc.vemser.cinedev.dto.UsuarioDTO> retornarUsuario() throws RegraDeNegocioException {
+        return new ResponseEntity<>(objectMapper.convertValue(usuarioService.getLoggedUser(), br.com.dbc.vemser.cinedev.dto.UsuarioDTO.class), HttpStatus.OK);
     }
 
     @PostMapping("/novo-cliente")
-    public ResponseEntity<ClienteDTO> criarCliente(@RequestBody @Valid UsuarioCreateClienteDTO criarClienteDTO) throws RegraDeNegocioException {
+    public ResponseEntity<UsuarioDTO> criarCliente(@RequestBody @Valid UsuarioCreateClienteDTO criarClienteDTO) throws RegraDeNegocioException {
 
-        ClienteDTO usuarioDTO = usuarioService.cadastrarCliente(criarClienteDTO);
+        UsuarioDTO usuarioDTO = usuarioService.cadastrarCliente(criarClienteDTO);
 
         return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
     }

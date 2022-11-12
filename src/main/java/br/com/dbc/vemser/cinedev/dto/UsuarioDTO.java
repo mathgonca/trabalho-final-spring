@@ -14,7 +14,7 @@ public class UsuarioDTO {
 
     @NotNull
     @Schema(example = "user")
-    private String login;
+    private String email;
 
     @JsonIgnore
     @NotNull
