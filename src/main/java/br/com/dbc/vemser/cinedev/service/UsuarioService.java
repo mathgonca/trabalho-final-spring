@@ -11,7 +11,6 @@ import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
 import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
 import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
-import br.com.dbc.vemser.cinedev.repository.CargoRepository;
 import br.com.dbc.vemser.cinedev.repository.CinemaRepository;
 import br.com.dbc.vemser.cinedev.repository.ClienteRepository;
 import br.com.dbc.vemser.cinedev.repository.UsuarioRepository;
@@ -40,14 +39,12 @@ public class UsuarioService {
     public static final int ROLE_RECCLIENTE_ID = 4;
     public static final int ROLE_RECCINEMA_ID = 5;
     public static final String USUARIO_NAO_ENCONTRADO = "Usuário não encontrado!";
-    public static final String CARGO_NAO_ENCONTRADO = "Cargo não encontrado!";
-
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final ClienteRepository clienteRepository;
     private final CinemaRepository cinemaRepository;
     private final EmailService emailService;
-    private final CargoRepository cargoRepository;
+    private final CargoService cargoService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
@@ -89,13 +86,9 @@ public class UsuarioService {
 
         emailService.sendEmail(usuarioDTO, TipoEmails.REC_SENHA, token);
 
-        Optional<CargoEntity> cargo = cargoRepository.findById(ROLE_RECCLIENTE_ID);
+        CargoEntity cargo = cargoService.findById(ROLE_RECCLIENTE_ID);
 
-        if (cargo.isEmpty()) {
-            throw new RegraDeNegocioException(CARGO_NAO_ENCONTRADO);
-        }
-
-        usuarioEntity.getCargos().add(cargo.get());
+        usuarioEntity.getCargos().add(cargo);
 
         usuarioRepository.save(usuarioEntity);
     }
@@ -112,15 +105,11 @@ public class UsuarioService {
 
         emailService.sendEmail(usuarioDTO, TipoEmails.REC_SENHA, token);
 
-        Optional<CargoEntity> cargo = cargoRepository.findById(ROLE_RECCINEMA_ID);
-
-        if (cargo.isEmpty()) {
-            throw new RegraDeNegocioException(CARGO_NAO_ENCONTRADO);
-        }
+        CargoEntity cargo = cargoService.findById(ROLE_RECCINEMA_ID);
 
         usuarioEntity = objectMapper.convertValue(usuarioRepository.findByEmail(emailDTO.getEmail()), UsuarioEntity.class);
 
-        usuarioEntity.getCargos().add(cargo.get());
+        usuarioEntity.getCargos().add(cargo);
 
         usuarioRepository.save(usuarioEntity);
     }
@@ -129,20 +118,16 @@ public class UsuarioService {
         UsuarioEntity usuarioEntity = this.findByEmail(getLoggedUser().getEmail())
                 .orElseThrow(() -> new RegraDeNegocioException(USUARIO_NAO_ENCONTRADO));
 
-        Optional<CargoEntity> cargoRemovido = cargoRepository.findById(ROLE_RECCLIENTE_ID);
-
-        if (cargoRemovido.isEmpty()) {
-            throw new RegraDeNegocioException(CARGO_NAO_ENCONTRADO);
-        }
+        CargoEntity cargoRemovido = cargoService.findById(ROLE_RECCLIENTE_ID);
 
         usuarioEntity.getCargos().stream()
-                .filter(cargo -> cargo.getIdCargo() == cargoRemovido.get().getIdCargo())
+                .filter(cargo -> cargo.getIdCargo() == cargoRemovido.getIdCargo())
                 .findFirst()
                 .orElseThrow(() -> new RegraDeNegocioException("Senha já foi alterada!"));
 
         String senhaNova = passwordEncoder.encode(senha);
         usuarioEntity.setSenha(senhaNova);
-        usuarioEntity.getCargos().remove(cargoRemovido.get());
+        usuarioEntity.getCargos().remove(cargoRemovido);
         usuarioRepository.save(usuarioEntity);
     }
 
@@ -150,20 +135,16 @@ public class UsuarioService {
         UsuarioEntity usuarioEntity = this.findByEmail(getLoggedUser().getEmail()).orElseThrow(()
                 -> new RegraDeNegocioException(USUARIO_NAO_ENCONTRADO));
 
-        Optional<CargoEntity> cargoRemovido = cargoRepository.findById(ROLE_RECCINEMA_ID);
-
-        if (cargoRemovido.isEmpty()) {
-            throw new RegraDeNegocioException(CARGO_NAO_ENCONTRADO);
-        }
+        CargoEntity cargoRemovido = cargoService.findById(ROLE_RECCINEMA_ID);
 
         usuarioEntity.getCargos().stream()
-                .filter(cargo -> cargo.getIdCargo() == cargoRemovido.get().getIdCargo())
+                .filter(cargo -> cargo.getIdCargo() == cargoRemovido.getIdCargo())
                 .findFirst()
                 .orElseThrow(() -> new RegraDeNegocioException("Senha já foi alterada!"));
 
         String senhaNova = passwordEncoder.encode(senha);
         usuarioEntity.setSenha(senhaNova);
-        usuarioEntity.getCargos().remove(cargoRemovido.get());
+        usuarioEntity.getCargos().remove(cargoRemovido);
         usuarioRepository.save(usuarioEntity);
     }
 
@@ -205,17 +186,13 @@ public class UsuarioService {
     public UsuarioDTO cadastrarCliente(UsuarioCreateClienteDTO clienteCreateDTO) throws RegraDeNegocioException {
 //        String clienteCadastroCPF = clienteCreateDTO.getCpf();
 //        Optional<ClienteEntity> clientePorCPF = clienteRepository.findByCpf(clienteCadastroCPF);
-        Optional<CargoEntity> cargo = cargoRepository.findById(ROLE_CLIENTE_ID);
-
-        if (cargo.isEmpty()) {
-            throw new RegraDeNegocioException(CARGO_NAO_ENCONTRADO);
-        }
+        CargoEntity cargo = cargoService.findById(ROLE_CLIENTE_ID);
 
         UsuarioEntity usuarioEntity = new UsuarioEntity();
         String senha = passwordEncoder.encode(clienteCreateDTO.getSenha());
         usuarioEntity.setEmail(clienteCreateDTO.getEmail());
         usuarioEntity.setSenha(senha);
-        usuarioEntity.setCargos(Set.of(cargo.get()));
+        usuarioEntity.setCargos(Set.of(cargo));
         usuarioEntity.setAtivo('S');
         usuarioRepository.save(usuarioEntity);
 
@@ -246,17 +223,13 @@ public class UsuarioService {
             throw new RegraDeNegocioException("Erro! Nome do Cinema já consta em nossa lista de cadastros!");
         }
 
-        Optional<CargoEntity> cargo = cargoRepository.findById(ROLE_ADMIN_ID);
-
-        if (cargo.isEmpty()) {
-            throw new RegraDeNegocioException(CARGO_NAO_ENCONTRADO);
-        }
+        CargoEntity cargo = cargoService.findById(ROLE_ADMIN_ID);
 
         UsuarioEntity usuarioEntity = new UsuarioEntity();
         String senha = passwordEncoder.encode(cinemaCapturado.getSenha());
         usuarioEntity.setEmail(cinemaCapturado.getEmail());
         usuarioEntity.setSenha(senha);
-        usuarioEntity.setCargos(Set.of(cargo.get()));
+        usuarioEntity.setCargos(Set.of(cargo));
         usuarioEntity.setAtivo('S');
         usuarioRepository.save(usuarioEntity);
         CinemaEntity cinema = new CinemaEntity();
