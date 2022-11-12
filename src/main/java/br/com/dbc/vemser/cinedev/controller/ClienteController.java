@@ -22,9 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/cliente")
 public class ClienteController implements OperationControllerCliente {
-
     private final ClienteService clienteService;
-
     @Override
     @GetMapping
     public List<UsuarioDTO> list() throws RegraDeNegocioException {
@@ -54,7 +52,6 @@ public class ClienteController implements OperationControllerCliente {
 
     @PutMapping("/atualizar-cliente-usuario")
     public ResponseEntity<ClienteDTO> updateUsuario(@Valid @RequestBody ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
-
         return new ResponseEntity<>(clienteService.atualizarClientePorUsuario(clienteCreateDTO), HttpStatus.OK);
     }
 

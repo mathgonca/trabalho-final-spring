@@ -64,9 +64,6 @@ public class TokenService {
     }
 
     public String getTokenTrocarSenha(UsuarioEntity usuarioEntity) {
-        // FIXME por meio do usuário, gerar um token
-
-
         LocalDateTime dataAtual = LocalDateTime.now();
         Date now = Date.from(dataAtual.atZone(ZoneId.systemDefault()).toInstant());
 
@@ -93,7 +90,6 @@ public class TokenService {
     }
 
     public UsernamePasswordAuthenticationToken isValid(String token) {
-        // FIXME validar se o token é válido e retornar o usuário se for válido
         if (token != null) {
             token = token.replace("Bearer ", "");
 

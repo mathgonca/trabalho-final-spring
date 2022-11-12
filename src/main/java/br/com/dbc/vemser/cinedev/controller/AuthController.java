@@ -27,9 +27,6 @@ public class AuthController {
     private final UsuarioService usuarioService;
     private final ObjectMapper objectMapper;
 
-
-    //FIXME injetar AuthenticationManager
-
     @PostMapping("/fazer-login")
     public ResponseEntity<String> autenticar(@RequestBody @Valid LoginDTO loginDTO) {
         String token = usuarioService.autenticar(loginDTO);
@@ -67,17 +64,13 @@ public class AuthController {
 
     @PostMapping("/novo-cliente")
     public ResponseEntity<UsuarioDTO> criarCliente(@RequestBody @Valid UsuarioCreateClienteDTO criarClienteDTO) throws RegraDeNegocioException {
-
         UsuarioDTO usuarioDTO = usuarioService.cadastrarCliente(criarClienteDTO);
-
         return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
     }
 
     @PostMapping("/novo-cinema")
     public ResponseEntity<CinemaDTO> criarcinema(@RequestBody @Valid UsuarioCreateCinemaDTO criarCinema) throws RegraDeNegocioException {
-
         CinemaDTO cinemaDTO = usuarioService.cadastrarCinema(criarCinema);
-
         return new ResponseEntity<>(cinemaDTO, HttpStatus.OK);
     }
 }

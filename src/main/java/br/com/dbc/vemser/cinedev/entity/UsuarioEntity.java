@@ -51,7 +51,6 @@ public class UsuarioEntity implements UserDetails {
     @ToString.Exclude
     private ClienteEntity cliente;
 
-    // FIXME implementar métodos de UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return cargos; // por enquanto

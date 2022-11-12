@@ -20,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/filme")
 public class FilmeController implements OperationControllerFilme {
-
     private final FilmeService filmeService;
 
     @Override

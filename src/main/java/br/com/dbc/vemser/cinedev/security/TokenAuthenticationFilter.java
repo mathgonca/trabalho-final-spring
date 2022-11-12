@@ -13,16 +13,11 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
-
     private final TokenService tokenService;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        // FIXME recuperar token do header
-        // FIXME recuperar usuário do token
-        // FIXME adicionar o usuário no contexto do spring security
         String token = request.getHeader("Authorization");
 
         UsernamePasswordAuthenticationToken dtoDoSpring = tokenService.isValid(token);

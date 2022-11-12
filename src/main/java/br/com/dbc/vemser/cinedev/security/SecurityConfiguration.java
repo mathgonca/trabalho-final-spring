@@ -23,11 +23,6 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // FIXME desabilitar frameOptions
-        // FIXME habilitar cors
-        // FIXME desabilitar csrf
-        // FIXME adicionar regras de requisição
-        // FIXME adicionar filtro do token
         http.headers().frameOptions().disable().and()
                 .cors().and()
                 .csrf().disable()
@@ -60,7 +55,6 @@ public class SecurityConfiguration {
     }
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        // FIXME fazer o security ignorar o swagger
         return (web) -> web.ignoring().antMatchers("/v3/api-docs",
                 "/v3/api-docs/**",
                 "/swagger-resources/**",

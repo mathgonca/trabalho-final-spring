@@ -30,8 +30,6 @@ public class AuthenticationService implements UserDetailsService {
 
     private final UsuarioRepository usuarioService;
 
-
-    // FIXME buscar usuário pelo login
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<UsuarioEntity> usuarioOptional = usuarioService.findByEmail(email);

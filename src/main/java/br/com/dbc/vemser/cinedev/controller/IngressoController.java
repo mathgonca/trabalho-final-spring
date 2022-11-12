@@ -23,7 +23,6 @@ import java.util.List;
 @RequestMapping("/ingresso")
 
 public class IngressoController implements OperationControllerIngresso {
-
     private final IngressoService ingressoService;
 
     @Override

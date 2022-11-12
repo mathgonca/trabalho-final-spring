@@ -13,16 +13,11 @@ import java.util.Optional;
 @Repository
 public interface ClienteRepository extends JpaRepository<ClienteEntity, Integer> {
     Optional<ClienteEntity> findByCpf(String cpf);
-
 //    Optional<ClienteEntity> findByUsuarioEmail(String email);
-
     @Query("select c from Cliente c where c.ativo like 'S' and c.idCliente = :idCliente")
     Optional<ClienteEntity> findById(Integer idCliente);
-
     @Query("select c from Cliente c where c.ativo like 'S'")
     List<ClienteEntity> findAll();
-
-
     Optional<ClienteEntity> findByIdUsuario(Integer idUsuario);
 
     @Modifying
