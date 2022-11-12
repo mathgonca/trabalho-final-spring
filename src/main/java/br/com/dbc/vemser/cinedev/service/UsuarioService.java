@@ -47,74 +47,12 @@ public class UsuarioService {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
 
-    // FIXME construir métodoss necessários para o usuário
-
-    public String autenticar(@RequestBody @Valid LoginDTO loginDTO) {
-        // FIXME adicionar mecanismo de autenticação para verificar se o usuário é válido e retornar o token
-
-        //FIXME criar objeto UsernamePasswordAuthenticationToken com o usuário e senha
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(
-                        loginDTO.getEmail(),
-                        loginDTO.getSenha()
-                );
-
-        //FIXME utilizar AuthenticationManager para se autenticar
-
-        Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-
-        // UsuarioEntity
-        //FIXME recuperar usuário após da autenticação (getPrincipal())
-        Object principal = authenticate.getPrincipal();
-
-        //FIXME GERAR TOKEN (trocar null por usuarioEntity da autenticação)
-        UsuarioEntity usuarioEntity = (UsuarioEntity) principal;
-
-        return tokenService.getToken(usuarioEntity);
-    }
-
-    public void recuperarSenha(RecuperarSenhaDTO emailDTO, Integer idRoleRec) throws RegraDeNegocioException {
-        // FIXME adicionar mecanismo de autenticação para verificar se o usuário é válido e retornar o token
-        UsuarioEntity usuarioEntity = findByEmail(emailDTO.getEmail());
-
-        String token = tokenService.getTokenTrocarSenha(usuarioEntity);
-
-        UsuarioDTO usuarioDTO = objectMapper.convertValue(usuarioEntity, UsuarioDTO.class);
-
-        emailService.sendEmail(usuarioDTO, TipoEmails.REC_SENHA, token);
-
-        CargoEntity cargo = cargoService.findById(idRoleRec);
-
-        usuarioEntity.getCargos().add(cargo);
-
-        usuarioRepository.save(usuarioEntity);
-    }
-
-    public UsuarioEntity removerCargo(UsuarioEntity usuario, Integer idCargo) throws RegraDeNegocioException {
-        CargoEntity cargoRemovido = cargoService.findById(idCargo);
-
-        usuario.getCargos().stream()
-                .filter(cargo -> cargo.getIdCargo() == cargoRemovido.getIdCargo())
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Senha já foi alterada!"));
-
-        usuario.getCargos().remove(cargoRemovido);
-
-        return usuario;
-    }
-
-    public void mudarSenha(String senha, Integer idRoleRec) throws RegraDeNegocioException {
-        UsuarioEntity usuarioEntity = this.findByEmail(getLoggedUser().getEmail());
-
-        UsuarioEntity usuarioAtualizado = removerCargo(usuarioEntity, idRoleRec);
-
-        String senhaNova = passwordEncoder.encode(senha);
-        usuarioEntity.setSenha(senhaNova);
-        usuarioRepository.save(usuarioAtualizado);
-    }
 
     public Integer getIdLoggedUser() {
         return Integer.parseInt((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    }
+    public UsuarioEntity getLoggedUser() throws RegraDeNegocioException {
+        return findById(getIdLoggedUser());
     }
 
     public Optional<UsuarioEntity> findByLoginAndSenha(String login, String senha) {
@@ -124,11 +62,12 @@ public class UsuarioService {
     public Optional<UsuarioEntity> findByID(Integer idUsuario) {
         return usuarioRepository.findById(idUsuario);
     }
-
-    // FIXME CRIAR FIND POR LOGIN
     public UsuarioEntity findByEmail(String login) throws RegraDeNegocioException {
         return usuarioRepository.findByEmail(login)
                 .orElseThrow(() -> new RegraDeNegocioException(USUARIO_NAO_ENCONTRADO));
+    }
+    public UsuarioEntity findById(Integer idLoggedUser) throws RegraDeNegocioException {
+        return usuarioRepository.findById(idLoggedUser).orElseThrow(() -> new RegraDeNegocioException(USUARIO_NAO_ENCONTRADO));
     }
 
     public UsuarioDTO create(LoginDTO loginDTO) {
@@ -138,15 +77,6 @@ public class UsuarioService {
         usuarioEntity.setSenha(senha);
         usuarioRepository.save(usuarioEntity);
         return objectMapper.convertValue(usuarioEntity, UsuarioDTO.class);
-    }
-
-
-    public UsuarioEntity getLoggedUser() throws RegraDeNegocioException {
-        return findById(getIdLoggedUser());
-    }
-
-    public UsuarioEntity findById(Integer idLoggedUser) throws RegraDeNegocioException {
-        return usuarioRepository.findById(idLoggedUser).orElseThrow(() -> new RegraDeNegocioException(USUARIO_NAO_ENCONTRADO));
     }
 
     public UsuarioDTO cadastrarCliente(UsuarioCreateClienteDTO clienteCreateDTO) throws RegraDeNegocioException {
@@ -164,11 +94,9 @@ public class UsuarioService {
 
 //        String clienteCadastroEmail = clienteCreateDTO.getEmail();
 //        Optional<ClienteEntity> clientePorEmail = clienteRepository.findByEmail(clienteCadastroEmail);
-
 //        if (clientePorCPF.isPresent() || clientePorEmail.isPresent()) {
 //            throw new RegraDeNegocioException("Cliente já cadastrado com os mesmos dados");
 //        }
-
         ClienteEntity clienteEntity = new ClienteEntity();
         clienteEntity.setUsuario(usuarioEntity);
         clienteEntity.setCpf(clienteCreateDTO.getCpf());
@@ -207,6 +135,46 @@ public class UsuarioService {
         CinemaEntity cinemaEntitySalvo = cinemaRepository.save(cinema);
 
         return objectMapper.convertValue(cinemaEntitySalvo, CinemaDTO.class);
+    }
+    public String autenticar(@RequestBody @Valid LoginDTO loginDTO) {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                new UsernamePasswordAuthenticationToken(
+                        loginDTO.getEmail(),
+                        loginDTO.getSenha()
+                );
+        Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        // UsuarioEntity
+        Object principal = authenticate.getPrincipal();
+        UsuarioEntity usuarioEntity = (UsuarioEntity) principal;
+
+        return tokenService.getToken(usuarioEntity);
+    }
+    public void recuperarSenha(RecuperarSenhaDTO emailDTO, Integer idRoleRec) throws RegraDeNegocioException {
+
+        UsuarioEntity usuarioEntity = findByEmail(emailDTO.getEmail());
+        String token = tokenService.getTokenTrocarSenha(usuarioEntity);
+        UsuarioDTO usuarioDTO = objectMapper.convertValue(usuarioEntity, UsuarioDTO.class);
+        emailService.sendEmail(usuarioDTO, TipoEmails.REC_SENHA, token);
+        CargoEntity cargo = cargoService.findById(idRoleRec);
+        usuarioEntity.getCargos().add(cargo);
+        usuarioRepository.save(usuarioEntity);
+    }
+    public void mudarSenha(String senha, Integer idRoleRec) throws RegraDeNegocioException {
+        UsuarioEntity usuarioEntity = this.findByEmail(getLoggedUser().getEmail());
+        UsuarioEntity usuarioAtualizado = removerCargo(usuarioEntity, idRoleRec);
+        String senhaNova = passwordEncoder.encode(senha);
+        usuarioEntity.setSenha(senhaNova);
+        usuarioRepository.save(usuarioAtualizado);
+    }
+
+    public UsuarioEntity removerCargo(UsuarioEntity usuario, Integer idCargo) throws RegraDeNegocioException {
+        CargoEntity cargoRemovido = cargoService.findById(idCargo);
+        usuario.getCargos().stream()
+                .filter(cargo -> cargo.getIdCargo() == cargoRemovido.getIdCargo())
+                .findFirst()
+                .orElseThrow(() -> new RegraDeNegocioException("Senha já foi alterada!"));
+        usuario.getCargos().remove(cargoRemovido);
+        return usuario;
     }
 
 }

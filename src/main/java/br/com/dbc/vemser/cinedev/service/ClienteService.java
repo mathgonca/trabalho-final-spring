@@ -27,11 +27,23 @@ public class ClienteService {
 
     private final UsuarioService usuarioService;
 
+    public ClienteEntity findById(Integer id) throws RegraDeNegocioException {
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Cliente não encontrado"));
+    }
     public List<UsuarioDTO> listarTodosClientes() {
         List<ClienteEntity> clienteEntityList = clienteRepository.findAll();
         return clienteEntityList.stream()
                 .map(clienteEntity -> objectMapper.convertValue(clienteEntity, UsuarioDTO.class))
                 .toList();
+    }
+    public ClienteEntity listarClientePorUsuario(Integer idUsuario) throws RegraDeNegocioException {
+        return clienteRepository.findByIdUsuario(usuarioService.getIdLoggedUser())
+                .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado"));
+    }
+
+    public UsuarioDTO listarClienteDTOPeloId(Integer idCliente) throws RegraDeNegocioException {
+        return objectMapper.convertValue(listarClientePeloId(idCliente), UsuarioDTO.class);
     }
 
     public UsuarioDTO cadastrarCliente(ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
@@ -61,15 +73,6 @@ public class ClienteService {
 
         return clienteOptional.get();
     }
-    public ClienteEntity listarClientePorUsuario(Integer idUsuario) throws RegraDeNegocioException {
-       return clienteRepository.findByIdUsuario(usuarioService.getIdLoggedUser())
-               .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado"));
-    }
-
-    public UsuarioDTO listarClienteDTOPeloId(Integer idCliente) throws RegraDeNegocioException {
-        return objectMapper.convertValue(listarClientePeloId(idCliente), UsuarioDTO.class);
-    }
-
     public UsuarioDTO atualizarCliente(Integer idCliente, ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
         listarClientePeloId(idCliente);
 
@@ -121,12 +124,6 @@ public class ClienteService {
         usuarioRepository.save(usuarioEntity);
 
     }
-
-    public ClienteEntity findById(Integer id) throws RegraDeNegocioException {
-        return clienteRepository.findById(id)
-                .orElseThrow(() -> new RegraDeNegocioException("Cliente não encontrado"));
-    }
-
     public List<RelatorioCadastroIngressoClienteDTO> listarRelatorioPersonalizado(Integer idCliente){
         return clienteRepository.listarRelatorioPersonalizado(idCliente);
     }

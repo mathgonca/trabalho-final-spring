@@ -26,6 +26,12 @@ public class CinemaService {
     private final UsuarioService usuarioService;
     private final UsuarioRepository usuarioRepository;
 
+    public CinemaEntity findById(Integer id) throws RegraDeNegocioException {
+        CinemaEntity cinemaEntityRecuperado = null;
+        cinemaEntityRecuperado = cinemaRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Cinema não encontrado!"));
+        return cinemaEntityRecuperado;
+    }
     public List<CinemaDTO> listarCinema() {
         List<CinemaEntity> cinemaEntityList = cinemaRepository.findAll();
         return cinemaEntityList.stream()
@@ -33,6 +39,27 @@ public class CinemaService {
                 .toList();
     }
 
+    public CinemaEntity listarCinemaID(Integer idCinema) throws RegraDeNegocioException {
+        Optional<CinemaEntity> cinemaOptional = cinemaRepository.findById(idCinema);
+
+        if (cinemaOptional.isEmpty()) {
+            throw new RegraDeNegocioException("cinema não cadastrado");
+        }
+
+        return cinemaOptional.get();
+    }
+    public CinemaDTO listarCinemaPorId(Integer idCinema) throws RegraDeNegocioException {
+        return objectMapper.convertValue(listarCinemaID(idCinema), CinemaDTO.class);
+    }
+    public CinemaEntity listarCinemaIdUsuario(Integer idUsuario) throws RegraDeNegocioException {
+        Optional<CinemaEntity> cinemaOptional = cinemaRepository.findByIdUsuario(idUsuario);
+
+        if (cinemaOptional.isEmpty()) {
+            throw new RegraDeNegocioException("cinema não cadastrado");
+        }
+
+        return cinemaOptional.get();
+    }
     public CinemaDTO adicionarCinema(CinemaCreateDTO cinemaCapturado) throws RegraDeNegocioException {
         String cinemaNome = cinemaCapturado.getNome();
         Optional<CinemaEntity> cinemaPorNome = cinemaRepository.findByNome(cinemaNome);
@@ -47,33 +74,7 @@ public class CinemaService {
 
         return cinemaDTO;
     }
-
-    public CinemaEntity listarCinemaID(Integer idCinema) throws RegraDeNegocioException {
-        Optional<CinemaEntity> cinemaOptional = cinemaRepository.findById(idCinema);
-
-        if (cinemaOptional.isEmpty()) {
-            throw new RegraDeNegocioException("cinema não cadastrado");
-        }
-
-        return cinemaOptional.get();
-    }
-
-    public CinemaEntity listarCinemaIdUsuario(Integer idUsuario) throws RegraDeNegocioException {
-        Optional<CinemaEntity> cinemaOptional = cinemaRepository.findByIdUsuario(idUsuario);
-
-        if (cinemaOptional.isEmpty()) {
-            throw new RegraDeNegocioException("cinema não cadastrado");
-        }
-
-        return cinemaOptional.get();
-    }
-
-    public CinemaDTO listarCinemaPorId(Integer idCinema) throws RegraDeNegocioException {
-        return objectMapper.convertValue(listarCinemaID(idCinema), CinemaDTO.class);
-    }
-
     public CinemaDTO atualizarCinema(Integer idCinema, CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
-
         CinemaEntity cinemaPego = findById(idCinema);
         CinemaEntity cinemaEntity = objectMapper.convertValue(cinemaCreateDTO, CinemaEntity.class);
 //        listarCinemaID(idCinema);
@@ -88,7 +89,6 @@ public class CinemaService {
 
         CinemaDTO cinemaDTO = objectMapper.convertValue(cinemaPego, CinemaDTO.class);
 //        CinemaEntity cinemaEntityAtualizado = cinemaRepository.save(cinemaEntity);
-
 //        return objectMapper.convertValue(cinemaEntityAtualizado, CinemaDTO.class);
         return cinemaDTO;
     }
@@ -102,8 +102,6 @@ public class CinemaService {
 //        cinemaEntityRecuperado.setIngressos(cinemaCreateDTO.getIngressos());
         cinemaRepository.save(cinemaPego);
         CinemaDTO cinemaDTO = objectMapper.convertValue(cinemaPego, CinemaDTO.class);
-//        CinemaEntity cinemaEntityAtualizado = cinemaRepository.save(cinemaEntity);
-//        return objectMapper.convertValue(cinemaEntityAtualizado, CinemaDTO.class);
         return cinemaDTO;
     }
 
@@ -122,13 +120,6 @@ public class CinemaService {
         cinemaRepository.delete(cinema);
         usuarioEntity.setAtivo('N');
         usuarioRepository.save(usuarioEntity);
-    }
-
-    public CinemaEntity findById(Integer id) throws RegraDeNegocioException {
-        CinemaEntity cinemaEntityRecuperado = null;
-        cinemaEntityRecuperado = cinemaRepository.findById(id)
-                .orElseThrow(() -> new RegraDeNegocioException("Cinema não encontrado!"));
-        return cinemaEntityRecuperado;
     }
 
     public List<RelatorioCadastroCinemaFilmeDTO> listarRelatorioPersonalizado(Integer idCinema) {

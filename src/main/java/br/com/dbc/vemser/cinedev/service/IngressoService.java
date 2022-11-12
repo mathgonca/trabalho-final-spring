@@ -33,8 +33,16 @@ public class IngressoService {
     private final EmailService emailService;
     private final ObjectMapper objectMapper;
 
-    public List<IngressoDTO> listarIngressos() throws RegraDeNegocioException {
 
+    public IngressoEntity findById(Integer id) throws RegraDeNegocioException {
+        IngressoEntity ingressoEntity = ingressoRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Cinema não encontrado!"));
+        return ingressoEntity;
+    }
+    public IngressoDTO ingressoDTOporId(Integer id) throws RegraDeNegocioException {
+        return objectMapper.convertValue(findById(id),IngressoDTO.class);
+    }
+    public List<IngressoDTO> listarIngressos() throws RegraDeNegocioException {
         List<IngressoEntity> ingressoslist = ingressoRepository.findIngressoDisponiveis();
         return ingressoslist.stream()
                 .map(ingressoEntity -> objectMapper.convertValue(ingressoEntity, IngressoDTO.class))
@@ -82,16 +90,7 @@ public class IngressoService {
         return ingressoDTO;
 
     }
-    public IngressoDTO ingressoDTOporId(Integer id) throws RegraDeNegocioException {
-        return objectMapper.convertValue(findById(id),IngressoDTO.class);
-    }
 
-
-    public IngressoEntity findById(Integer id) throws RegraDeNegocioException {
-        IngressoEntity ingressoEntity = ingressoRepository.findById(id)
-                .orElseThrow(() -> new RegraDeNegocioException("Cinema não encontrado!"));
-        return ingressoEntity;
-    }
 
     public void removeIngresso(Integer id) throws RegraDeNegocioException {
         ingressoRepository.deleteById(id);

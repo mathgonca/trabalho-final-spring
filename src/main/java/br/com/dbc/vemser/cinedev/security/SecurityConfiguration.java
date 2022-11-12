@@ -46,8 +46,6 @@ public class SecurityConfiguration {
 //                                .antMatchers(HttpMethod.PUT,"/cliente/**").hasRole("CLIENTE")
 
 
-
-
 //                                //ao meio - nossas regras especificas
 //                                .antMatchers(HttpMethod.DELETE, "/pessoa", "/endereco").hasRole("ADMIN") // pro usuario n poder deletar, nem o marketing.
 //                                .antMatchers("/contato/**").hasRole("ADMIN")
@@ -58,11 +56,8 @@ public class SecurityConfiguration {
                 );
         // 1 - verifica token
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
-
     }
-
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         // FIXME fazer o security ignorar o swagger
@@ -71,7 +66,6 @@ public class SecurityConfiguration {
                 "/swagger-resources/**",
                 "/swagger-ui/**");
     }
-
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {

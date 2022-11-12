@@ -18,6 +18,14 @@ public class FilmeService {
     private final FilmeRepository filmeRepository;
     private final ObjectMapper objectMapper;
 
+    public FilmeDTO editarFilme(Integer id, FilmeCreateDTO filmeCapturado) throws RegraDeNegocioException {
+        FilmeEntity filme = listarPeloId(id);
+
+        FilmeEntity filmeEntityTransf = objectMapper.convertValue(filmeCapturado, FilmeEntity.class);
+        FilmeEntity filmeEntitySalvo = filmeRepository.save(filmeEntityTransf);
+        FilmeDTO filmeDTO = objectMapper.convertValue(filmeEntitySalvo, FilmeDTO.class);
+        return filmeDTO;
+    }
     public FilmeDTO adicionarFilme(FilmeCreateDTO filmeCapturado) throws RegraDeNegocioException {
         String filmeNome = filmeCapturado.getNome();
         Optional<FilmeEntity> filmePorNome = filmeRepository.findByNome(filmeNome);
@@ -35,15 +43,6 @@ public class FilmeService {
     public void removerFilme(Integer id) throws RegraDeNegocioException {
         FilmeEntity filme = listarPeloId(id);
         filmeRepository.deleteById(id);
-    }
-
-    public FilmeDTO editarFilme(Integer id, FilmeCreateDTO filmeCapturado) throws RegraDeNegocioException {
-        FilmeEntity filme = listarPeloId(id);
-
-        FilmeEntity filmeEntityTransf = objectMapper.convertValue(filmeCapturado, FilmeEntity.class);
-        FilmeEntity filmeEntitySalvo = filmeRepository.save(filmeEntityTransf);
-        FilmeDTO filmeDTO = objectMapper.convertValue(filmeEntitySalvo, FilmeDTO.class);
-        return filmeDTO;
     }
 
     public List<FilmeDTO> listarTodosFilmes() throws RegraDeNegocioException {
