@@ -1,11 +1,11 @@
 package br.com.dbc.vemser.cinedev.controller;
 
+import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerAuth;
 import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
-import br.com.dbc.vemser.cinedev.dto.clientedto.UsuarioCreateClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.login.LoginDTO;
 import br.com.dbc.vemser.cinedev.dto.recuperarsenhadto.RecuperarSenhaDTO;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
@@ -25,7 +25,7 @@ import javax.validation.Valid;
 @RequestMapping("/auth")
 @Validated
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements OperationControllerAuth {
     public static final int ROLE_RECCLIENTE_ID = 4;
     public static final int ROLE_RECCINEMA_ID = 5;
     public static final int ROLE_RECADMIN_ID = 6;
@@ -51,6 +51,7 @@ public class AuthController {
         usuarioService.recuperarSenha(email, ROLE_RECCINEMA_ID);
         return ResponseEntity.noContent().build();
     }
+
     @PostMapping("/recuperar-senha-admin")
     public ResponseEntity<Void> recuperarSenhaAdminstrador(@Valid @RequestBody RecuperarSenhaDTO email) throws RegraDeNegocioException {
         usuarioService.recuperarSenha(email, ROLE_RECADMIN_ID);
@@ -68,6 +69,7 @@ public class AuthController {
         usuarioService.mudarSenha(senha, ROLE_RECCLIENTE_ID);
         return ResponseEntity.noContent().build();
     }
+
     @PutMapping("/atualizar-senha-admin")
     public ResponseEntity<Void> atualizarSenhaAdministrador(@Valid @RequestBody String senha) throws RegraDeNegocioException {
         usuarioService.mudarSenha(senha, ROLE_RECADMIN_ID);
@@ -78,6 +80,7 @@ public class AuthController {
     public ResponseEntity<UsuarioDTO> retornarUsuario() throws RegraDeNegocioException {
         return new ResponseEntity<>(objectMapper.convertValue(usuarioService.getLoggedUser(), UsuarioDTO.class), HttpStatus.OK);
     }
+
     @PostMapping("/novo-administrador")
     public ResponseEntity<UsuarioDTO> criarAdministrador(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
         UsuarioDTO usuarioDTO = usuarioService.cadastrarAdministrador(loginDTO);
