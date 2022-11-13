@@ -75,30 +75,25 @@ public class ClienteService {
                 .orElseThrow(() -> new RegraDeNegocioException("Cliente não cadastrado"));
     }
 
-    public ClienteDTO atualizarClienteAdmin(Integer idCliente, ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
-        listarClientePeloId(idCliente);
-
-        ClienteEntity clienteEntity = objectMapper.convertValue(clienteCreateDTO, ClienteEntity.class);
-        clienteEntity.setIdCliente(idCliente);
-
-        ClienteEntity clienteEntityAtualizado = clienteRepository.save(clienteEntity);
-        ClienteDTO usuarioDTO = objectMapper.convertValue(clienteEntityAtualizado, ClienteDTO.class);
-//        emailService.sendEmail(clienteDTO, TipoEmails.UPDATE);
-
-        return usuarioDTO;
+    public ClienteDTO atualizarClienteLogado(ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
+        ClienteEntity clienteRecuperado = listarClientePorUsuario(usuarioService.getIdLoggedUser());
+        return atualizarCliente(clienteRecuperado.getIdCliente(), clienteCreateDTO);
     }
 
-    public ClienteDTO atualizarCliente(ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
+    public ClienteDTO atualizarCliente(Integer idCliente, ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
+        ClienteEntity cliente = listarClientePeloId(idCliente);
 
-        ClienteEntity clienteRecuperado = listarClientePorUsuario(usuarioService.getIdLoggedUser());
-        clienteRecuperado.setPrimeiroNome(clienteCreateDTO.getPrimeiroNome());
-        clienteRecuperado.setUltimoNome(clienteCreateDTO.getUltimoNome());
-        clienteRecuperado.setDataNascimento(clienteCreateDTO.getDataNascimento());
-        clienteRecuperado.setCpf(clienteCreateDTO.getCpf());
+        cliente.setPrimeiroNome(clienteCreateDTO.getPrimeiroNome());
+        cliente.setUltimoNome(clienteCreateDTO.getUltimoNome());
+        cliente.setDataNascimento(clienteCreateDTO.getDataNascimento());
+        cliente.setCpf(clienteCreateDTO.getCpf());
+        cliente.getUsuario().setEmail(clienteCreateDTO.getEmail());
 
-        ClienteEntity clienteEntityAtualizado = clienteRepository.save(clienteRecuperado);
-        ClienteDTO clienteDTO = objectMapper.convertValue(clienteEntityAtualizado, ClienteDTO.class);
-//        emailService.sendEmail(clienteDTO, TipoEmails.UPDATE);
+        ClienteEntity clienteSalvo = clienteRepository.save(cliente);
+
+        ClienteDTO clienteDTO = objectMapper.convertValue(clienteSalvo, ClienteDTO.class);
+        clienteDTO.setEmail(clienteSalvo.getUsuario().getEmail());
+        //        emailService.sendEmail(clienteDTO, TipoEmails.UPDATE);
 
         return clienteDTO;
     }

@@ -43,7 +43,7 @@ public class ClienteController implements OperationControllerCliente {
 
     @PutMapping("/atualizar-cliente-usuario")
     public ResponseEntity<ClienteDTO> updateUsuario(@Valid @RequestBody ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
-        return new ResponseEntity<>(clienteService.atualizarCliente(clienteCreateDTO), HttpStatus.OK);
+        return new ResponseEntity<>(clienteService.atualizarClienteLogado(clienteCreateDTO), HttpStatus.OK);
     }
     @Override
     @DeleteMapping("/delete-cliente-logado")

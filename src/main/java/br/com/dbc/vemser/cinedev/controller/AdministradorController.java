@@ -32,7 +32,7 @@ public class AdministradorController {
     @PutMapping("/cliente/{idCliente}")
     public ResponseEntity<ClienteDTO> updateCliente(@PathVariable Integer idCliente,
                                              @Valid @RequestBody ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
-        return new ResponseEntity<>(clienteService.atualizarClienteAdmin(idCliente, clienteCreateDTO), HttpStatus.OK);
+        return new ResponseEntity<>(clienteService.atualizarCliente(idCliente, clienteCreateDTO), HttpStatus.OK);
     }
 
     @DeleteMapping("/deletar-cinema-usuario/{idCinema}")
