@@ -24,13 +24,13 @@ public class AdministradorController {
     private final ClienteService clienteService;
 
 
-    @PutMapping("/{idCinema}")
-    public ResponseEntity<CinemaDTO> update(@PathVariable Integer idCinema, @Valid @RequestBody CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
+    @PutMapping("/cinema/{idCinema}")
+    public ResponseEntity<CinemaDTO> updateCinema(@PathVariable Integer idCinema, @Valid @RequestBody CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(cinemaService.atualizarCinema(idCinema, cinemaCreateDTO), HttpStatus.OK);
     }
 
-    @PutMapping("/{idCliente}")
-    public ResponseEntity<ClienteDTO> update(@PathVariable Integer idCliente,
+    @PutMapping("/cliente/{idCliente}")
+    public ResponseEntity<ClienteDTO> updateCliente(@PathVariable Integer idCliente,
                                              @Valid @RequestBody ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(clienteService.atualizarClienteAdmin(idCliente, clienteCreateDTO), HttpStatus.OK);
     }

@@ -46,7 +46,7 @@ public class CinemaController implements OperationControllerCinema {
 
     @PutMapping("/atualizar-cinema-usuario")
     public ResponseEntity<CinemaDTO> updateCinemaPorUsuario(@Valid @RequestBody CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
-        return new ResponseEntity<>(cinemaService.atualizarCinemaUsuario(cinemaCreateDTO), HttpStatus.OK);
+        return new ResponseEntity<>(cinemaService.atualizarCinemaLogado(cinemaCreateDTO), HttpStatus.OK);
     }
 
     @Override

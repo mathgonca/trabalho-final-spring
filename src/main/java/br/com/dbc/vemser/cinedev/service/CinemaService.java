@@ -8,7 +8,6 @@ import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
 import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.CinemaRepository;
-import br.com.dbc.vemser.cinedev.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,7 +24,6 @@ public class CinemaService {
     private final CinemaRepository cinemaRepository;
     private final ObjectMapper objectMapper;
     private final UsuarioService usuarioService;
-    private final UsuarioRepository usuarioRepository;
 
     public CinemaEntity findById(Integer id) throws RegraDeNegocioException {
         CinemaEntity cinemaEntityRecuperado = null;
@@ -91,34 +89,23 @@ public class CinemaService {
     }
 
     public CinemaDTO atualizarCinema(Integer idCinema, CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
-        CinemaEntity cinemaPego = findById(idCinema);
-        CinemaEntity cinemaEntity = objectMapper.convertValue(cinemaCreateDTO, CinemaEntity.class);
-//        listarCinemaID(idCinema);
+        CinemaEntity cinemaPego = listarCinemaIdUsuario(idCinema);
 
-        cinemaPego.setIngresso(cinemaEntity.getIngresso());
         cinemaPego.setNome(cinemaCreateDTO.getNome());
         cinemaPego.setCidade(cinemaCreateDTO.getCidade());
         cinemaPego.setEstado(cinemaCreateDTO.getEstado());
-//        cinemaEntityRecuperado.setIngressos(cinemaCreateDTO.getIngressos());
+        cinemaPego.getUsuario().setEmail(cinemaCreateDTO.getEmail());
 
-        cinemaRepository.save(cinemaPego);
+        CinemaEntity cinemaSalvo = cinemaRepository.save(cinemaPego);
+        CinemaDTO cinemaDTO = objectMapper.convertValue(cinemaSalvo, CinemaDTO.class);
+        cinemaDTO.setEmail(cinemaPego.getUsuario().getEmail());
 
-        CinemaDTO cinemaDTO = objectMapper.convertValue(cinemaPego, CinemaDTO.class);
-//        CinemaEntity cinemaEntityAtualizado = cinemaRepository.save(cinemaEntity);
-//        return objectMapper.convertValue(cinemaEntityAtualizado, CinemaDTO.class);
         return cinemaDTO;
     }
 
-    public CinemaDTO atualizarCinemaUsuario(CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
+    public CinemaDTO atualizarCinemaLogado(CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
         CinemaEntity cinemaPego = listarCinemaIdUsuario(usuarioService.getIdLoggedUser());
-//        listarCinemaID(idCinema);
-        cinemaPego.setNome(cinemaCreateDTO.getNome());
-        cinemaPego.setCidade(cinemaCreateDTO.getCidade());
-        cinemaPego.setEstado(cinemaCreateDTO.getEstado());
-//        cinemaEntityRecuperado.setIngressos(cinemaCreateDTO.getIngressos());
-        cinemaRepository.save(cinemaPego);
-        CinemaDTO cinemaDTO = objectMapper.convertValue(cinemaPego, CinemaDTO.class);
-        return cinemaDTO;
+        return atualizarCinema(cinemaPego.getIdCinema(), cinemaCreateDTO);
     }
 
     public void deletarCinemaLogado() throws RegraDeNegocioException {
