@@ -38,14 +38,19 @@ public class IngressoController implements OperationControllerIngresso {
     }
 
     @Override
-    @GetMapping("/comprado")
+    @GetMapping("/comprados")
     public List<IngressoDTO> listarIngressosComprados() throws RegraDeNegocioException {
         return ingressoService.listarIngressosComprados();
     }
 
-    @GetMapping("/ingressosComprados-byCliente")
+    @GetMapping("/ingressosComprados-idcliente")
     public List<RelatorioCadastroIngressoClienteDTO> listarIngressosCompradosPorCliente(@RequestParam("idCliente") Integer idCliente) throws RegraDeNegocioException {
         return ingressoService.listarIngressosCompradosPorCliente(idCliente);
+    }
+
+    @GetMapping("/ingressosComprados-cliente-logado")
+    public List<RelatorioCadastroIngressoClienteDTO> listarIngressosCompradosPorClienteLogado() throws RegraDeNegocioException {
+        return ingressoService.listarIngressosDoClienteLogado();
     }
 
 

@@ -105,17 +105,18 @@ public class CinemaService {
         return cinemaDTO;
     }
 
-    public void deletarCinema(Integer idCinema) throws RegraDeNegocioException {
-//        CinemaEntity cinema = listarCinemaID(idCinema);
-        CinemaEntity cinema = null;
-        cinema = findById(idCinema);
+    public void deletarCinemaLogado() throws RegraDeNegocioException {
+        CinemaEntity cinemaPego = listarCinemaIdUsuario(usuarioService.getIdLoggedUser());
+        CinemaEntity cinema = findById(cinemaPego.getIdCinema());
+        UsuarioEntity usuarioEntity = cinema.getUsuario();
         cinemaRepository.delete(cinema);
+        usuarioEntity.setAtivo('N');
+        usuarioRepository.save(usuarioEntity);
     }
 
-    public void deletarCinemaLogin(Integer idCinema) throws RegraDeNegocioException {
+    public void deletarCinemaPorUsuario(Integer idCinema) throws RegraDeNegocioException {
 //        CinemaEntity cinema = listarCinemaID(idCinema);
-        CinemaEntity cinema = null;
-        cinema = findById(idCinema);
+        CinemaEntity cinema = findById(idCinema);
         UsuarioEntity usuarioEntity = cinema.getUsuario();
         cinemaRepository.delete(cinema);
         usuarioEntity.setAtivo('N');

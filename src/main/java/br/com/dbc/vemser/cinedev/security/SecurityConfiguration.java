@@ -3,6 +3,7 @@ package br.com.dbc.vemser.cinedev.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,25 +28,27 @@ public class SecurityConfiguration {
                 .cors().and()
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->
-                        authz.antMatchers("/auth/**").permitAll()
-                                .antMatchers("/atualizar-senha-cinema").hasRole("CINEMA")
-                                .antMatchers("/atualizar-senha-cliente").hasRole("CLIENTE")
-//                            .antMatchers(HttpMethod.DELETE,"/**").hasRole("ADMIN")
-//                                .antMatchers("/**").hasRole("ADMIN")
-//                                .antMatchers("/cinema/**").hasRole("CINEMA")
-//                                .antMatchers(HttpMethod.POST,"/ingresso/cadastro").hasRole("CINEMA")
-//                                .antMatchers("/ingresso/ingressosComprados-byCliente").hasRole("CLIENTE")
-//                                .antMatchers("/ingresso/find-ingresso-paginado").hasRole("CLIENTE")
-//                                .antMatchers("/ingresso/comprado").hasAnyRole("CINEMA","ADMIN")
-//                                .antMatchers(HttpMethod.GET,"/filme").hasAnyRole("CINEMA", "CLIENTE","ADMIN")
-//                                .antMatchers(HttpMethod.PUT,"/cliente/**").hasRole("CLIENTE")
-
-
-//                                //ao meio - nossas regras especificas
-//                                .antMatchers(HttpMethod.DELETE, "/pessoa", "/endereco").hasRole("ADMIN") // pro usuario n poder deletar, nem o marketing.
-//                                .antMatchers("/contato/**").hasRole("ADMIN")
-//                                .antMatchers("/endereco/**").hasAnyRole("MARKETING", "USUARIO")
-//
+                        //autorizações -> auth
+                                authz.antMatchers("/auth/fazer-login", "/auth/novo-cliente",
+                                                "/auth/novo-cinema","/auth/novo-admin","/auth/usuario-logado").permitAll()
+                      //autorizações -> cliente
+                                        .antMatchers("/auth/atualizar-senha-cliente").hasRole("CLIENTE")
+                                        .antMatchers("/auth/recuperar-senha-cliente").hasRole("CLIENTE")
+                                        .antMatchers("/ingresso", "/ingressosComprados-cliente-logado",
+                                         "/ingresso/comprar/{idCliente}/ingresso/{idIngresso}").hasRole("CLIENTE")
+                                        .antMatchers(HttpMethod.GET,"/filme").hasRole("CLIENTE")
+                                        .antMatchers("/cliente/atualizar-cliente-usuario").hasRole("CLIENTE")
+                                        .antMatchers("/cliente/delete-cliente-logado").hasRole("CLIENTE")
+                     //autorizações - cinema
+                                        .antMatchers("/auth/atualizar-senha-cinema").hasRole("CINEMA")
+                                        .antMatchers("/auth/recuperar-senha-cinema").hasRole("CINEMA")
+                                        .antMatchers(HttpMethod.GET, "/cinema/**").hasRole("CLIENTE")
+                                        .antMatchers("/ingresso/**").hasRole("CINEMA")
+                                        .antMatchers("/filme/**").hasRole("CINEMA")
+                                        .antMatchers("/cinema/**").hasRole("CINEMA")
+                     //autorizações - administrador
+                                        .antMatchers(HttpMethod.DELETE,"/**").hasRole("ADMIN")
+                                        .antMatchers("/**").hasRole("ADMIN")
 //
                                 .anyRequest().authenticated()
                 );

@@ -33,25 +33,25 @@ public interface OperationControllerCinema {
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
     CinemaDTO listaPorId(@PathVariable("idCinema") Integer id) throws RegraDeNegocioException;
 
-    @Operation(summary = "Realiza o cadastramento dos Cinemas ", description = "Cadastramento de dados dos Cinemas")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Cinema cadastrado com sucesso!"),
-            @ApiResponse(responseCode = "403", description = "Erro na inserção de dados!"),
-            @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
-    ResponseEntity<CinemaDTO> cadastrarCinema(@Valid @RequestBody CinemaCreateDTO cinemaCreateDTO)
-            throws RegraDeNegocioException;
+//    @Operation(summary = "Realiza o cadastramento dos Cinemas ", description = "Cadastramento de dados dos Cinemas")
+//    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Cinema cadastrado com sucesso!"),
+//            @ApiResponse(responseCode = "403", description = "Erro na inserção de dados!"),
+//            @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
+//    ResponseEntity<CinemaDTO> cadastrarCinema(@Valid @RequestBody CinemaCreateDTO cinemaCreateDTO)
+//            throws RegraDeNegocioException;
 
     @Operation(summary = "Realiza atualização de dados dos Cinemas ", description = "Realiza a alteração de dados dos Cinemas De acordo com o 'idCinema' !")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Atualização de dados realizada!"),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
-    ResponseEntity<CinemaDTO> update(@PathVariable("idCinema") Integer id,
+    ResponseEntity<CinemaDTO> updateCinemaPorUsuario(
                                      @Valid @RequestBody CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException;
 
     @Operation(summary = "Realiza Remoção dos Cinemas", description = "Realiza a remoção dos Cinemas a partir do 'idCinema'!")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remoção de cinema realizada com sucesso!"),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
-    ResponseEntity<Void> delete(@PathVariable("idCinema") Integer id) throws RegraDeNegocioException;
+    ResponseEntity<Void> deletarCinemaLogado() throws RegraDeNegocioException;
 
     @Operation(summary = "Realiza a listagem do relatório de cinemas ", description = "Realiza a listagens dos filmes e ingressos disponíveis pelo cinema selecionado pelo 'id'!")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remoção de dados realizada!"),

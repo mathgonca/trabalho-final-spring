@@ -24,6 +24,7 @@ import javax.validation.Valid;
 public class AuthController {
     public static final int ROLE_RECCLIENTE_ID = 4;
     public static final int ROLE_RECCINEMA_ID = 5;
+    public static final int ROLE_RECADMIN_ID = 6;
     private final UsuarioService usuarioService;
     private final ObjectMapper objectMapper;
 
@@ -44,6 +45,11 @@ public class AuthController {
         usuarioService.recuperarSenha(email, ROLE_RECCINEMA_ID);
         return ResponseEntity.noContent().build();
     }
+    @PostMapping("/recuperar-senha-admin")
+    public ResponseEntity<Void> recuperarSenhaAdminstrador(@Valid @RequestBody RecuperarSenhaDTO email) throws RegraDeNegocioException {
+        usuarioService.recuperarSenha(email, ROLE_RECADMIN_ID);
+        return ResponseEntity.noContent().build();
+    }
 
     @PutMapping("/atualizar-senha-cinema")
     public ResponseEntity<Void> atualizarSenhaCinema(@Valid @RequestBody String senha) throws RegraDeNegocioException {
@@ -56,10 +62,20 @@ public class AuthController {
         usuarioService.mudarSenha(senha, ROLE_RECCLIENTE_ID);
         return ResponseEntity.noContent().build();
     }
+    @PutMapping("/atualizar-senha-admin")
+    public ResponseEntity<Void> atualizarSenhaAdministrador(@Valid @RequestBody String senha) throws RegraDeNegocioException {
+        usuarioService.mudarSenha(senha, ROLE_RECADMIN_ID);
+        return ResponseEntity.noContent().build();
+    }
 
     @GetMapping("/usuario-logado")
     public ResponseEntity<UsuarioDTO> retornarUsuario() throws RegraDeNegocioException {
         return new ResponseEntity<>(objectMapper.convertValue(usuarioService.getLoggedUser(), UsuarioDTO.class), HttpStatus.OK);
+    }
+    @PostMapping("/novo-administrador")
+    public ResponseEntity<UsuarioDTO> criarAdministrador(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
+        UsuarioDTO usuarioDTO = usuarioService.cadastrarAdministrador(loginDTO);
+        return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
     }
 
     @PostMapping("/novo-cliente")

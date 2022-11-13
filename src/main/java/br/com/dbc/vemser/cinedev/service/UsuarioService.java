@@ -23,6 +23,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,6 +37,7 @@ import java.util.Set;
 public class UsuarioService {
     public static final int ROLE_ADMIN_ID = 1;
     public static final int ROLE_CLIENTE_ID = 2;
+    public static final int ROLE_CINEMA_ID = 3;
     public static final String USUARIO_NAO_ENCONTRADO = "Usuário não encontrado!";
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
@@ -79,6 +81,17 @@ public class UsuarioService {
         return objectMapper.convertValue(usuarioEntity, UsuarioDTO.class);
     }
 
+    public UsuarioDTO cadastrarAdministrador(LoginDTO loginDTO) throws RegraDeNegocioException {
+        CargoEntity cargo = cargoService.findById(ROLE_ADMIN_ID);
+        UsuarioEntity usuarioCapturado = objectMapper.convertValue(loginDTO, UsuarioEntity.class);
+        String senha = passwordEncoder.encode(loginDTO.getSenha());
+        usuarioCapturado.setSenha(senha);
+        usuarioCapturado.setCargos(Set.of(cargo));
+        UsuarioEntity usuarioSalvo = usuarioRepository.save(usuarioCapturado);
+        UsuarioDTO usuarioDTO = objectMapper.convertValue(usuarioSalvo, UsuarioDTO.class);
+        return usuarioDTO;
+    }
+
     public UsuarioDTO cadastrarCliente(UsuarioCreateClienteDTO clienteCreateDTO) throws RegraDeNegocioException {
 //        String clienteCadastroCPF = clienteCreateDTO.getCpf();
 //        Optional<ClienteEntity> clientePorCPF = clienteRepository.findByCpf(clienteCadastroCPF);
@@ -117,7 +130,7 @@ public class UsuarioService {
             throw new RegraDeNegocioException("Erro! Nome do Cinema já consta em nossa lista de cadastros!");
         }
 
-        CargoEntity cargo = cargoService.findById(ROLE_ADMIN_ID);
+        CargoEntity cargo = cargoService.findById(ROLE_CINEMA_ID);
         String senha = passwordEncoder.encode(cinemaCapturado.getSenha());
 
         UsuarioEntity usuarioEntity = new UsuarioEntity();

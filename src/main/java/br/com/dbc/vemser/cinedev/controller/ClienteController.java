@@ -25,45 +25,32 @@ public class ClienteController implements OperationControllerCliente {
     private final ClienteService clienteService;
     @Override
     @GetMapping
-    public List<UsuarioDTO> list() throws RegraDeNegocioException {
+    public List<ClienteDTO> list() throws RegraDeNegocioException {
         return clienteService.listarTodosClientes();
     }
 
-
+    @Override
     @GetMapping("/{idCliente}")
-    public UsuarioDTO listarClientePeloId(@PathVariable Integer idCliente) throws RegraDeNegocioException {
+    public ClienteDTO listarClientePeloId(@PathVariable Integer idCliente) throws RegraDeNegocioException {
         return clienteService.listarClienteDTOPeloId(idCliente);
     }
 
-    @Override
-    @PostMapping
-    public ResponseEntity<UsuarioDTO> cadastrarCliente(@Valid @RequestBody ClienteCreateDTO clienteCreateDTO)
-            throws BancoDeDadosException, RegraDeNegocioException {
-        return new ResponseEntity<>(clienteService.cadastrarCliente(clienteCreateDTO), HttpStatus.OK);
-    }
-
-    @Override
-    @PutMapping("/{idCliente}")
-    public ResponseEntity<UsuarioDTO> update(@PathVariable Integer idCliente,
-                                             @Valid @RequestBody ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
-        return new ResponseEntity<>(clienteService.atualizarCliente(idCliente, clienteCreateDTO), HttpStatus.OK);
-    }
+//    @Override
+//    @PostMapping
+//    public ResponseEntity<ClienteDTO> cadastrarCliente(@Valid @RequestBody ClienteCreateDTO clienteCreateDTO)
+//            throws  RegraDeNegocioException {
+//        return new ResponseEntity<>(clienteService.cadastrarCliente(clienteCreateDTO), HttpStatus.OK);
+//    }
 
 
     @PutMapping("/atualizar-cliente-usuario")
     public ResponseEntity<ClienteDTO> updateUsuario(@Valid @RequestBody ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(clienteService.atualizarClientePorUsuario(clienteCreateDTO), HttpStatus.OK);
     }
-
     @Override
-    @DeleteMapping("/delete/{idCliente}")
-    public void delete(@PathVariable Integer idCliente) throws RegraDeNegocioException {
-        clienteService.deletarCliente(idCliente);
-    }
-
-    @DeleteMapping("/delete/usuario-cliente/{idCliente}")
-    public void deletarUsuarioCliente(@PathVariable Integer idCliente) throws RegraDeNegocioException {
-        clienteService.deletarUsuarioCliente(idCliente);
+    @DeleteMapping("/delete-cliente-logado")
+    public void delete() throws RegraDeNegocioException {
+        clienteService.deletarClienteLogado();
     }
 
     @GetMapping("/cliente-relatorio")

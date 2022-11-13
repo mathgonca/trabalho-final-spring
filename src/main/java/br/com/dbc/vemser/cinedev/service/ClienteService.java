@@ -31,10 +31,10 @@ public class ClienteService {
         return clienteRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Cliente não encontrado"));
     }
-    public List<UsuarioDTO> listarTodosClientes() {
+    public List<ClienteDTO> listarTodosClientes() {
         List<ClienteEntity> clienteEntityList = clienteRepository.findAll();
         return clienteEntityList.stream()
-                .map(clienteEntity -> objectMapper.convertValue(clienteEntity, UsuarioDTO.class))
+                .map(clienteEntity -> objectMapper.convertValue(clienteEntity, ClienteDTO.class))
                 .toList();
     }
     public ClienteEntity listarClientePorUsuario(Integer idUsuario) throws RegraDeNegocioException {
@@ -42,11 +42,11 @@ public class ClienteService {
                 .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado"));
     }
 
-    public UsuarioDTO listarClienteDTOPeloId(Integer idCliente) throws RegraDeNegocioException {
-        return objectMapper.convertValue(listarClientePeloId(idCliente), UsuarioDTO.class);
+    public ClienteDTO listarClienteDTOPeloId(Integer idCliente) throws RegraDeNegocioException {
+        return objectMapper.convertValue(listarClientePeloId(idCliente), ClienteDTO.class);
     }
 
-    public UsuarioDTO cadastrarCliente(ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
+    public ClienteDTO cadastrarCliente(ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
         String clienteCadastroCPF = clienteCreateDTO.getCpf();
         Optional<ClienteEntity> clientePorCPF = clienteRepository.findByCpf(clienteCadastroCPF);
 
@@ -59,7 +59,7 @@ public class ClienteService {
 
         ClienteEntity clienteEntity = objectMapper.convertValue(clienteCreateDTO, ClienteEntity.class);
         ClienteEntity clienteEntityCadastrado = clienteRepository.save(clienteEntity);
-        UsuarioDTO usuarioDTO = objectMapper.convertValue(clienteEntityCadastrado, UsuarioDTO.class);
+        ClienteDTO usuarioDTO = objectMapper.convertValue(clienteEntityCadastrado, ClienteDTO.class);
 //        emailService.sendEmail(clienteDTO, TipoEmails.CREATE);
         return usuarioDTO;
     }
@@ -73,14 +73,14 @@ public class ClienteService {
 
         return clienteOptional.get();
     }
-    public UsuarioDTO atualizarCliente(Integer idCliente, ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
+    public ClienteDTO atualizarCliente(Integer idCliente, ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
         listarClientePeloId(idCliente);
 
         ClienteEntity clienteEntity = objectMapper.convertValue(clienteCreateDTO, ClienteEntity.class);
         clienteEntity.setIdCliente(idCliente);
 
         ClienteEntity clienteEntityAtualizado = clienteRepository.save(clienteEntity);
-        UsuarioDTO usuarioDTO = objectMapper.convertValue(clienteEntityAtualizado, UsuarioDTO.class);
+        ClienteDTO usuarioDTO = objectMapper.convertValue(clienteEntityAtualizado, ClienteDTO.class);
 //        emailService.sendEmail(clienteDTO, TipoEmails.UPDATE);
 
         return usuarioDTO;
@@ -101,16 +101,16 @@ public class ClienteService {
         return clienteDTO;
     }
 
-    public void deletarCliente(Integer idCliente) throws RegraDeNegocioException {
-        ClienteEntity clienteEntity = listarClientePeloId(idCliente);
+    public void deletarClienteLogado() throws RegraDeNegocioException {
+        ClienteEntity clienteRecuperado = listarClientePorUsuario(usuarioService.getIdLoggedUser());
+        ClienteEntity clienteEntity = listarClientePeloId(clienteRecuperado.getIdCliente());
         ClienteDTO clienteDTO = objectMapper.convertValue(clienteEntity, ClienteDTO.class);
         UsuarioEntity usuario = new UsuarioEntity();
         UsuarioEntity usuarioEntity = clienteEntity.getUsuario();
-
-
 //        emailService.sendEmail(clienteDTO, TipoEmails.DELETE);
         clienteRepository.deleteById(clienteEntity.getIdCliente());
-        usuarioEntity.isEnabled();
+        usuarioEntity.setAtivo('N');
+        usuarioRepository.save(usuarioEntity);
     }
 
     public void deletarUsuarioCliente(Integer idCliente) throws RegraDeNegocioException {

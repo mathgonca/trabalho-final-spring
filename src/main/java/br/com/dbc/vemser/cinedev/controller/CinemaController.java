@@ -36,18 +36,13 @@ public class CinemaController implements OperationControllerCinema {
         return cinemaService.listarCinemaPorId(id);
     }
 
-    @Override
-    @PostMapping
-    public ResponseEntity<CinemaDTO> cadastrarCinema(@Valid @RequestBody CinemaCreateDTO cinemaCreateDTO)
-            throws RegraDeNegocioException {
-        return new ResponseEntity<>(cinemaService.adicionarCinema(cinemaCreateDTO), HttpStatus.OK);
-    }
-
-    @Override
-    @PutMapping("/{idCinema}")
-    public ResponseEntity<CinemaDTO> update(@PathVariable Integer idCinema, @Valid @RequestBody CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
-        return new ResponseEntity<>(cinemaService.atualizarCinema(idCinema, cinemaCreateDTO), HttpStatus.OK);
-    }
+//    @Override
+//    @PostMapping
+//    public ResponseEntity<CinemaDTO> cadastrarCinema(@Valid @RequestBody CinemaCreateDTO cinemaCreateDTO)
+//            throws RegraDeNegocioException {
+//        return new ResponseEntity<>(cinemaService.adicionarCinema(cinemaCreateDTO), HttpStatus.OK);
+//    }
+//
 
     @PutMapping("/atualizar-cinema-usuario")
     public ResponseEntity<CinemaDTO> updateCinemaPorUsuario(@Valid @RequestBody CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
@@ -55,19 +50,13 @@ public class CinemaController implements OperationControllerCinema {
     }
 
     @Override
-    @DeleteMapping("/{idCinema}")
-    public ResponseEntity<Void> delete(@PathVariable Integer idCinema) throws
+    @DeleteMapping("/deletar-cinema-logado")
+    public ResponseEntity<Void> deletarCinemaLogado() throws
             RegraDeNegocioException {
-        cinemaService.deletarCinema(idCinema);
+        cinemaService.deletarCinemaLogado();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/deletar-cinema/{idCinema}")
-    public ResponseEntity<Void> deletarCinema(@PathVariable Integer idCinema) throws
-            RegraDeNegocioException {
-        cinemaService.deletarCinemaLogin(idCinema);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
     @GetMapping("/cinema-relatorio")
     public ResponseEntity<List<RelatorioCadastroCinemaFilmeDTO>> listarRelatorioPersonalizado(@RequestParam(required = false, name = "idCinema") Integer idCinema) {

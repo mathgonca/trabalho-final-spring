@@ -13,6 +13,7 @@ import br.com.dbc.vemser.cinedev.entity.IngressoEntity;
 import br.com.dbc.vemser.cinedev.entity.enums.Disponibilidade;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.IngressoRepository;
+import br.com.dbc.vemser.cinedev.repository.UsuarioRepository;
 import br.com.dbc.vemser.cinedev.service.emails.EmailService;
 import br.com.dbc.vemser.cinedev.service.emails.TipoEmails;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,6 +33,7 @@ public class IngressoService {
     private final ClienteService clienteService;
     private final EmailService emailService;
     private final ObjectMapper objectMapper;
+    private final UsuarioService usuarioService;
 
 
     public IngressoEntity findById(Integer id) throws RegraDeNegocioException {
@@ -56,7 +58,13 @@ public class IngressoService {
     }
 
     public List<RelatorioCadastroIngressoClienteDTO> listarIngressosCompradosPorCliente(Integer id) throws RegraDeNegocioException {
-            return clienteService.listarRelatorioPersonalizado(id);
+        return clienteService.listarRelatorioPersonalizado(id);
+    }
+
+    public List<RelatorioCadastroIngressoClienteDTO> listarIngressosDoClienteLogado() throws RegraDeNegocioException {
+        ClienteEntity clienteRecuperado = clienteService.listarClientePorUsuario(usuarioService.getIdLoggedUser());
+        return clienteService.listarRelatorioPersonalizado(clienteRecuperado.getIdCliente());
+
     }
 
     public IngressoDTO createIngresso(IngressoCreateDTO ingressoCreateDTO) throws RegraDeNegocioException {
