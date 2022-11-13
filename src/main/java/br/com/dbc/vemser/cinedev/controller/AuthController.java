@@ -1,12 +1,13 @@
 package br.com.dbc.vemser.cinedev.controller;
 
 import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
+import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
-import br.com.dbc.vemser.cinedev.dto.cinemadto.UsuarioCreateCinemaDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.UsuarioCreateClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.login.LoginDTO;
 import br.com.dbc.vemser.cinedev.dto.recuperarsenhadto.RecuperarSenhaDTO;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
+import br.com.dbc.vemser.cinedev.service.CinemaService;
 import br.com.dbc.vemser.cinedev.service.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class AuthController {
     public static final int ROLE_RECCLIENTE_ID = 4;
     public static final int ROLE_RECCINEMA_ID = 5;
     public static final int ROLE_RECADMIN_ID = 6;
+    private final CinemaService cinemaService;
     private final UsuarioService usuarioService;
     private final ObjectMapper objectMapper;
 
@@ -85,8 +87,8 @@ public class AuthController {
     }
 
     @PostMapping("/novo-cinema")
-    public ResponseEntity<CinemaDTO> criarcinema(@RequestBody @Valid UsuarioCreateCinemaDTO criarCinema) throws RegraDeNegocioException {
-        CinemaDTO cinemaDTO = usuarioService.cadastrarCinema(criarCinema);
+    public ResponseEntity<CinemaDTO> criarcinema(@RequestBody @Valid CinemaCreateDTO criarCinema) throws RegraDeNegocioException {
+        CinemaDTO cinemaDTO = cinemaService.adicionarCinema(criarCinema);
         return new ResponseEntity<>(cinemaDTO, HttpStatus.OK);
     }
 }

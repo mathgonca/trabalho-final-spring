@@ -10,8 +10,19 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CinemaDTO extends CinemaCreateDTO {
-
-    @Schema(description = "Id do cinema", example = "1")
+public class CinemaDTO {
+    @Schema(example = "1")
     private Integer idCinema;
+
+    @Schema(example = "CINEMARK Pier-21")
+    private String nome;
+
+    @Schema(example = "Maranhão")
+    private String estado;
+
+    @Schema(example = "Ceilândia")
+    private String cidade;
+
+    @Schema(example = "noahbispo@yahoo.com.br")
+    private String email;
 }

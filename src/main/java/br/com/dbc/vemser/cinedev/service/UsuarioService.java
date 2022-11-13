@@ -1,17 +1,13 @@
 package br.com.dbc.vemser.cinedev.service;
 
 import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
-import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
-import br.com.dbc.vemser.cinedev.dto.cinemadto.UsuarioCreateCinemaDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.UsuarioCreateClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.login.LoginDTO;
 import br.com.dbc.vemser.cinedev.dto.recuperarsenhadto.RecuperarSenhaDTO;
 import br.com.dbc.vemser.cinedev.entity.CargoEntity;
-import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
 import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
 import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
-import br.com.dbc.vemser.cinedev.repository.CinemaRepository;
 import br.com.dbc.vemser.cinedev.repository.ClienteRepository;
 import br.com.dbc.vemser.cinedev.repository.UsuarioRepository;
 import br.com.dbc.vemser.cinedev.security.TokenService;
@@ -23,7 +19,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,12 +32,10 @@ import java.util.Set;
 public class UsuarioService {
     public static final int ROLE_ADMIN_ID = 1;
     public static final int ROLE_CLIENTE_ID = 2;
-    public static final int ROLE_CINEMA_ID = 3;
     public static final String USUARIO_NAO_ENCONTRADO = "Usuário não encontrado!";
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final ClienteRepository clienteRepository;
-    private final CinemaRepository cinemaRepository;
     private final EmailService emailService;
     private final CargoService cargoService;
     private final PasswordEncoder passwordEncoder;
@@ -53,6 +46,7 @@ public class UsuarioService {
     public Integer getIdLoggedUser() {
         return Integer.parseInt((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
+
     public UsuarioEntity getLoggedUser() throws RegraDeNegocioException {
         return findById(getIdLoggedUser());
     }
@@ -64,10 +58,12 @@ public class UsuarioService {
     public Optional<UsuarioEntity> findByID(Integer idUsuario) {
         return usuarioRepository.findById(idUsuario);
     }
+
     public UsuarioEntity findByEmail(String login) throws RegraDeNegocioException {
         return usuarioRepository.findByEmail(login)
                 .orElseThrow(() -> new RegraDeNegocioException(USUARIO_NAO_ENCONTRADO));
     }
+
     public UsuarioEntity findById(Integer idLoggedUser) throws RegraDeNegocioException {
         return usuarioRepository.findById(idLoggedUser).orElseThrow(() -> new RegraDeNegocioException(USUARIO_NAO_ENCONTRADO));
     }
@@ -122,33 +118,19 @@ public class UsuarioService {
         return usuarioDTO;
     }
 
-    public CinemaDTO cadastrarCinema(UsuarioCreateCinemaDTO cinemaCapturado) throws RegraDeNegocioException {
-        String cinemaNome = cinemaCapturado.getNome();
-        Optional<CinemaEntity> cinemaPorNome = cinemaRepository.findByNome(cinemaNome);
-
-        if (cinemaPorNome.isPresent()) {
-            throw new RegraDeNegocioException("Erro! Nome do Cinema já consta em nossa lista de cadastros!");
-        }
-
-        CargoEntity cargo = cargoService.findById(ROLE_CINEMA_ID);
-        String senha = passwordEncoder.encode(cinemaCapturado.getSenha());
+    public UsuarioEntity cadastrarUsuario(String email, String senha, Integer idRole) throws RegraDeNegocioException {
+        CargoEntity cargo = cargoService.findById(idRole);
+        String senhaEncode = passwordEncoder.encode(senha);
 
         UsuarioEntity usuarioEntity = new UsuarioEntity();
-        usuarioEntity.setEmail(cinemaCapturado.getEmail());
-        usuarioEntity.setSenha(senha);
+        usuarioEntity.setEmail(email);
+        usuarioEntity.setSenha(senhaEncode);
         usuarioEntity.setCargos(Set.of(cargo));
         usuarioEntity.setAtivo('S');
-        usuarioRepository.save(usuarioEntity);
 
-        CinemaEntity cinema = new CinemaEntity();
-        cinema.setUsuario(usuarioEntity);
-        cinema.setNome(cinemaCapturado.getNome());
-        cinema.setEstado(cinemaCapturado.getEstado());
-        cinema.setCidade(cinemaCapturado.getCidade());
-        CinemaEntity cinemaEntitySalvo = cinemaRepository.save(cinema);
-
-        return objectMapper.convertValue(cinemaEntitySalvo, CinemaDTO.class);
+        return usuarioRepository.save(usuarioEntity);
     }
+
     public String autenticar(@RequestBody @Valid LoginDTO loginDTO) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(
@@ -162,6 +144,7 @@ public class UsuarioService {
 
         return tokenService.getToken(usuarioEntity);
     }
+
     public void recuperarSenha(RecuperarSenhaDTO emailDTO, Integer idRoleRec) throws RegraDeNegocioException {
 
         UsuarioEntity usuarioEntity = findByEmail(emailDTO.getEmail());
@@ -172,6 +155,7 @@ public class UsuarioService {
         usuarioEntity.getCargos().add(cargo);
         usuarioRepository.save(usuarioEntity);
     }
+
     public void mudarSenha(String senha, Integer idRoleRec) throws RegraDeNegocioException {
         UsuarioEntity usuarioEntity = this.findByEmail(getLoggedUser().getEmail());
         UsuarioEntity usuarioAtualizado = removerCargo(usuarioEntity, idRoleRec);

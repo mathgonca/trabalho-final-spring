@@ -1,6 +1,5 @@
 package br.com.dbc.vemser.cinedev.dto.cinemadto;
 
-import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,8 +14,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioCreateCinemaDTO extends CinemaCreateDTO {
-
+public class UsuarioCreateDTO  {
     @NotNull
     @NotEmpty
     @Schema(description = "Email do usuário - o mesmo não pode ser usado para mais de um cadastro!", example = "noahbispo@yahoo.com.br")

@@ -21,6 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class CinemaService {
+    public static final int ROLE_CINEMA_ID = 3;
     private final CinemaRepository cinemaRepository;
     private final ObjectMapper objectMapper;
     private final UsuarioService usuarioService;
@@ -32,6 +33,7 @@ public class CinemaService {
                 .orElseThrow(() -> new RegraDeNegocioException("Cinema não encontrado!"));
         return cinemaEntityRecuperado;
     }
+
     public List<CinemaDTO> listarCinema() {
         List<CinemaEntity> cinemaEntityList = cinemaRepository.findAll();
         return cinemaEntityList.stream()
@@ -48,9 +50,11 @@ public class CinemaService {
 
         return cinemaOptional.get();
     }
+
     public CinemaDTO listarCinemaPorId(Integer idCinema) throws RegraDeNegocioException {
         return objectMapper.convertValue(listarCinemaID(idCinema), CinemaDTO.class);
     }
+
     public CinemaEntity listarCinemaIdUsuario(Integer idUsuario) throws RegraDeNegocioException {
         Optional<CinemaEntity> cinemaOptional = cinemaRepository.findByIdUsuario(idUsuario);
 
@@ -60,6 +64,7 @@ public class CinemaService {
 
         return cinemaOptional.get();
     }
+
     public CinemaDTO adicionarCinema(CinemaCreateDTO cinemaCapturado) throws RegraDeNegocioException {
         String cinemaNome = cinemaCapturado.getNome();
         Optional<CinemaEntity> cinemaPorNome = cinemaRepository.findByNome(cinemaNome);
@@ -68,12 +73,23 @@ public class CinemaService {
             throw new RegraDeNegocioException("Erro! Nome do Cinema já consta em nossa lista de cadastros!");
         }
 
-        CinemaEntity cinemaEntityTransform = objectMapper.convertValue(cinemaCapturado, CinemaEntity.class);
-        CinemaEntity cinemaEntitySalvo = cinemaRepository.save(cinemaEntityTransform);
+        String email = cinemaCapturado.getEmail();
+        String senha = cinemaCapturado.getSenha();
+        UsuarioEntity usuario = usuarioService.cadastrarUsuario(email, senha, ROLE_CINEMA_ID);
+
+        CinemaEntity cinema = new CinemaEntity();
+        cinema.setUsuario(usuario);
+        cinema.setNome(cinemaCapturado.getNome());
+        cinema.setEstado(cinemaCapturado.getEstado());
+        cinema.setCidade(cinemaCapturado.getCidade());
+        CinemaEntity cinemaEntitySalvo = cinemaRepository.save(cinema);
+
         CinemaDTO cinemaDTO = objectMapper.convertValue(cinemaEntitySalvo, CinemaDTO.class);
+        cinemaDTO.setEmail(usuario.getEmail());
 
         return cinemaDTO;
     }
+
     public CinemaDTO atualizarCinema(Integer idCinema, CinemaCreateDTO cinemaCreateDTO) throws RegraDeNegocioException {
         CinemaEntity cinemaPego = findById(idCinema);
         CinemaEntity cinemaEntity = objectMapper.convertValue(cinemaCreateDTO, CinemaEntity.class);
