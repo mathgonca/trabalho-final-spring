@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.cinedev.controller;
 
+import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerAdministrador;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
@@ -19,7 +20,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/admin")
-public class AdministradorController {
+public class AdministradorController implements OperationControllerAdministrador {
     private final CinemaService cinemaService;
     private final ClienteService clienteService;
 
@@ -35,15 +36,16 @@ public class AdministradorController {
         return new ResponseEntity<>(clienteService.atualizarCliente(idCliente, clienteCreateDTO), HttpStatus.OK);
     }
 
-    @DeleteMapping("/deletar-cinema-usuario/{idCinema}")
+    @DeleteMapping("/cinema/{idCinema}")
     public ResponseEntity<Void> deletarCinemaPorUsuario(@PathVariable Integer idCinema) throws
             RegraDeNegocioException {
         cinemaService.deletarCinemaPorUsuario(idCinema);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/usuario-cliente/{idCliente}")
-    public void deletarUsuarioCliente(@PathVariable Integer idCliente) throws RegraDeNegocioException {
+    @DeleteMapping("/cliente/{idCliente}")
+    public ResponseEntity<Void> deletarUsuarioCliente(@PathVariable Integer idCliente) throws RegraDeNegocioException {
         clienteService.deletarUsuarioCliente(idCliente);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
