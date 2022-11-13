@@ -1,6 +1,5 @@
 package br.com.dbc.vemser.cinedev.service;
 
-import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
@@ -19,10 +18,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class ClienteService {
+    public static final int ROLE_CLIENTE_ID = 2;
     private final ClienteRepository clienteRepository;
 
     private final UsuarioRepository usuarioRepository;
-//    private final EmailService emailService;
+    //    private final EmailService emailService;
     private final ObjectMapper objectMapper;
 
     private final UsuarioService usuarioService;
@@ -31,12 +31,14 @@ public class ClienteService {
         return clienteRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Cliente não encontrado"));
     }
+
     public List<ClienteDTO> listarTodosClientes() {
         List<ClienteEntity> clienteEntityList = clienteRepository.findAll();
         return clienteEntityList.stream()
                 .map(clienteEntity -> objectMapper.convertValue(clienteEntity, ClienteDTO.class))
                 .toList();
     }
+
     public ClienteEntity listarClientePorUsuario(Integer idUsuario) throws RegraDeNegocioException {
         return clienteRepository.findByIdUsuario(usuarioService.getIdLoggedUser())
                 .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado"));
@@ -50,18 +52,26 @@ public class ClienteService {
         String clienteCadastroCPF = clienteCreateDTO.getCpf();
         Optional<ClienteEntity> clientePorCPF = clienteRepository.findByCpf(clienteCadastroCPF);
 
-//        String clienteCadastroEmail = clienteCreateDTO.getEmail();
-//        Optional<ClienteEntity> clientePorEmail = clienteRepository.findByEmail(clienteCadastroEmail);
-//
-//        if (clientePorCPF.isPresent() || clientePorEmail.isPresent()) {
-//            throw new RegraDeNegocioException("Cliente já cadastrado com os mesmos dados");
-//        }
+        String clienteCadastroEmail = clienteCreateDTO.getEmail();
+        Optional<UsuarioEntity> clientePorEmail = usuarioService.findOptionalByEmail(clienteCadastroEmail);
+
+        if (clientePorCPF.isPresent() || clientePorEmail.isPresent()) {
+            throw new RegraDeNegocioException("Cliente já cadastrado com os mesmos dados");
+        }
+
+        String email = clienteCreateDTO.getEmail();
+        String senha = clienteCreateDTO.getSenha();
+        UsuarioEntity usuario = usuarioService.cadastrarUsuario(email, senha, ROLE_CLIENTE_ID);
 
         ClienteEntity clienteEntity = objectMapper.convertValue(clienteCreateDTO, ClienteEntity.class);
+        clienteEntity.setUsuario(usuario);
         ClienteEntity clienteEntityCadastrado = clienteRepository.save(clienteEntity);
-        ClienteDTO usuarioDTO = objectMapper.convertValue(clienteEntityCadastrado, ClienteDTO.class);
+
+        ClienteDTO clienteDTO = objectMapper.convertValue(clienteEntityCadastrado, ClienteDTO.class);
+        clienteDTO.setEmail(usuario.getEmail());
+
 //        emailService.sendEmail(clienteDTO, TipoEmails.CREATE);
-        return usuarioDTO;
+        return clienteDTO;
     }
 
     public ClienteEntity listarClientePeloId(Integer idCliente) throws RegraDeNegocioException {
@@ -73,6 +83,7 @@ public class ClienteService {
 
         return clienteOptional.get();
     }
+
     public ClienteDTO atualizarCliente(Integer idCliente, ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
         listarClientePeloId(idCliente);
 
@@ -124,7 +135,8 @@ public class ClienteService {
         usuarioRepository.save(usuarioEntity);
 
     }
-    public List<RelatorioCadastroIngressoClienteDTO> listarRelatorioPersonalizado(Integer idCliente){
+
+    public List<RelatorioCadastroIngressoClienteDTO> listarRelatorioPersonalizado(Integer idCliente) {
         return clienteRepository.listarRelatorioPersonalizado(idCliente);
     }
 

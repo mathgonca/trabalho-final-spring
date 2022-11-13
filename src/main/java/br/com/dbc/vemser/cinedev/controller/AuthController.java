@@ -3,11 +3,14 @@ package br.com.dbc.vemser.cinedev.controller;
 import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
+import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
+import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.UsuarioCreateClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.login.LoginDTO;
 import br.com.dbc.vemser.cinedev.dto.recuperarsenhadto.RecuperarSenhaDTO;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.CinemaService;
+import br.com.dbc.vemser.cinedev.service.ClienteService;
 import br.com.dbc.vemser.cinedev.service.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ public class AuthController {
     public static final int ROLE_RECCINEMA_ID = 5;
     public static final int ROLE_RECADMIN_ID = 6;
     private final CinemaService cinemaService;
+    private final ClienteService clienteService;
     private final UsuarioService usuarioService;
     private final ObjectMapper objectMapper;
 
@@ -81,9 +85,9 @@ public class AuthController {
     }
 
     @PostMapping("/novo-cliente")
-    public ResponseEntity<UsuarioDTO> criarCliente(@RequestBody @Valid UsuarioCreateClienteDTO criarClienteDTO) throws RegraDeNegocioException {
-        UsuarioDTO usuarioDTO = usuarioService.cadastrarCliente(criarClienteDTO);
-        return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
+    public ResponseEntity<ClienteDTO> criarCliente(@RequestBody @Valid ClienteCreateDTO criarClienteDTO) throws RegraDeNegocioException {
+        ClienteDTO clienteDTO = clienteService.cadastrarCliente(criarClienteDTO);
+        return new ResponseEntity<>(clienteDTO, HttpStatus.OK);
     }
 
     @PostMapping("/novo-cinema")

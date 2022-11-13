@@ -1,11 +1,9 @@
 package br.com.dbc.vemser.cinedev.service;
 
 import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
-import br.com.dbc.vemser.cinedev.dto.clientedto.UsuarioCreateClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.login.LoginDTO;
 import br.com.dbc.vemser.cinedev.dto.recuperarsenhadto.RecuperarSenhaDTO;
 import br.com.dbc.vemser.cinedev.entity.CargoEntity;
-import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
 import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.ClienteRepository;
@@ -31,11 +29,9 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class UsuarioService {
     public static final int ROLE_ADMIN_ID = 1;
-    public static final int ROLE_CLIENTE_ID = 2;
     public static final String USUARIO_NAO_ENCONTRADO = "Usuário não encontrado!";
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
-    private final ClienteRepository clienteRepository;
     private final EmailService emailService;
     private final CargoService cargoService;
     private final PasswordEncoder passwordEncoder;
@@ -59,9 +55,13 @@ public class UsuarioService {
         return usuarioRepository.findById(idUsuario);
     }
 
-    public UsuarioEntity findByEmail(String login) throws RegraDeNegocioException {
-        return usuarioRepository.findByEmail(login)
+    public UsuarioEntity findByEmail(String email) throws RegraDeNegocioException {
+        return usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RegraDeNegocioException(USUARIO_NAO_ENCONTRADO));
+    }
+
+    public Optional<UsuarioEntity> findOptionalByEmail(String email) {
+        return usuarioRepository.findByEmail(email);
     }
 
     public UsuarioEntity findById(Integer idLoggedUser) throws RegraDeNegocioException {
@@ -85,36 +85,6 @@ public class UsuarioService {
         usuarioCapturado.setCargos(Set.of(cargo));
         UsuarioEntity usuarioSalvo = usuarioRepository.save(usuarioCapturado);
         UsuarioDTO usuarioDTO = objectMapper.convertValue(usuarioSalvo, UsuarioDTO.class);
-        return usuarioDTO;
-    }
-
-    public UsuarioDTO cadastrarCliente(UsuarioCreateClienteDTO clienteCreateDTO) throws RegraDeNegocioException {
-//        String clienteCadastroCPF = clienteCreateDTO.getCpf();
-//        Optional<ClienteEntity> clientePorCPF = clienteRepository.findByCpf(clienteCadastroCPF);
-        CargoEntity cargo = cargoService.findById(ROLE_CLIENTE_ID);
-
-        UsuarioEntity usuarioEntity = new UsuarioEntity();
-        String senha = passwordEncoder.encode(clienteCreateDTO.getSenha());
-        usuarioEntity.setEmail(clienteCreateDTO.getEmail());
-        usuarioEntity.setSenha(senha);
-        usuarioEntity.setCargos(Set.of(cargo));
-        usuarioEntity.setAtivo('S');
-        usuarioRepository.save(usuarioEntity);
-
-//        String clienteCadastroEmail = clienteCreateDTO.getEmail();
-//        Optional<ClienteEntity> clientePorEmail = clienteRepository.findByEmail(clienteCadastroEmail);
-//        if (clientePorCPF.isPresent() || clientePorEmail.isPresent()) {
-//            throw new RegraDeNegocioException("Cliente já cadastrado com os mesmos dados");
-//        }
-        ClienteEntity clienteEntity = new ClienteEntity();
-        clienteEntity.setUsuario(usuarioEntity);
-        clienteEntity.setCpf(clienteCreateDTO.getCpf());
-        clienteEntity.setDataNascimento(clienteCreateDTO.getDataNascimento());
-        clienteEntity.setPrimeiroNome(clienteCreateDTO.getPrimeiroNome());
-        clienteEntity.setUltimoNome(clienteCreateDTO.getUltimoNome());
-        ClienteEntity clienteEntityCadastrado = clienteRepository.save(clienteEntity);
-        UsuarioDTO usuarioDTO = objectMapper.convertValue(clienteEntityCadastrado, UsuarioDTO.class);
-//        emailService.sendEmail(clienteDTO, TipoEmails.CREATE);
         return usuarioDTO;
     }
 

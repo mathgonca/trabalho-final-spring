@@ -1,23 +1,20 @@
 package br.com.dbc.vemser.cinedev.dto.clientedto;
 
+import br.com.dbc.vemser.cinedev.dto.cinemadto.UsuarioCreateDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClienteCreateDTO {
-
+public class ClienteCreateDTO extends UsuarioCreateDTO {
     @NotNull
     @NotEmpty
     @Size(min = 2, max = 25)
@@ -38,6 +35,6 @@ public class ClienteCreateDTO {
 
     @Past
     @NotNull
-    @Schema(description = "Data de Nascimento do usuário", example = "1999/02/20")
+    @Schema(description = "Data de Nascimento do usuário", example = "1999-02-20")
     private LocalDate dataNascimento;
 }
