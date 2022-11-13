@@ -10,7 +10,6 @@ public enum TipoEmails {
     UPDATE("Alteração de Dados Cadastrais!"),
     DELETE("Acesso da conta encerrado!"),
     ING_COMPRADO("Compra do IngressoEntity Realizada!"),
-
     REC_SENHA("Token para recuperação do e-mail realizada!");
 
     private final String descricao;

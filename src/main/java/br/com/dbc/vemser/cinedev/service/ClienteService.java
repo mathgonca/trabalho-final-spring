@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.cinedev.service;
 
+import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
@@ -7,6 +8,8 @@ import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
 import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.ClienteRepository;
+import br.com.dbc.vemser.cinedev.service.emails.EmailService;
+import br.com.dbc.vemser.cinedev.service.emails.TipoEmails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +22,7 @@ import java.util.Optional;
 public class ClienteService {
     public static final int ROLE_CLIENTE_ID = 2;
     private final ClienteRepository clienteRepository;
-    //    private final EmailService emailService;
+    private final EmailService emailService;
     private final ObjectMapper objectMapper;
     private final UsuarioService usuarioService;
 
@@ -65,8 +68,8 @@ public class ClienteService {
 
         ClienteDTO clienteDTO = objectMapper.convertValue(clienteEntityCadastrado, ClienteDTO.class);
         clienteDTO.setEmail(usuario.getEmail());
-
-//        emailService.sendEmail(clienteDTO, TipoEmails.CREATE);
+        UsuarioDTO usuarioDTO = objectMapper.convertValue(clienteEntityCadastrado.getUsuario(), UsuarioDTO.class);
+        emailService.sendEmail(usuarioDTO, TipoEmails.CREATE, null);
         return clienteDTO;
     }
 
@@ -93,7 +96,8 @@ public class ClienteService {
 
         ClienteDTO clienteDTO = objectMapper.convertValue(clienteSalvo, ClienteDTO.class);
         clienteDTO.setEmail(clienteSalvo.getUsuario().getEmail());
-        //        emailService.sendEmail(clienteDTO, TipoEmails.UPDATE);
+        UsuarioDTO usuarioDTO = objectMapper.convertValue(clienteSalvo.getUsuario(),UsuarioDTO.class);
+        emailService.sendEmail(usuarioDTO, TipoEmails.UPDATE, null);
 
         return clienteDTO;
     }
@@ -106,8 +110,10 @@ public class ClienteService {
     public void deletarUsuarioCliente(Integer idCliente) throws RegraDeNegocioException {
         ClienteEntity clienteEntity = listarClientePeloId(idCliente);
         UsuarioEntity usuarioEntity = clienteEntity.getUsuario();
+        UsuarioDTO usuarioDTO = objectMapper.convertValue(clienteEntity.getUsuario(), UsuarioDTO.class);
 
-//        emailService.sendEmail(clienteDTO, TipoEmails.DELETE);
+        emailService.sendEmail(usuarioDTO, TipoEmails.DELETE, null);
+
         clienteRepository.deleteById(clienteEntity.getIdCliente());
         usuarioService.desativarUsuario(usuarioEntity);
     }

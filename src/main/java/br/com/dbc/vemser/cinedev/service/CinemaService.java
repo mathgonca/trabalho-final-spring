@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.cinedev.service;
 
+import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
@@ -8,6 +9,8 @@ import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
 import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.CinemaRepository;
+import br.com.dbc.vemser.cinedev.service.emails.EmailService;
+import br.com.dbc.vemser.cinedev.service.emails.TipoEmails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +27,7 @@ public class CinemaService {
     private final CinemaRepository cinemaRepository;
     private final ObjectMapper objectMapper;
     private final UsuarioService usuarioService;
+    private final EmailService emailService;
 
     public CinemaEntity findById(Integer id) throws RegraDeNegocioException {
         CinemaEntity cinemaEntityRecuperado = null;
@@ -85,6 +89,9 @@ public class CinemaService {
         CinemaDTO cinemaDTO = objectMapper.convertValue(cinemaEntitySalvo, CinemaDTO.class);
         cinemaDTO.setEmail(usuario.getEmail());
 
+        UsuarioDTO cinemaEmail = objectMapper.convertValue(cinemaEntitySalvo.getUsuario(), UsuarioDTO.class);
+        emailService.sendEmail(cinemaEmail, TipoEmails.CREATE, null);
+
         return cinemaDTO;
     }
 
@@ -99,6 +106,9 @@ public class CinemaService {
         CinemaEntity cinemaSalvo = cinemaRepository.save(cinemaPego);
         CinemaDTO cinemaDTO = objectMapper.convertValue(cinemaSalvo, CinemaDTO.class);
         cinemaDTO.setEmail(cinemaPego.getUsuario().getEmail());
+
+        UsuarioDTO cinemaEmail = objectMapper.convertValue(cinemaSalvo.getUsuario(), UsuarioDTO.class);
+        emailService.sendEmail(cinemaEmail, TipoEmails.UPDATE, null);
 
         return cinemaDTO;
     }
@@ -118,6 +128,8 @@ public class CinemaService {
         UsuarioEntity usuarioEntity = cinema.getUsuario();
         cinemaRepository.delete(cinema);
         usuarioService.desativarUsuario(usuarioEntity);
+        UsuarioDTO cinemaEmail = objectMapper.convertValue(usuarioEntity, UsuarioDTO.class);
+        emailService.sendEmail(cinemaEmail, TipoEmails.DELETE, null);
     }
 
     public List<RelatorioCadastroCinemaFilmeDTO> listarRelatorioPersonalizadoCinemaLogado() throws RegraDeNegocioException {
