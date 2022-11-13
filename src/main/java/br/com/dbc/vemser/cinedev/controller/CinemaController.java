@@ -63,6 +63,11 @@ public class CinemaController implements OperationControllerCinema {
         return new ResponseEntity<>(cinemaService.listarRelatorioPersonalizado(idCinema), HttpStatus.OK);
     }
 
+    @GetMapping("/cinema-relatorio/cinema-logado")
+    public ResponseEntity<List<RelatorioCadastroCinemaFilmeDTO>> listarRelatorioPersonalizadoCinemaLogado() throws RegraDeNegocioException {
+        return new ResponseEntity<>(cinemaService.listarRelatorioPersonalizadoCinemaLogado(), HttpStatus.OK);
+    }
+
     @GetMapping("/find-cinema-paginado")
     public ResponseEntity<PageDTO<CinemaDTO>> listarCinemasPaginados(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina) {
         return new ResponseEntity<>(cinemaService.listCinemaPaginado(paginaQueEuQuero, tamanhoDeRegistrosPorPagina), HttpStatus.OK);

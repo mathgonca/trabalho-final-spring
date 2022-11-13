@@ -120,6 +120,11 @@ public class CinemaService {
         usuarioService.desativarUsuario(usuarioEntity);
     }
 
+    public List<RelatorioCadastroCinemaFilmeDTO> listarRelatorioPersonalizadoCinemaLogado() throws RegraDeNegocioException {
+        CinemaEntity cinemaLogado = listarCinemaIdUsuario(usuarioService.getIdLoggedUser());
+        return listarRelatorioPersonalizado(cinemaLogado.getIdCinema());
+    }
+
     public List<RelatorioCadastroCinemaFilmeDTO> listarRelatorioPersonalizado(Integer idCinema) {
         return cinemaRepository.listarRelatorioPersonalizado(idCinema);
     }
