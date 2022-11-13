@@ -1,11 +1,9 @@
 package br.com.dbc.vemser.cinedev.controller;
 
 import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerCliente;
-import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
-import br.com.dbc.vemser.cinedev.exception.BancoDeDadosException;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.ClienteService;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +43,7 @@ public class ClienteController implements OperationControllerCliente {
 
     @PutMapping("/atualizar-cliente-usuario")
     public ResponseEntity<ClienteDTO> updateUsuario(@Valid @RequestBody ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
-        return new ResponseEntity<>(clienteService.atualizarClientePorUsuario(clienteCreateDTO), HttpStatus.OK);
+        return new ResponseEntity<>(clienteService.atualizarCliente(clienteCreateDTO), HttpStatus.OK);
     }
     @Override
     @DeleteMapping("/delete-cliente-logado")

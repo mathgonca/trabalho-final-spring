@@ -144,4 +144,8 @@ public class UsuarioService {
         return usuario;
     }
 
+    public void desativarUsuario(UsuarioEntity usuario) {
+        usuario.setAtivo('N');
+        usuarioRepository.save(usuario);
+    }
 }

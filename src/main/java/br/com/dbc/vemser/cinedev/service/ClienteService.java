@@ -7,7 +7,6 @@ import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
 import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.ClienteRepository;
-import br.com.dbc.vemser.cinedev.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,11 +19,8 @@ import java.util.Optional;
 public class ClienteService {
     public static final int ROLE_CLIENTE_ID = 2;
     private final ClienteRepository clienteRepository;
-
-    private final UsuarioRepository usuarioRepository;
     //    private final EmailService emailService;
     private final ObjectMapper objectMapper;
-
     private final UsuarioService usuarioService;
 
     public ClienteEntity findById(Integer id) throws RegraDeNegocioException {
@@ -75,16 +71,11 @@ public class ClienteService {
     }
 
     public ClienteEntity listarClientePeloId(Integer idCliente) throws RegraDeNegocioException {
-        Optional<ClienteEntity> clienteOptional = clienteRepository.findById(idCliente);
-
-        if (clienteOptional.isEmpty()) {
-            throw new RegraDeNegocioException("Cliente não cadastrado");
-        }
-
-        return clienteOptional.get();
+        return clienteRepository.findById(idCliente)
+                .orElseThrow(() -> new RegraDeNegocioException("Cliente não cadastrado"));
     }
 
-    public ClienteDTO atualizarCliente(Integer idCliente, ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
+    public ClienteDTO atualizarClienteAdmin(Integer idCliente, ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
         listarClientePeloId(idCliente);
 
         ClienteEntity clienteEntity = objectMapper.convertValue(clienteCreateDTO, ClienteEntity.class);
@@ -97,7 +88,7 @@ public class ClienteService {
         return usuarioDTO;
     }
 
-    public ClienteDTO atualizarClientePorUsuario(ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
+    public ClienteDTO atualizarCliente(ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
 
         ClienteEntity clienteRecuperado = listarClientePorUsuario(usuarioService.getIdLoggedUser());
         clienteRecuperado.setPrimeiroNome(clienteCreateDTO.getPrimeiroNome());
@@ -114,26 +105,16 @@ public class ClienteService {
 
     public void deletarClienteLogado() throws RegraDeNegocioException {
         ClienteEntity clienteRecuperado = listarClientePorUsuario(usuarioService.getIdLoggedUser());
-        ClienteEntity clienteEntity = listarClientePeloId(clienteRecuperado.getIdCliente());
-        ClienteDTO clienteDTO = objectMapper.convertValue(clienteEntity, ClienteDTO.class);
-        UsuarioEntity usuario = new UsuarioEntity();
-        UsuarioEntity usuarioEntity = clienteEntity.getUsuario();
-//        emailService.sendEmail(clienteDTO, TipoEmails.DELETE);
-        clienteRepository.deleteById(clienteEntity.getIdCliente());
-        usuarioEntity.setAtivo('N');
-        usuarioRepository.save(usuarioEntity);
+        deletarUsuarioCliente(clienteRecuperado.getIdCliente());
     }
 
     public void deletarUsuarioCliente(Integer idCliente) throws RegraDeNegocioException {
         ClienteEntity clienteEntity = listarClientePeloId(idCliente);
-        UsuarioEntity usuario = new UsuarioEntity();
         UsuarioEntity usuarioEntity = clienteEntity.getUsuario();
 
 //        emailService.sendEmail(clienteDTO, TipoEmails.DELETE);
         clienteRepository.deleteById(clienteEntity.getIdCliente());
-        usuarioEntity.setAtivo('N');
-        usuarioRepository.save(usuarioEntity);
-
+        usuarioService.desativarUsuario(usuarioEntity);
     }
 
     public List<RelatorioCadastroIngressoClienteDTO> listarRelatorioPersonalizado(Integer idCliente) {

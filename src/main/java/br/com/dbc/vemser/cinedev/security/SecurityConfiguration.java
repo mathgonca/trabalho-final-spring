@@ -28,34 +28,35 @@ public class SecurityConfiguration {
                 .cors().and()
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->
-                        //autorizações -> auth
+                                //autorizações -> auth
                                 authz.antMatchers("/auth/fazer-login", "/auth/novo-cliente",
-                                                "/auth/novo-cinema","/auth/novo-admin","/auth/usuario-logado").permitAll()
-                      //autorizações -> cliente
+                                                "/auth/novo-cinema", "/auth/novo-admin", "/auth/usuario-logado").permitAll()
+                                        //autorizações -> cliente
                                         .antMatchers("/auth/atualizar-senha-cliente").hasRole("CLIENTE")
                                         .antMatchers("/auth/recuperar-senha-cliente").hasRole("CLIENTE")
                                         .antMatchers("/ingresso", "/ingressosComprados-cliente-logado",
-                                         "/ingresso/comprar/{idCliente}/ingresso/{idIngresso}").hasRole("CLIENTE")
-                                        .antMatchers(HttpMethod.GET,"/filme").hasRole("CLIENTE")
+                                                "/ingresso/comprar/{idCliente}/ingresso/{idIngresso}").hasRole("CLIENTE")
+                                        .antMatchers(HttpMethod.GET, "/filme").hasRole("CLIENTE")
                                         .antMatchers("/cliente/atualizar-cliente-usuario").hasRole("CLIENTE")
                                         .antMatchers("/cliente/delete-cliente-logado").hasRole("CLIENTE")
-                     //autorizações - cinema
+                                        //autorizações - cinema
                                         .antMatchers("/auth/atualizar-senha-cinema").hasRole("CINEMA")
                                         .antMatchers("/auth/recuperar-senha-cinema").hasRole("CINEMA")
                                         .antMatchers(HttpMethod.GET, "/cinema/**").hasRole("CLIENTE")
                                         .antMatchers("/ingresso/**").hasRole("CINEMA")
                                         .antMatchers("/filme/**").hasRole("CINEMA")
                                         .antMatchers("/cinema/**").hasRole("CINEMA")
-                     //autorizações - administrador
-                                        .antMatchers(HttpMethod.DELETE,"/**").hasRole("ADMIN")
+                                        //autorizações - administrador
+                                        .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
                                         .antMatchers("/**").hasRole("ADMIN")
 //
-                                .anyRequest().authenticated()
+                                        .anyRequest().authenticated()
                 );
         // 1 - verifica token
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().antMatchers("/v3/api-docs",
@@ -63,6 +64,7 @@ public class SecurityConfiguration {
                 "/swagger-resources/**",
                 "/swagger-ui/**");
     }
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
