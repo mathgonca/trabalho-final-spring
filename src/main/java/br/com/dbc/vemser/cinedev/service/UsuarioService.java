@@ -129,7 +129,7 @@ public class UsuarioService {
         UsuarioEntity usuarioEntity = this.findByEmail(getLoggedUser().getEmail());
         UsuarioEntity usuarioAtualizado = removerCargo(usuarioEntity, idRoleRec);
         String senhaNova = passwordEncoder.encode(senha);
-        usuarioEntity.setSenha(senhaNova);
+        usuarioAtualizado.setSenha(senhaNova);
         usuarioRepository.save(usuarioAtualizado);
     }
 
