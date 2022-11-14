@@ -36,10 +36,16 @@ public class CinemaService {
         return cinemaEntityRecuperado;
     }
 
+    public CinemaDTO converterParaCinemaDTO(CinemaEntity cinema) {
+        CinemaDTO cinemaDTO = objectMapper.convertValue(cinema, CinemaDTO.class);
+        cinemaDTO.setEmail(cinema.getUsuario().getEmail());
+        return cinemaDTO;
+    }
+
     public List<CinemaDTO> listarCinema() {
         List<CinemaEntity> cinemaEntityList = cinemaRepository.findAll();
         return cinemaEntityList.stream()
-                .map(cinemaEntity -> objectMapper.convertValue(cinemaEntity, CinemaDTO.class))
+                .map(this::converterParaCinemaDTO)
                 .toList();
     }
 
@@ -54,7 +60,8 @@ public class CinemaService {
     }
 
     public CinemaDTO listarCinemaPorId(Integer idCinema) throws RegraDeNegocioException {
-        return objectMapper.convertValue(listarCinemaID(idCinema), CinemaDTO.class);
+        CinemaEntity cinema = listarCinemaID(idCinema);
+        return converterParaCinemaDTO(cinema);
     }
 
     public CinemaEntity listarCinemaIdUsuario(Integer idUsuario) throws RegraDeNegocioException {

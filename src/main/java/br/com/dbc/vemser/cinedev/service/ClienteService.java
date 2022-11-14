@@ -1,9 +1,11 @@
 package br.com.dbc.vemser.cinedev.service;
 
 import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
+import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
+import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
 import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
 import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
@@ -31,10 +33,16 @@ public class ClienteService {
                 .orElseThrow(() -> new RegraDeNegocioException("Cliente não encontrado"));
     }
 
+    public ClienteDTO converterParaClienteDTO(ClienteEntity cliente) {
+        ClienteDTO clienteDTO = objectMapper.convertValue(cliente, ClienteDTO.class);
+        clienteDTO.setEmail(cliente.getUsuario().getEmail());
+        return clienteDTO;
+    }
+
     public List<ClienteDTO> listarTodosClientes() {
         List<ClienteEntity> clienteEntityList = clienteRepository.findAll();
         return clienteEntityList.stream()
-                .map(clienteEntity -> objectMapper.convertValue(clienteEntity, ClienteDTO.class))
+                .map(this::converterParaClienteDTO)
                 .toList();
     }
 
@@ -44,7 +52,8 @@ public class ClienteService {
     }
 
     public ClienteDTO listarClienteDTOPeloId(Integer idCliente) throws RegraDeNegocioException {
-        return objectMapper.convertValue(listarClientePeloId(idCliente), ClienteDTO.class);
+        ClienteEntity cliente = listarClientePeloId(idCliente);
+        return converterParaClienteDTO(cliente);
     }
 
     public ClienteDTO cadastrarCliente(ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
