@@ -30,7 +30,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authz) ->
                                 //autorizações -> auth
                                 authz.antMatchers("/auth/fazer-login", "/auth/novo-cliente",
-                                                "/auth/novo-cinema", "/auth/novo-admin", "/auth/usuario-logado", "avaliacoes/**").permitAll()
+                                                "/auth/novo-cinema", "/auth/novo-admin", "/auth/usuario-logado", "/avaliacoes/**").permitAll()
                                         //autorizações -> cliente
                                         .antMatchers("/auth/atualizar-senha-cliente").hasRole("CLIENTE")
                                         .antMatchers("/auth/recuperar-senha-cliente").hasRole("CLIENTE")

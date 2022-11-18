@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Column;
 
-@Document(collection = "Avaliacoes")
+@Document(collection = "avaliacoes")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,13 +15,15 @@ public class AvaliacoesEntity {
     @Id
     private String id;
 
-    @Column(name = "Nome Filme")
+//    @Column(name = "Nome Filme")
     private String nome;
 
-    @Column(name = "nota")
+//    @Column(name = "nota")
     private Double nota;
 
-    @Column(name = "comentario")
+//    @Column(name = "comentario")
     private String comentario;
+
+    private Integer quantidade;
 
 }

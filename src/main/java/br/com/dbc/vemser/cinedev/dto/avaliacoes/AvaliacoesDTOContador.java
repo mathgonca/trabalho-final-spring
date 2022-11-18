@@ -1,15 +1,15 @@
 package br.com.dbc.vemser.cinedev.dto.avaliacoes;
 
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Data
 public class AvaliacoesDTOContador {
 
-    private String nome;
+    @Field("_id")
     private Double nota;
+
+    private Integer quantidade;
 
 }

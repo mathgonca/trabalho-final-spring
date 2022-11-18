@@ -58,13 +58,11 @@ public class AvaliacoesService {
     }
 
     public List<AvaliacoesDTOContador> groupByNotaAndCount() throws RegraDeNegocioException{
-        return this.avaliacoesRepository.groupByNota().stream().map(l->{
-            return new AvaliacoesDTOContador(l.getNome(), l.getNota());
-        }).collect(Collectors.toList());
+        return avaliacoesRepository.groupByNota();
     }
 
     public List<AvaliacoesDTO> listByNotaContains(Double nota) throws RegraDeNegocioException {
-        return avaliacoesRepository.findAllByNotaContains(nota).stream().map(avaliacoesEntity -> objectMapper.convertValue(avaliacoesEntity, AvaliacoesDTO.class)).collect(Collectors.toList());
+        return avaliacoesRepository.findAllByNota(nota).stream().map(avaliacoesEntity -> objectMapper.convertValue(avaliacoesEntity, AvaliacoesDTO.class)).collect(Collectors.toList());
     }
 
 
