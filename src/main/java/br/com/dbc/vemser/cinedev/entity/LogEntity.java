@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Column;
+
 //import javax.persistence.EnumType;
 //import javax.persistence.Enumerated;
 
@@ -17,11 +19,13 @@ public class LogEntity {
     @Id
     private String id;
 
-    //@Enumerated(EnumType.STRING)
-    private TipoLog tipoLog;
+    @Column(name = "nome")
+    private String nome;
 
-    private String descricao;
+    @Column(name = "estado")
+    private String estado;
 
-    private String data;
+    @Column(name = "cidade")
+    private String cidade;
 
 }

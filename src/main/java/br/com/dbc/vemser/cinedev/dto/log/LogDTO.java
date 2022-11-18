@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+
 @Builder
 @Data
 @AllArgsConstructor
@@ -15,9 +17,14 @@ public class LogDTO {
     private String id;
 
     //@Enumerated(EnumType.STRING)
-    private TipoLog tipoLog;
+    @Column(name = "nome")
+    private String nome;
 
-    private String descricao;
+    @Column(name = "estado")
+    private String estado;
+
+    @Column(name = "cidade")
+    private String cidade;
 
     private String data;
 

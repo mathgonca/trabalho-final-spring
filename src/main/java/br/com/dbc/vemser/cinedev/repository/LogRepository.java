@@ -12,18 +12,24 @@ import java.util.List;
 @Repository
 public interface LogRepository extends MongoRepository<LogEntity, String> {
 
-    List<LogEntity> findAllByTipoLog(TipoLog tipoLog);
-
     @Aggregation(pipeline = {
             "{ '$unwind' : '$tipoLog' }",
             "{'$group':{ '_id': '$tipoLog', 'quantidade' : {'$sum': 1} }}"
     })
     List<LogByTipo> groupByTipoLogAndCount();
 
-    List<LogEntity> findAllByDataContains(String data);
+    List<LogEntity> findLogEntityByCidade(String cidade);
 
-    Long countAllByDataContains(String data);
+    List<LogEntity> findLogEntityByEstado(String estado);
 
-    Integer countByTipoLog(TipoLog tipoLog);
+//    List<LogEntity> findAllByDataContains(String data);
+
+    Long countByCidade(String cidade);
+
+    Long countByEstado(String estado);
+
+//    Long countAllByDataContains(String data);
+//
+//    Integer countByTipoLog(TipoLog tipoLog);
 
 }

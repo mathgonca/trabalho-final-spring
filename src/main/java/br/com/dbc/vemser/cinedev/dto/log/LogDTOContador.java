@@ -12,7 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class LogDTOContador {
 
-    private TipoLog tipoLog;
     private Integer quantidade;
 
 }

@@ -5,13 +5,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class LogCreateDTO {
 
     //@Enumerated(EnumType.STRING)
-    private TipoLog tipoLog;
-    private String descricao;
+    @Column(name = "nome")
+    private String nome;
+
+    @Column(name = "estado")
+    private String estado;
+
+    @Column(name = "cidade")
+    private String cidade;
 
 }
