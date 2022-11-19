@@ -1,25 +1,16 @@
 package br.com.dbc.vemser.cinedev.service;
 
-import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
 import br.com.dbc.vemser.cinedev.dto.avaliacoes.AvaliacoesCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.avaliacoes.AvaliacoesDTO;
 import br.com.dbc.vemser.cinedev.dto.avaliacoes.AvaliacoesDTOContador;
-import br.com.dbc.vemser.cinedev.dto.avaliacoes.AvaliacoesNotaDTO;
-import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
-import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.entity.AvaliacoesEntity;
-import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
-import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.AvaliacoesRepository;
-import br.com.dbc.vemser.cinedev.service.emails.TipoEmails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

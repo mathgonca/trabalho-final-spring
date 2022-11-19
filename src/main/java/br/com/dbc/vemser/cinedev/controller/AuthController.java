@@ -35,7 +35,7 @@ public class AuthController implements OperationControllerAuth {
     private final ObjectMapper objectMapper;
 
     @PostMapping("/fazer-login")
-    public ResponseEntity<String> autenticar(@RequestBody @Valid LoginDTO loginDTO) {
+    public ResponseEntity<String> autenticar(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
         String token = usuarioService.autenticar(loginDTO);
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
@@ -60,19 +60,19 @@ public class AuthController implements OperationControllerAuth {
 
     @PutMapping("/atualizar-senha-cinema")
     public ResponseEntity<Void> atualizarSenhaCinema(@Valid @RequestBody String senha) throws RegraDeNegocioException {
-        usuarioService.mudarSenha(senha, ROLE_RECCINEMA_ID);
+        usuarioService.mudarSenhaUsuarioLogado(senha, ROLE_RECCINEMA_ID);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/atualizar-senha-cliente")
     public ResponseEntity<Void> atualizarSenhaCliente(@Valid @RequestBody String senha) throws RegraDeNegocioException {
-        usuarioService.mudarSenha(senha, ROLE_RECCLIENTE_ID);
+        usuarioService.mudarSenhaUsuarioLogado(senha, ROLE_RECCLIENTE_ID);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/atualizar-senha-admin")
     public ResponseEntity<Void> atualizarSenhaAdministrador(@Valid @RequestBody String senha) throws RegraDeNegocioException {
-        usuarioService.mudarSenha(senha, ROLE_RECADMIN_ID);
+        usuarioService.mudarSenhaUsuarioLogado(senha, ROLE_RECADMIN_ID);
         return ResponseEntity.noContent().build();
     }
 

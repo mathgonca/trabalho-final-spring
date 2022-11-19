@@ -8,8 +8,7 @@ import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.UsuarioRepository;
 import br.com.dbc.vemser.cinedev.security.TokenService;
-import br.com.dbc.vemser.cinedev.service.emails.EmailService;
-import br.com.dbc.vemser.cinedev.service.emails.TipoEmails;
+import br.com.dbc.vemser.cinedev.enums.TipoEmails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,19 +38,11 @@ public class UsuarioService {
 
 
     public Integer getIdLoggedUser() {
-        return Integer.parseInt((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        return Integer.parseInt(String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
     }
 
     public UsuarioEntity getLoggedUser() throws RegraDeNegocioException {
         return findById(getIdLoggedUser());
-    }
-
-    public Optional<UsuarioEntity> findByLoginAndSenha(String login, String senha) {
-        return usuarioRepository.findByEmailAndSenha(login, senha);
-    }
-
-    public Optional<UsuarioEntity> findByID(Integer idUsuario) {
-        return usuarioRepository.findById(idUsuario);
     }
 
     public UsuarioEntity findByEmail(String email) throws RegraDeNegocioException {
@@ -64,25 +55,12 @@ public class UsuarioService {
     }
 
     public UsuarioEntity findById(Integer idLoggedUser) throws RegraDeNegocioException {
-        return usuarioRepository.findById(idLoggedUser).orElseThrow(() -> new RegraDeNegocioException(USUARIO_NAO_ENCONTRADO));
-    }
-
-    public UsuarioDTO create(LoginDTO loginDTO) {
-        UsuarioEntity usuarioEntity = objectMapper.convertValue(loginDTO, UsuarioEntity.class);
-
-        String senha = passwordEncoder.encode(usuarioEntity.getSenha()); //p codificar a senha
-        usuarioEntity.setSenha(senha);
-        usuarioRepository.save(usuarioEntity);
-        return objectMapper.convertValue(usuarioEntity, UsuarioDTO.class);
+        return usuarioRepository.findById(idLoggedUser)
+                .orElseThrow(() -> new RegraDeNegocioException(USUARIO_NAO_ENCONTRADO));
     }
 
     public UsuarioDTO cadastrarAdministrador(LoginDTO loginDTO) throws RegraDeNegocioException {
-        CargoEntity cargo = cargoService.findById(ROLE_ADMIN_ID);
-        UsuarioEntity usuarioCapturado = objectMapper.convertValue(loginDTO, UsuarioEntity.class);
-        String senha = passwordEncoder.encode(loginDTO.getSenha());
-        usuarioCapturado.setSenha(senha);
-        usuarioCapturado.setCargos(Set.of(cargo));
-        UsuarioEntity usuarioSalvo = usuarioRepository.save(usuarioCapturado);
+        UsuarioEntity usuarioSalvo = cadastrarUsuario(loginDTO.getEmail(), loginDTO.getSenha(), ROLE_ADMIN_ID);
         UsuarioDTO usuarioDTO = objectMapper.convertValue(usuarioSalvo, UsuarioDTO.class);
         return usuarioDTO;
     }
@@ -100,7 +78,7 @@ public class UsuarioService {
         return usuarioRepository.save(usuarioEntity);
     }
 
-    public String autenticar(@RequestBody @Valid LoginDTO loginDTO) {
+    public String autenticar(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(
                         loginDTO.getEmail(),
@@ -109,13 +87,12 @@ public class UsuarioService {
         Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         // UsuarioEntity
         Object principal = authenticate.getPrincipal();
-        UsuarioEntity usuarioEntity = (UsuarioEntity) principal;
+        UsuarioEntity usuarioEntity = findByEmail((String) principal);
 
         return tokenService.getToken(usuarioEntity);
     }
 
     public void recuperarSenha(RecuperarSenhaDTO emailDTO, Integer idRoleRec) throws RegraDeNegocioException {
-
         UsuarioEntity usuarioEntity = findByEmail(emailDTO.getEmail());
         String token = tokenService.getTokenTrocarSenha(usuarioEntity);
         UsuarioDTO usuarioDTO = objectMapper.convertValue(usuarioEntity, UsuarioDTO.class);
@@ -125,12 +102,17 @@ public class UsuarioService {
         usuarioRepository.save(usuarioEntity);
     }
 
-    public void mudarSenha(String senha, Integer idRoleRec) throws RegraDeNegocioException {
-        UsuarioEntity usuarioEntity = this.findByEmail(getLoggedUser().getEmail());
+    public void mudarSenhaUsuarioLogado(String senha, Integer idRoleRec) throws RegraDeNegocioException {
+        String email = getLoggedUser().getEmail();
+        mudarSenha(senha, idRoleRec, email);
+    }
+
+    public UsuarioEntity mudarSenha(String senha, Integer idRoleRec, String email) throws RegraDeNegocioException {
+        UsuarioEntity usuarioEntity = this.findByEmail(email);
         UsuarioEntity usuarioAtualizado = removerCargo(usuarioEntity, idRoleRec);
         String senhaNova = passwordEncoder.encode(senha);
-        usuarioAtualizado.setSenha(senhaNova);
-        usuarioRepository.save(usuarioAtualizado);
+        usuarioEntity.setSenha(senhaNova);
+        return usuarioRepository.save(usuarioEntity);
     }
 
     public UsuarioEntity removerCargo(UsuarioEntity usuario, Integer idCargo) throws RegraDeNegocioException {

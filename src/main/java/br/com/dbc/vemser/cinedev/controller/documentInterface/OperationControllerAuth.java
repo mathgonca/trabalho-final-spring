@@ -22,7 +22,7 @@ public interface OperationControllerAuth {
             @ApiResponse(responseCode = "200", description = "Login realizado com sucesso."),
             @ApiResponse(responseCode = "403", description = "Email ou senha incorretos. Login não concluído.")
     })
-    ResponseEntity<String> autenticar(@RequestBody @Valid LoginDTO loginDTO);
+    ResponseEntity<String> autenticar(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException;
 
     @Operation(summary = "Esqueci a senha do Cliente",
             description = "Caso você tenha um Cliente cadastrado no nosso banco de dados, envia um email com um token para trocar a senha.")
