@@ -1,14 +1,17 @@
 package br.com.dbc.vemser.cinedev.dto.cinemadto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CinemaCreateDTO extends UsuarioCreateDTO{
     @NotNull
     @NotEmpty
