@@ -1,13 +1,14 @@
 package br.com.dbc.vemser.cinedev.dto.relatorios;
 
 import br.com.dbc.vemser.cinedev.entity.enums.Disponibilidade;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
-@Data
+@RequiredArgsConstructor
+@Getter
+@Setter
 public class RelatorioCadastroCinemaFilmeDTO {
 
     private Integer idCinema; // cinema

@@ -4,9 +4,15 @@ import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
+import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoDTO;
+import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
+import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroCinemaFilmeDTO;
+import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
 import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
 import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
+import br.com.dbc.vemser.cinedev.entity.IngressoEntity;
 import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
+import br.com.dbc.vemser.cinedev.entity.enums.Disponibilidade;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.CinemaRepository;
 import br.com.dbc.vemser.cinedev.repository.ClienteRepository;
@@ -20,14 +26,19 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -54,7 +65,7 @@ public class CinemaServiceTest {
     }
 
     @Test
-    public void retornaCinemaQuandoIdEstiverCadastradoNoBanco() throws RegraDeNegocioException {
+    public void retornaCinemaQuandoIdEstiverCadastradoNoBancoComSucesso() throws RegraDeNegocioException {
         final int ID_CINEMA = 1;
         CinemaEntity cinemaEsperado = new CinemaEntity();
         cinemaEsperado.setIdCinema(ID_CINEMA);
@@ -177,15 +188,129 @@ public class CinemaServiceTest {
 
         when(usuarioService.getIdLoggedUser()).thenReturn(idCinema);
         when(cinemaRepository.findByIdUsuario(idCinema)).thenReturn(Optional.of(cinema));
-        when(cinemaRepository.findById(idCinema)).thenReturn(Optional.of(cinema));
         when(cinemaRepository.save(any())).thenReturn(cinema);
         cinemaService.atualizarCinemaLogado(cinemaCreateDTO);
 
         verify(usuarioService).getIdLoggedUser();
     }
 
-    
+    @Test
+    public void atualizarCinemaComDadosCorretos() throws RegraDeNegocioException {
+        final int idCinema = 1;
+        final String nome = "cinemark";
+        final String cidade = "Ceilandia";
 
+        CinemaEntity cinema = getCinemaEntity();
+        cinema.setIdCinema(idCinema);
+
+        CinemaCreateDTO cinemaCreateDTO = getCinemaCreateDTO();
+        cinemaCreateDTO.setCidade(cidade);
+        cinemaCreateDTO.setNome(nome);
+
+        CinemaEntity cinemaAtualizado = getCinemaEntity();
+        cinemaAtualizado.setIdCinema(idCinema);
+        cinemaAtualizado.setCidade(cidade);
+        cinemaAtualizado.setNome(nome);
+
+        when(cinemaRepository.findByIdUsuario(idCinema)).thenReturn(Optional.of(cinema));
+        when(cinemaRepository.save(any())).thenReturn(cinemaAtualizado);
+        CinemaDTO cinemaDTO = cinemaService.atualizarCinema(idCinema, cinemaCreateDTO);
+
+        assertEquals(idCinema, cinemaDTO.getIdCinema());
+        assertEquals(nome, cinemaDTO.getNome());
+        assertEquals(cidade, cinemaDTO.getCidade());
+    }
+
+    @Test(expected = RegraDeNegocioException.class)
+    public void naoAtualizaCinemaQuandoIdNaoCadastradoNoBanco() throws RegraDeNegocioException {
+        final int idCinema = 1;
+        CinemaCreateDTO cinemaCreateDTO = getCinemaCreateDTO();
+
+        when(cinemaRepository.findByIdUsuario(idCinema)).thenReturn(Optional.empty());
+        cinemaService.atualizarCinema(idCinema, cinemaCreateDTO);
+    }
+
+    @Test
+    public void deletarCinemaLogadoDeFormaCorreta() throws RegraDeNegocioException {
+        final int idCinema = 1;
+        CinemaEntity cinema = getCinemaEntity();
+
+        when(usuarioService.getIdLoggedUser()).thenReturn(idCinema);
+        when(cinemaRepository.findByIdUsuario(idCinema)).thenReturn(Optional.of(cinema));
+        when(cinemaRepository.findById(idCinema)).thenReturn(Optional.of(cinema));
+
+        cinemaService.deletarCinemaLogado();
+        verify(usuarioService).getIdLoggedUser();
+    }
+
+    @Test
+    public void quandoDeletarUsuarioCinemaUtilizaMetodosUsuarioServiceECinemaRepository() throws RegraDeNegocioException {
+        final int idCinema = 1;
+        CinemaEntity cinema = getCinemaEntity();
+        cinema.setIdCinema(idCinema);
+
+        when(cinemaRepository.findById(idCinema)).thenReturn(Optional.of(cinema));
+        cinemaService.deletarCinemaPorUsuario(idCinema);
+        verify(cinemaRepository).delete(cinema);
+        verify(usuarioService).desativarUsuario(any());
+    }
+
+    @Test(expected = RegraDeNegocioException.class)
+    public void retornaUmaExcecaoQuandoIdClienteNaoEncontradoNoBanco() throws RegraDeNegocioException {
+        final int idCinema = 1;
+        when(cinemaRepository.findById(idCinema)).thenReturn(Optional.empty());
+        cinemaService.deletarCinemaPorUsuario(idCinema);
+    }
+
+    @Test
+    public void retornaListaRelatorioPersonalizadaCorretamente() throws RegraDeNegocioException {
+        final int idCinema = 1;
+        RelatorioCadastroCinemaFilmeDTO relatorioCadastroCinemaFilmeDTO = getRelatorioCadastroCinemaFilmeDTO();
+        CinemaEntity cinema = getCinemaEntity();
+
+        when(usuarioService.getIdLoggedUser()).thenReturn(idCinema);
+        when(cinemaRepository.findByIdUsuario(idCinema)).thenReturn(Optional.of(cinema));
+        when(cinemaRepository.listarRelatorioPersonalizado(idCinema)).thenReturn(List.of(relatorioCadastroCinemaFilmeDTO));
+        List<RelatorioCadastroCinemaFilmeDTO> list = cinemaService.listarRelatorioPersonalizadoCinemaLogado();
+
+        assertNotNull(list);
+        assertEquals(1, list.size());
+    }
+    @Test
+    public void retornaRelatorioPersonalizadoComSucesso(){
+        RelatorioCadastroCinemaFilmeDTO relatorioCadastroCinemaFilmeDTO = getRelatorioCadastroCinemaFilmeDTO();
+        final int idCinema = 1;
+
+        when(cinemaRepository.listarRelatorioPersonalizado(idCinema)).thenReturn(List.of(relatorioCadastroCinemaFilmeDTO));
+        List<RelatorioCadastroCinemaFilmeDTO> list = cinemaService.listarRelatorioPersonalizado(idCinema);
+
+        assertNotNull(list);
+        assertEquals(1, list.size());
+
+    }
+
+    @Test
+    public void listarIngressosPaginadosCorretamente() {
+        final int numeroPagina = 0;
+        final int tamanho = 3;
+
+        CinemaEntity cinema = getCinemaEntity();
+        PageImpl<CinemaEntity> listaPaginada = new PageImpl<>(List.of(cinema), PageRequest.of(numeroPagina, tamanho), 0);
+
+        when(cinemaRepository.findAll(any(Pageable.class))).thenReturn(listaPaginada);
+        PageDTO<CinemaDTO> cinemaDTOPageDTO = cinemaService.listCinemaPaginado(numeroPagina, tamanho);
+
+        assertNotNull(cinemaDTOPageDTO);
+        assertEquals(1, cinemaDTOPageDTO.getTotalElementos());
+        assertEquals(1, cinemaDTOPageDTO.getQuantidadePaginas());
+        assertEquals(listaPaginada.getPageable().getPageNumber(), cinemaDTOPageDTO.getPagina());
+    }
+
+    private static RelatorioCadastroCinemaFilmeDTO getRelatorioCadastroCinemaFilmeDTO() {
+        return new RelatorioCadastroCinemaFilmeDTO(1,"cinemark","Taguatinga", 1,
+                "Shrek 2", 13, 120, 1, 30.0,
+                LocalDateTime.now().plusDays(3), Disponibilidade.S, "S");
+    }
 
     private static CinemaCreateDTO getCinemaCreateDTO() {
         final String nome = "Cinemark";
