@@ -1,4 +1,4 @@
-package br.com.dbc.vemser.cinedev.service.emails;
+package br.com.dbc.vemser.cinedev.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

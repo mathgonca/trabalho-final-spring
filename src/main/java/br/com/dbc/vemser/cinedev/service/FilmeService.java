@@ -19,12 +19,11 @@ public class FilmeService {
     private final ObjectMapper objectMapper;
 
     public FilmeDTO editarFilme(Integer id, FilmeCreateDTO filmeCapturado) throws RegraDeNegocioException {
-        FilmeEntity filme = listarPeloId(id);
+        listarPeloId(id);
 
         FilmeEntity filmeEntityTransf = objectMapper.convertValue(filmeCapturado, FilmeEntity.class);
         FilmeEntity filmeEntitySalvo = filmeRepository.save(filmeEntityTransf);
-        FilmeDTO filmeDTO = objectMapper.convertValue(filmeEntitySalvo, FilmeDTO.class);
-        return filmeDTO;
+        return objectMapper.convertValue(filmeEntitySalvo, FilmeDTO.class);
     }
     public FilmeDTO adicionarFilme(FilmeCreateDTO filmeCapturado) throws RegraDeNegocioException {
         String filmeNome = filmeCapturado.getNome();
@@ -36,16 +35,15 @@ public class FilmeService {
 
         FilmeEntity filmeEntityTransform = objectMapper.convertValue(filmeCapturado, FilmeEntity.class);
         FilmeEntity filmeEntitySalvo = filmeRepository.save(filmeEntityTransform);
-        FilmeDTO filmeDTO = objectMapper.convertValue(filmeEntitySalvo, FilmeDTO.class);
-        return filmeDTO;
+        return objectMapper.convertValue(filmeEntitySalvo, FilmeDTO.class);
     }
 
     public void removerFilme(Integer id) throws RegraDeNegocioException {
-        FilmeEntity filme = listarPeloId(id);
+        listarPeloId(id);
         filmeRepository.deleteById(id);
     }
 
-    public List<FilmeDTO> listarTodosFilmes() throws RegraDeNegocioException {
+    public List<FilmeDTO> listarTodosFilmes() {
         return filmeRepository.findAll().stream()
                 .map(filmeEntity -> objectMapper.convertValue(filmeEntity, FilmeDTO.class))
                 .toList();

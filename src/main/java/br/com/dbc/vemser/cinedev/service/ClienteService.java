@@ -1,17 +1,14 @@
 package br.com.dbc.vemser.cinedev.service;
 
 import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
-import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
-import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
 import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
 import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.ClienteRepository;
-import br.com.dbc.vemser.cinedev.service.emails.EmailService;
-import br.com.dbc.vemser.cinedev.service.emails.TipoEmails;
+import br.com.dbc.vemser.cinedev.enums.TipoEmails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,13 +43,13 @@ public class ClienteService {
                 .toList();
     }
 
-    public ClienteEntity listarClientePorUsuario(Integer idUsuario) throws RegraDeNegocioException {
+    public ClienteEntity listarClientePorUsuario() throws RegraDeNegocioException {
         return clienteRepository.findByIdUsuario(usuarioService.getIdLoggedUser())
                 .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado"));
     }
 
     public ClienteDTO listarClienteDTOPeloId(Integer idCliente) throws RegraDeNegocioException {
-        ClienteEntity cliente = listarClientePeloId(idCliente);
+        ClienteEntity cliente = findById(idCliente);
         return converterParaClienteDTO(cliente);
     }
 
@@ -82,18 +79,13 @@ public class ClienteService {
         return clienteDTO;
     }
 
-    public ClienteEntity listarClientePeloId(Integer idCliente) throws RegraDeNegocioException {
-        return clienteRepository.findById(idCliente)
-                .orElseThrow(() -> new RegraDeNegocioException("Cliente não cadastrado"));
-    }
-
     public ClienteDTO atualizarClienteLogado(ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
-        ClienteEntity clienteRecuperado = listarClientePorUsuario(usuarioService.getIdLoggedUser());
+        ClienteEntity clienteRecuperado = listarClientePorUsuario();
         return atualizarCliente(clienteRecuperado.getIdCliente(), clienteCreateDTO);
     }
 
     public ClienteDTO atualizarCliente(Integer idCliente, ClienteCreateDTO clienteCreateDTO) throws RegraDeNegocioException {
-        ClienteEntity cliente = listarClientePeloId(idCliente);
+        ClienteEntity cliente = findById(idCliente);
 
         cliente.setPrimeiroNome(clienteCreateDTO.getPrimeiroNome());
         cliente.setUltimoNome(clienteCreateDTO.getUltimoNome());
@@ -112,12 +104,12 @@ public class ClienteService {
     }
 
     public void deletarClienteLogado() throws RegraDeNegocioException {
-        ClienteEntity clienteRecuperado = listarClientePorUsuario(usuarioService.getIdLoggedUser());
+        ClienteEntity clienteRecuperado = listarClientePorUsuario();
         deletarUsuarioCliente(clienteRecuperado.getIdCliente());
     }
 
     public void deletarUsuarioCliente(Integer idCliente) throws RegraDeNegocioException {
-        ClienteEntity clienteEntity = listarClientePeloId(idCliente);
+        ClienteEntity clienteEntity = findById(idCliente);
         UsuarioEntity usuarioEntity = clienteEntity.getUsuario();
         UsuarioDTO usuarioDTO = objectMapper.convertValue(clienteEntity.getUsuario(), UsuarioDTO.class);
 

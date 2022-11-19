@@ -6,6 +6,7 @@ import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoDTO;
 import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
+import br.com.dbc.vemser.cinedev.enums.TipoEmails;
 import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
 import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
 import br.com.dbc.vemser.cinedev.entity.FilmeEntity;
@@ -13,9 +14,6 @@ import br.com.dbc.vemser.cinedev.entity.IngressoEntity;
 import br.com.dbc.vemser.cinedev.entity.enums.Disponibilidade;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.IngressoRepository;
-import br.com.dbc.vemser.cinedev.repository.UsuarioRepository;
-import br.com.dbc.vemser.cinedev.service.emails.EmailService;
-import br.com.dbc.vemser.cinedev.service.emails.TipoEmails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,38 +31,38 @@ public class IngressoService {
     private final ClienteService clienteService;
     private final EmailService emailService;
     private final ObjectMapper objectMapper;
-    private final UsuarioService usuarioService;
 
 
     public IngressoEntity findById(Integer id) throws RegraDeNegocioException {
-        IngressoEntity ingressoEntity = ingressoRepository.findById(id)
+        return ingressoRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Cinema não encontrado!"));
-        return ingressoEntity;
     }
+
     public IngressoDTO ingressoDTOporId(Integer id) throws RegraDeNegocioException {
-        return objectMapper.convertValue(findById(id),IngressoDTO.class);
+        return objectMapper.convertValue(findById(id), IngressoDTO.class);
     }
-    public List<IngressoDTO> listarIngressos() throws RegraDeNegocioException {
+
+    public List<IngressoDTO> listarIngressos() {
         List<IngressoEntity> ingressoslist = ingressoRepository.findIngressoDisponiveis();
         return ingressoslist.stream()
                 .map(ingressoEntity -> objectMapper.convertValue(ingressoEntity, IngressoDTO.class))
                 .toList();
     }
-    public List<IngressoDTO> listarIngressosComprados() throws RegraDeNegocioException {
+
+    public List<IngressoDTO> listarIngressosComprados() {
         List<IngressoEntity> ingressoslist = ingressoRepository.findIngressoComprados();
         return ingressoslist.stream()
                 .map(ingressoEntity -> objectMapper.convertValue(ingressoEntity, IngressoDTO.class))
                 .toList();
     }
 
-    public List<RelatorioCadastroIngressoClienteDTO> listarIngressosCompradosPorCliente(Integer id) throws RegraDeNegocioException {
+    public List<RelatorioCadastroIngressoClienteDTO> listarIngressosCompradosPorCliente(Integer id) {
         return clienteService.listarRelatorioPersonalizado(id);
     }
 
     public List<RelatorioCadastroIngressoClienteDTO> listarIngressosDoClienteLogado() throws RegraDeNegocioException {
-        ClienteEntity clienteRecuperado = clienteService.listarClientePorUsuario(usuarioService.getIdLoggedUser());
+        ClienteEntity clienteRecuperado = clienteService.listarClientePorUsuario();
         return clienteService.listarRelatorioPersonalizado(clienteRecuperado.getIdCliente());
-
     }
 
     public IngressoDTO createIngresso(IngressoCreateDTO ingressoCreateDTO) throws RegraDeNegocioException {
@@ -74,12 +72,10 @@ public class IngressoService {
         ingressoEntity.setFilme(filme);
         ingressoEntity.setCinema(cinema);
         IngressoEntity ingressoEntitySalvo = ingressoRepository.save(ingressoEntity);
-        IngressoDTO ingressoDTO = objectMapper.convertValue(ingressoEntitySalvo, IngressoDTO.class);
-        return ingressoDTO;
+        return objectMapper.convertValue(ingressoEntitySalvo, IngressoDTO.class);
     }
 
     public IngressoCompradoDTO comprarIngresso(Integer idCliente, Integer idIngresso) throws RegraDeNegocioException {
-
         IngressoEntity ingressoRecuperado = findById(idIngresso);
 
         ClienteEntity clienteRecuperado = clienteService.findById(idCliente);
@@ -94,13 +90,11 @@ public class IngressoService {
         ingressoDTO.setNomeCinema(ingressoRecuperado.getCinema().getNome());
         ingressoDTO.setNomeCliente(ingressoRecuperado.getCliente().getPrimeiroNome());
         ingressoDTO.setNomeFilme(ingressoRecuperado.getFilme().getNome());
-        emailService.sendEmail(usuarioDTO,TipoEmails.ING_COMPRADO, null);
+        emailService.sendEmail(usuarioDTO, TipoEmails.ING_COMPRADO, null);
         return ingressoDTO;
-
     }
 
-
-    public void removeIngresso(Integer id) throws RegraDeNegocioException {
+    public void removeIngresso(Integer id) {
         ingressoRepository.deleteById(id);
     }
 

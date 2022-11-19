@@ -1,6 +1,7 @@
-package br.com.dbc.vemser.cinedev.service.emails;
+package br.com.dbc.vemser.cinedev.service;
 
 import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
+import br.com.dbc.vemser.cinedev.enums.TipoEmails;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import lombok.RequiredArgsConstructor;
