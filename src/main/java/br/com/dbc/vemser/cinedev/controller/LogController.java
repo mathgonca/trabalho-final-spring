@@ -56,9 +56,4 @@ public class LogController { //implements LogAPI{
         return new ResponseEntity<>(logService.listAllByData(data), HttpStatus.OK);
     }
 
-    @GetMapping("count-all-by-data")
-    public ResponseEntity<Long> countLogsToday() throws Exception {
-        return new ResponseEntity<>(logService.countLogsByData(), HttpStatus.OK);
-    }
-
 }
