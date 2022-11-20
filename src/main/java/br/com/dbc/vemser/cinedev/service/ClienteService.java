@@ -83,8 +83,8 @@ public class ClienteService {
         emailService.sendEmail(usuarioDTO, TipoEmails.CREATE, null);
 
         LogCreateDTO logCreateDTO = new LogCreateDTO(clienteDTO.getPrimeiroNome(), TipoLog.CLIENTE,  LocalDate.now());
-        LogDTO logDTO = objectMapper.convertValue(logCreateDTO, LogDTO.class);
-        logService.salvarLog(logDTO);
+//        LogDTO logDTO = objectMapper.convertValue(logCreateDTO, LogDTO.class);
+        logService.salvarLog(logCreateDTO);
 
         return clienteDTO;
     }

@@ -98,8 +98,8 @@ public class IngressoService {
         emailService.sendEmail(usuarioDTO, TipoEmails.ING_COMPRADO, null);
 
         LogCreateDTO logCreateDTO = new LogCreateDTO(ingressoDTO.getNomeCliente(), TipoLog.INGRESSOS,  LocalDate.now());
-        LogDTO logDTO = objectMapper.convertValue(logCreateDTO, LogDTO.class);
-        logService.salvarLog(logDTO);
+//        LogDTO logDTO = objectMapper.convertValue(logCreateDTO, LogDTO.class);
+        logService.salvarLog(logCreateDTO);
         return ingressoDTO;
     }
 

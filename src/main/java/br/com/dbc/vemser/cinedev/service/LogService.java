@@ -30,11 +30,14 @@ public class LogService {
     SimpleDateFormat sdfComplete = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     SimpleDateFormat sdfDayMonthYear = new SimpleDateFormat("dd-MM-yyyy");
 
-    public void salvarLog(LogDTO logDTO) {
-        var log = new LogEntity();
-        BeanUtils.copyProperties(logDTO, log);
-        log.setData(LocalDate.now());
-        logRepository.save(log);
+    public void salvarLog(LogCreateDTO logDTO) {
+//        var log = new LogEntity();
+//        log.setData(LocalDate.now());
+//        log.setNome(log.getNome());
+//        log.setTipoLog(logDTO.getTipoLog());
+////        BeanUtils.copyProperties(logDTO, log);
+//        log.setData(LocalDate.now());
+        logRepository.save(objectMapper.convertValue(logDTO, LogEntity.class));
     }
 
     public List<LogDTO> listAllLogs() {

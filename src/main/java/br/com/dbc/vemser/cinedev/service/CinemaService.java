@@ -105,8 +105,8 @@ public class CinemaService {
         emailService.sendEmail(cinemaEmail, TipoEmails.CREATE, null);
 
         LogCreateDTO logCreateDTO = new LogCreateDTO(cinemaDTO.getNome(), TipoLog.CINEMA,  LocalDate.now());
-        LogDTO logDTO = objectMapper.convertValue(logCreateDTO, LogDTO.class);
-        logService.salvarLog(logDTO);
+//        LogDTO logDTO = objectMapper.convertValue(logCreateDTO, LogDTO.class);
+        logService.salvarLog(logCreateDTO);
 
         return cinemaDTO;
     }
