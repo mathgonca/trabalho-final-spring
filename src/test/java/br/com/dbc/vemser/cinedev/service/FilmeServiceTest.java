@@ -45,7 +45,7 @@ public class FilmeServiceTest {
     }
 
     @Test
-    public void editaFilmeCorretamente() throws RegraDeNegocioException {
+    public void deveEditarFilmeCorretamente() throws RegraDeNegocioException {
         final int idFilme = 1;
         final int novaDuracao = 200;
         final Idioma novoIdioma = Idioma.LEGENDADO;
@@ -72,7 +72,7 @@ public class FilmeServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void retornaUmaExcecaoQuandoAtualizarFilmeIdFilmeNaoCadastradoNoBanco() throws RegraDeNegocioException {
+    public void deveRetornarUmaExcecaoQuandoAtualizarFilmeIdFilmeNaoCadastradoNoBanco() throws RegraDeNegocioException {
         final int idFilme = 1;
         FilmeCreateDTO filme = getFilmeCreateDTO();
 
@@ -81,7 +81,7 @@ public class FilmeServiceTest {
     }
 
     @Test
-    public void adicionaFilmeCorretamenteQuandoNomeAindaNaoAdicionadoNoBanco() throws RegraDeNegocioException {
+    public void deveAdicionarFilmeCorretamenteQuandoNomeAindaNaoAdicionadoNoBanco() throws RegraDeNegocioException {
         FilmeCreateDTO filmeCreateDTO = getFilmeCreateDTO();
         FilmeEntity filmeAdicionado = getFilmeEntity();
 
@@ -97,7 +97,7 @@ public class FilmeServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void retornaUmaExcecaoQuandoAdicionaFilmeComNomeJaCadastradoNoBanco() throws RegraDeNegocioException {
+    public void deveRetornarUmaExcecaoQuandoAdicionaFilmeComNomeJaCadastradoNoBanco() throws RegraDeNegocioException {
         FilmeCreateDTO filmeCreateDTO = getFilmeCreateDTO();
         FilmeEntity filme = getFilmeEntity();
 
@@ -106,7 +106,7 @@ public class FilmeServiceTest {
     }
 
     @Test
-    public void removeFilmeCorretamente() throws RegraDeNegocioException {
+    public void deveRemoverFilmeCorretamente() throws RegraDeNegocioException {
         final int idFilme = 1;
         FilmeEntity filme = getFilmeEntity();
 
@@ -117,7 +117,7 @@ public class FilmeServiceTest {
     }
 
     @Test
-    public void retornaListaComTodosFilmesCorretamente() {
+    public void deveRetornarListaComTodosFilmesCorretamente() {
         final int tamanhoListaEsperado = 1;
         FilmeEntity filme = getFilmeEntity();
 
@@ -129,7 +129,7 @@ public class FilmeServiceTest {
     }
 
     @Test
-    public void converteCorretamenteClienteEntityParaClienteDTO() throws RegraDeNegocioException {
+    public void deveConverterCorretamenteClienteEntityParaClienteDTO() throws RegraDeNegocioException {
         final int idFilme = 1;
         FilmeEntity filme = getFilmeEntity();
 

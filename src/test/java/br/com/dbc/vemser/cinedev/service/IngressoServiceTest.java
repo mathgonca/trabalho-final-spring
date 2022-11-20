@@ -64,7 +64,7 @@ public class IngressoServiceTest {
     }
 
     @Test
-    public void retornaIngressoCorretamenteQuandoIdIngressoCadastradoNoBanco() throws RegraDeNegocioException {
+    public void deveRetornaIngressoCorretamenteQuandoIdIngressoCadastradoNoBanco() throws RegraDeNegocioException {
         final int idIngresso = 1;
         IngressoEntity ingressoEntity = getIngressoEntity();
 
@@ -75,7 +75,7 @@ public class IngressoServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void retornaUmaExcecaoQuandoBuscarIdIngressoNaoCadastradoNoBanco() throws RegraDeNegocioException {
+    public void deveRetornaUmaExcecaoQuandoBuscarIdIngressoNaoCadastradoNoBanco() throws RegraDeNegocioException {
         final int idIngresso = 1;
 
         when(ingressoRepository.findById(idIngresso)).thenReturn(Optional.empty());
@@ -83,7 +83,7 @@ public class IngressoServiceTest {
     }
 
     @Test
-    public void converteCorretamenteIngressoEntityParaIngressoDTO() throws RegraDeNegocioException {
+    public void deveConverteCorretamenteIngressoEntityParaIngressoDTO() throws RegraDeNegocioException {
         final int idIngresso = 1;
         IngressoEntity ingressoEntity = getIngressoEntity();
 
@@ -100,7 +100,7 @@ public class IngressoServiceTest {
     }
 
     @Test
-    public void criaIngressoCorretamente() throws RegraDeNegocioException {
+    public void deveCriarIngressoCorretamente() throws RegraDeNegocioException {
         final int idFilme = 1;
         final int idCinema = 1;
 
@@ -125,7 +125,7 @@ public class IngressoServiceTest {
     }
 
     @Test
-    public void compraIngressoCorretamenteQuandoClienteEIngressoExistem() throws RegraDeNegocioException {
+    public void deveComprarIngressoCorretamenteQuandoClienteEIngressoExistem() throws RegraDeNegocioException {
         final int idIngresso = 1;
         final int idCliente = 1;
 
@@ -151,7 +151,7 @@ public class IngressoServiceTest {
     }
 
     @Test
-    public void quandoDeletaIngressoUtilizarIngressoRepositoryDeleteById() {
+    public void deveUtilizarIngressoRepositoryDeleteByIdquandoDeletarIngresso() {
         final int idIngresso = 1;
 
         ingressoService.removeIngresso(idIngresso);
@@ -159,7 +159,7 @@ public class IngressoServiceTest {
     }
 
     @Test
-    public void listarIngressosPaginadosCorretamente() {
+    public void deveListarIngressosPaginadosCorretamente() {
         final int numeroPagina = 0;
         final int tamanho = 3;
 
@@ -176,7 +176,7 @@ public class IngressoServiceTest {
     }
 
     @Test
-    public void listarIngressosDisponiveisCorretamente() {
+    public void deveListarIngressosDisponiveisCorretamente() {
         IngressoEntity ingresso = getIngressoEntity();
 
         when(ingressoRepository.findIngressoDisponiveis()).thenReturn(List.of(ingresso));
@@ -186,7 +186,7 @@ public class IngressoServiceTest {
     }
 
     @Test
-    public void listarIngressosCompradosCorretamente() {
+    public void deveListarIngressosCompradosCorretamente() {
         ClienteEntity cliente = getClienteEntity();
         IngressoEntity ingresso = getIngressoEntity();
         ingresso.setCliente(cliente);
@@ -199,7 +199,7 @@ public class IngressoServiceTest {
     }
 
     @Test
-    public void listarIngressosPorClienteCorretamente() {
+    public void deveListarIngressosPorClienteCorretamente() {
        final int idPessoa = 1;
        RelatorioCadastroIngressoClienteDTO relatorioCadastroIngressoClienteDTO = getRelatorioCadastroIngressoClienteDTO();
 
@@ -213,7 +213,7 @@ public class IngressoServiceTest {
     }
 
     @Test
-    public void listarIngressosDoClienteLogadoCorretamente() throws RegraDeNegocioException {
+    public void deveListarIngressosDoClienteLogadoCorretamente() throws RegraDeNegocioException {
        final int idPessoa = 1;
        RelatorioCadastroIngressoClienteDTO relatorioCadastroIngressoClienteDTO = getRelatorioCadastroIngressoClienteDTO();
        ClienteEntity cliente = getClienteEntity();
