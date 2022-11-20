@@ -64,7 +64,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void encontraUsuarioQuandoEmailEstiverNoBanco() throws RegraDeNegocioException {
+    public void deveEncontraUsuarioQuandoEmailEstiverNoBanco() throws RegraDeNegocioException {
         UsuarioEntity usuario = getUsuarioEntity();
 
         when(usuarioRepository.findByEmail(EMAIL)).thenReturn(Optional.of(usuario));
@@ -74,19 +74,19 @@ public class UsuarioServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void geraUmRegraDeNegocioExceptionQuandoEmailNaoEstiverNoBanco() throws RegraDeNegocioException {
+    public void deveGerarUmRegraDeNegocioExceptionQuandoEmailNaoEstiverNoBanco() throws RegraDeNegocioException {
         when(usuarioRepository.findByEmail(EMAIL)).thenReturn(Optional.empty());
         usuarioService.findByEmail(EMAIL);
     }
 
     @Test
-    public void usaRepositoryMetodoFindByEmailQuandoFindOptionalByEmail() {
+    public void deveUsarRepositoryMetodoFindByEmailQuandoFindOptionalByEmail() {
         usuarioService.findOptionalByEmail(EMAIL);
         verify(usuarioRepository).findByEmail(EMAIL);
     }
 
     @Test
-    public void mudarSenhaTeste() throws RegraDeNegocioException {
+    public void deveMudarSenhaTeste() throws RegraDeNegocioException {
         final String senhaNova = "1234admin";
 
         CargoEntity cargoRecCliente = getCargoRecCliente();
@@ -110,7 +110,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void mudarSenhaCorretamenteUsuarioLogado() throws RegraDeNegocioException {
+    public void deveMudarSenhaCorretamenteUsuarioLogado() throws RegraDeNegocioException {
 
         final String senhaNova = "1234admin";
 
@@ -138,7 +138,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void removeCargo() throws RegraDeNegocioException {
+    public void deveRemoveCargo() throws RegraDeNegocioException {
         CargoEntity cargoRecCliente = getCargoRecCliente();
         CargoEntity cargoCliente = getCargoCliente();
         UsuarioEntity usuario = getUsuarioEntity();
@@ -158,14 +158,14 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void desativaUsuarioCorretamente() {
+    public void deveDesativaUsuarioCorretamente() {
         UsuarioEntity usuario = getUsuarioEntity();
         usuarioService.desativarUsuario(usuario);
         verify(usuarioRepository).save(usuario);
     }
 
     @Test
-    public void testeGetIdLoggedUser() {
+    public void deveTestarOmetodoGetIdLoggedUserComSucesso() {
         UsernamePasswordAuthenticationToken dto
                 = new UsernamePasswordAuthenticationToken(1, null, Collections.emptyList());
         SecurityContextHolder.getContext().setAuthentication(dto);
@@ -176,7 +176,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void getLoggedUserCorretamente() throws RegraDeNegocioException {
+    public void deveTestarOmetodoGetLoggedUserCorretamente() throws RegraDeNegocioException {
         UsuarioEntity usuario = getUsuarioEntity();
 
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
@@ -186,7 +186,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void cadastrarUsuarioCorretamente() throws RegraDeNegocioException {
+    public void deveCadastrarUsuarioCorretamente() throws RegraDeNegocioException {
         CargoEntity cargo = getCargoCliente();
         final String email = "test@demo.com.br";
         final String senha = "123";
@@ -205,7 +205,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void cadastrarUsuarioAdministradoCorretamente() throws RegraDeNegocioException {
+    public void deveCadastrarUsuarioAdministradoCorretamente() throws RegraDeNegocioException {
         final String senha = "123";
 
         CargoEntity cargoAdmin = new CargoEntity();
@@ -230,7 +230,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void recuperaSenhaCorretamente() throws RegraDeNegocioException {
+    public void deveRecuperaSenhaCorretamente() throws RegraDeNegocioException {
         final String email = "test@demo.com.br";
         RecuperarSenhaDTO recuperarSenhaDTO = new RecuperarSenhaDTO();
         recuperarSenhaDTO.setEmail(email);
@@ -254,7 +254,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void autenticaCorretamente() throws RegraDeNegocioException {
+    public void deveAutenticarCorretamente() throws RegraDeNegocioException {
         final String senha = "123";
         final String email = "test@demo.com.br";
         final String tokenEsperado = "token";
