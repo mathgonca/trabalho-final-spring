@@ -22,11 +22,11 @@ public class AvaliacoesService {
 
     private final ObjectMapper objectMapper;
 
-    public void salvarAvaliacoes(AvaliacoesDTO avaliacoesDTO) {
-        var avaliacao = new AvaliacoesEntity();
-        BeanUtils.copyProperties(avaliacoesDTO, avaliacao);
-        avaliacoesRepository.save(avaliacao);
-    }
+//    public void salvarAvaliacoes(AvaliacoesDTO avaliacoesDTO) {
+//        var avaliacao = new AvaliacoesEntity();
+//        BeanUtils.copyProperties(avaliacoesDTO, avaliacao);
+//        avaliacoesRepository.save(avaliacao);
+//    }
 
     public AvaliacoesDTO adicionarAvaliacao(AvaliacoesCreateDTO avaliacoesCreateDTO) throws RegraDeNegocioException {
         String avaliacaoNome = avaliacoesCreateDTO.getNome();
