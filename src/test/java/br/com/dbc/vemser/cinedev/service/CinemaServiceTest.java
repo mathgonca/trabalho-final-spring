@@ -2,20 +2,13 @@ package br.com.dbc.vemser.cinedev.service;
 
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
-import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
-import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
-import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoDTO;
 import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroCinemaFilmeDTO;
-import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
 import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
-import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
-import br.com.dbc.vemser.cinedev.entity.IngressoEntity;
 import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
 import br.com.dbc.vemser.cinedev.entity.enums.Disponibilidade;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.CinemaRepository;
-import br.com.dbc.vemser.cinedev.repository.ClienteRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -31,7 +24,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -54,10 +46,8 @@ public class CinemaServiceTest {
     private UsuarioService usuarioService;
     @Mock
     private EmailService emailService;
-
     @Mock
     private LogService logService;
-
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Before
@@ -149,8 +139,9 @@ public class CinemaServiceTest {
         when(cinemaRepository.findById(idCinema)).thenReturn(Optional.empty());
         cinemaService.listarCinemaPorId(idCinema);
     }
+
     @Test
-    public void cadastrarUmCinemaCorretamente() throws RegraDeNegocioException{
+    public void cadastrarUmCinemaCorretamente() throws RegraDeNegocioException {
         CinemaCreateDTO cinemaCreateDTO = getCinemaCreateDTO();
         UsuarioEntity usuarioEsperado = getUsuarioEntity();
         usuarioEsperado.setIdUsuario(1);
@@ -163,6 +154,7 @@ public class CinemaServiceTest {
         when(cinemaRepository.save(any())).thenReturn(cinema);
         CinemaDTO cinemaResponse = cinemaService.adicionarCinema(cinemaCreateDTO);
 
+        verify(logService).salvarLog(any());
 
         assertEquals(1, cinemaResponse.getIdCinema());
         assertEquals(cinemaCreateDTO.getNome(), cinemaResponse.getNome());
@@ -185,7 +177,7 @@ public class CinemaServiceTest {
     }
 
     @Test
-    public void atualizarDadosDoCinemaUsandoMetodosAtualizarCinemaEAtualizarCinemaLogado() throws RegraDeNegocioException{
+    public void atualizarDadosDoCinemaUsandoMetodosAtualizarCinemaEAtualizarCinemaLogado() throws RegraDeNegocioException {
         final int idCinema = 1;
         CinemaCreateDTO cinemaCreateDTO = getCinemaCreateDTO();
         CinemaEntity cinema = getCinemaEntity();
@@ -280,8 +272,9 @@ public class CinemaServiceTest {
         assertNotNull(list);
         assertEquals(1, list.size());
     }
+
     @Test
-    public void retornaRelatorioPersonalizadoComSucesso(){
+    public void retornaRelatorioPersonalizadoComSucesso() {
         RelatorioCadastroCinemaFilmeDTO relatorioCadastroCinemaFilmeDTO = getRelatorioCadastroCinemaFilmeDTO();
         final int idCinema = 1;
 
@@ -311,7 +304,7 @@ public class CinemaServiceTest {
     }
 
     private static RelatorioCadastroCinemaFilmeDTO getRelatorioCadastroCinemaFilmeDTO() {
-        return new RelatorioCadastroCinemaFilmeDTO(1,"cinemark","Taguatinga", 1,
+        return new RelatorioCadastroCinemaFilmeDTO(1, "cinemark", "Taguatinga", 1,
                 "Shrek 2", 13, 120, 1, 30.0,
                 LocalDateTime.now().plusDays(3), Disponibilidade.S, "S");
     }
@@ -343,7 +336,7 @@ public class CinemaServiceTest {
     private static CinemaEntity getCinemaEntity() {
         UsuarioEntity usuario = getUsuarioEntity();
         return new CinemaEntity(1, 1,
-                "Cinemark", "DF", "Taguatinga", "S", Set.of(),usuario);
+                "Cinemark", "DF", "Taguatinga", "S", Set.of(), usuario);
     }
 
 }

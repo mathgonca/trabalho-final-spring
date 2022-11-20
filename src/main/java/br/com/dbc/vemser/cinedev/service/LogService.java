@@ -5,19 +5,15 @@ import br.com.dbc.vemser.cinedev.dto.log.LogDTO;
 import br.com.dbc.vemser.cinedev.dto.log.LogDTOContador;
 import br.com.dbc.vemser.cinedev.entity.LogEntity;
 import br.com.dbc.vemser.cinedev.entity.enums.TipoLog;
-import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.LogRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,12 +27,6 @@ public class LogService {
     SimpleDateFormat sdfDayMonthYear = new SimpleDateFormat("dd-MM-yyyy");
 
     public void salvarLog(LogCreateDTO logDTO) {
-//        var log = new LogEntity();
-//        log.setData(LocalDate.now());
-//        log.setNome(log.getNome());
-//        log.setTipoLog(logDTO.getTipoLog());
-////        BeanUtils.copyProperties(logDTO, log);
-//        log.setData(LocalDate.now());
         logRepository.save(objectMapper.convertValue(logDTO, LogEntity.class));
     }
 

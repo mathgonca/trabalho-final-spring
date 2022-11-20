@@ -143,6 +143,8 @@ public class IngressoServiceTest {
         when(ingressoRepository.save(any())).thenReturn(ingressoSalvo);
         IngressoCompradoDTO ingressoCompradoDTO = ingressoService.comprarIngresso(idCliente, idIngresso);
 
+        verify(logService).salvarLog(any());
+
         assertEquals(ingressoSalvo.getIdCliente(), ingressoCompradoDTO.getIdCliente());
         assertEquals(ingressoSalvo.getCliente().getPrimeiroNome(), ingressoCompradoDTO.getNomeCliente());
         assertEquals(Disponibilidade.N, ingressoCompradoDTO.getDisponibilidade());

@@ -78,7 +78,7 @@ public class UsuarioService {
         return usuarioRepository.save(usuarioEntity);
     }
 
-    public String autenticar(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
+    public String autenticar(@RequestBody @Valid LoginDTO loginDTO) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(
                         loginDTO.getEmail(),

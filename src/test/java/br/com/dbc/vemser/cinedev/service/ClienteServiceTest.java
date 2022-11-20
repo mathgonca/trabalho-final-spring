@@ -154,6 +154,8 @@ public class ClienteServiceTest {
         when(clienteRepository.save(any())).thenReturn(cliente);
         ClienteDTO clienteResponse = clienteService.cadastrarCliente(clienteCreateDTO);
 
+        verify(logService).salvarLog(any());
+
         assertEquals(1, clienteResponse.getIdCliente());
         assertEquals(clienteCreateDTO.getPrimeiroNome(), clienteResponse.getPrimeiroNome());
         assertEquals(clienteCreateDTO.getUltimoNome(), clienteResponse.getUltimoNome());

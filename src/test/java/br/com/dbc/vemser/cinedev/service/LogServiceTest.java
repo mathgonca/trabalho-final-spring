@@ -5,9 +5,9 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AvaliacoesServiceTest {
+public class LogServiceTest {
     @Test
     public void teste() {
-
+        
     }
 }
