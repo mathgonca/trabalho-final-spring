@@ -54,6 +54,10 @@ public class CinemaServiceTest {
     private UsuarioService usuarioService;
     @Mock
     private EmailService emailService;
+
+    @Mock
+    private LogService logService;
+
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Before
@@ -290,7 +294,7 @@ public class CinemaServiceTest {
     }
 
     @Test
-    public void listarIngressosPaginadosCorretamente() {
+    public void listarCinemaPaginadoCorretamente() {
         final int numeroPagina = 0;
         final int tamanho = 3;
 

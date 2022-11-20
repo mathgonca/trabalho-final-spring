@@ -40,6 +40,8 @@ public class ClienteServiceTest {
     private UsuarioService usuarioService;
     @Mock
     private EmailService emailService;
+    @Mock
+    private LogService logService;
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Before

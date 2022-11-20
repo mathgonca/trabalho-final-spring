@@ -3,10 +3,13 @@ package br.com.dbc.vemser.cinedev.service;
 import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
+import br.com.dbc.vemser.cinedev.dto.log.LogCreateDTO;
+import br.com.dbc.vemser.cinedev.dto.log.LogDTO;
 import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroCinemaFilmeDTO;
 import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
 import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
+import br.com.dbc.vemser.cinedev.entity.enums.TipoLog;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.CinemaRepository;
 import br.com.dbc.vemser.cinedev.enums.TipoEmails;
@@ -16,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +31,8 @@ public class CinemaService {
     private final ObjectMapper objectMapper;
     private final UsuarioService usuarioService;
     private final EmailService emailService;
+
+    private final LogService logService;
 
     public CinemaEntity findById(Integer id) throws RegraDeNegocioException {
         CinemaEntity cinemaEntityRecuperado = null;
@@ -97,6 +103,10 @@ public class CinemaService {
 
         UsuarioDTO cinemaEmail = objectMapper.convertValue(cinemaEntitySalvo.getUsuario(), UsuarioDTO.class);
         emailService.sendEmail(cinemaEmail, TipoEmails.CREATE, null);
+
+        LogCreateDTO logCreateDTO = new LogCreateDTO(cinemaDTO.getNome(), TipoLog.CINEMA,  LocalDate.now());
+        LogDTO logDTO = objectMapper.convertValue(logCreateDTO, LogDTO.class);
+        logService.salvarLog(logDTO);
 
         return cinemaDTO;
     }

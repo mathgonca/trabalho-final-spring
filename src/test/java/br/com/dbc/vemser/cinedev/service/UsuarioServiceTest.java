@@ -265,11 +265,12 @@ public class UsuarioServiceTest {
         loginDTO.setEmail(email);
         loginDTO.setSenha(senha);
 
-        Authentication authenticate = new UsernamePasswordAuthenticationToken(email, senha);
+        Authentication authenticate = new UsernamePasswordAuthenticationToken(usuario, senha);
+
 
         when(tokenService.getToken(any())).thenReturn(tokenEsperado);
         when(authenticationManager.authenticate(any())).thenReturn(authenticate);
-        when(usuarioRepository.findByEmail(email)).thenReturn(Optional.of(usuario));
+//        when(usuarioRepository.findByEmail(email)).thenReturn(Optional.of(usuario));
         String token = usuarioService.autenticar(loginDTO);
 
         assertEquals(tokenEsperado, token);

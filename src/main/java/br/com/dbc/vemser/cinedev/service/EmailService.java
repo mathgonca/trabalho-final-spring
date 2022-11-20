@@ -35,13 +35,15 @@ public class EmailService {
             if(token == null){
                 mimeMessageHelper.setText(geContentFromTemplate(usuarioDTO, tipoEmails), true);
                 emailSender.send(mimeMessageHelper.getMimeMessage());
+            } else {
+                mimeMessageHelper.setText(geContentFromTemplateToken(usuarioDTO, tipoEmails, token), true);
+                emailSender.send(mimeMessageHelper.getMimeMessage());
             }
-            mimeMessageHelper.setText(geContentFromTemplateToken(usuarioDTO, tipoEmails, token), true);
-            emailSender.send(mimeMessageHelper.getMimeMessage());
         } catch (MessagingException | IOException | TemplateException e) {
             e.printStackTrace();
         }
     }
+
 
     public String geContentFromTemplate(UsuarioDTO usuarioDTO, TipoEmails tipoEmails) throws IOException, TemplateException {
         Map<String, Object> dados = new HashMap<>();
@@ -65,7 +67,8 @@ public class EmailService {
         return html;
     }
 
-    public String geContentFromTemplateToken(UsuarioDTO usuarioDTO, TipoEmails tipoEmails, String token) throws IOException, TemplateException {
+    public String geContentFromTemplateToken(UsuarioDTO usuarioDTO, TipoEmails tipoEmails, String token)
+            throws IOException, TemplateException {
         Map<String, Object> dados = new HashMap<>();
         dados.put("nome", usuarioDTO.getEmail());
         dados.put("email", from);

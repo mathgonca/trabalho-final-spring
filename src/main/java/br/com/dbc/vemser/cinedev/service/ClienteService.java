@@ -3,9 +3,12 @@ package br.com.dbc.vemser.cinedev.service;
 import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
+import br.com.dbc.vemser.cinedev.dto.log.LogCreateDTO;
+import br.com.dbc.vemser.cinedev.dto.log.LogDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
 import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
 import br.com.dbc.vemser.cinedev.entity.UsuarioEntity;
+import br.com.dbc.vemser.cinedev.entity.enums.TipoLog;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.ClienteRepository;
 import br.com.dbc.vemser.cinedev.enums.TipoEmails;
@@ -13,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +28,7 @@ public class ClienteService {
     private final EmailService emailService;
     private final ObjectMapper objectMapper;
     private final UsuarioService usuarioService;
+    private final LogService logService;
 
     public ClienteEntity findById(Integer id) throws RegraDeNegocioException {
         return clienteRepository.findById(id)
@@ -76,6 +81,11 @@ public class ClienteService {
         clienteDTO.setEmail(usuario.getEmail());
         UsuarioDTO usuarioDTO = objectMapper.convertValue(clienteEntityCadastrado.getUsuario(), UsuarioDTO.class);
         emailService.sendEmail(usuarioDTO, TipoEmails.CREATE, null);
+
+        LogCreateDTO logCreateDTO = new LogCreateDTO(clienteDTO.getPrimeiroNome(), TipoLog.CLIENTE,  LocalDate.now());
+        LogDTO logDTO = objectMapper.convertValue(logCreateDTO, LogDTO.class);
+        logService.salvarLog(logDTO);
+
         return clienteDTO;
     }
 

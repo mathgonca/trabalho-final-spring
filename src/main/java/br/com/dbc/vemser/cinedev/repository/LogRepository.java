@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -18,18 +20,11 @@ public interface LogRepository extends MongoRepository<LogEntity, String> {
     })
     List<LogByTipo> groupByTipoLogAndCount();
 
-    List<LogEntity> findLogEntityByCidade(String cidade);
+    List<LogEntity> findAllByDataContains(LocalDate data);
 
-    List<LogEntity> findLogEntityByEstado(String estado);
+    Long countAllByDataContains(LocalDate data);
+    
+    Integer countByTipoLog(TipoLog tipoLog);
 
-//    List<LogEntity> findAllByDataContains(String data);
-
-    Long countByCidade(String cidade);
-
-    Long countByEstado(String estado);
-
-//    Long countAllByDataContains(String data);
-//
-//    Integer countByTipoLog(TipoLog tipoLog);
-
+    Collection<Object> findAllByTipoLog(TipoLog tipoLog, LocalDate data);
 }

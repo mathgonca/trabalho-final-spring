@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Column;
+import java.time.LocalDate;
 
 //import javax.persistence.EnumType;
 //import javax.persistence.Enumerated;
@@ -19,13 +20,12 @@ public class LogEntity {
     @Id
     private String id;
 
+    @Column(name = "tipo")
+    private TipoLog tipoLog;
+
     @Column(name = "nome")
     private String nome;
 
-    @Column(name = "estado")
-    private String estado;
-
-    @Column(name = "cidade")
-    private String cidade;
+    private LocalDate data;
 
 }

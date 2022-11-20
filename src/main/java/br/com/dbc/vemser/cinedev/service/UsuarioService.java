@@ -87,7 +87,8 @@ public class UsuarioService {
         Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         // UsuarioEntity
         Object principal = authenticate.getPrincipal();
-        UsuarioEntity usuarioEntity = findByEmail((String) principal);
+
+        UsuarioEntity usuarioEntity = (UsuarioEntity) principal;
 
         return tokenService.getToken(usuarioEntity);
     }

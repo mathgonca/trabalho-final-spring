@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
+import java.time.LocalDate;
 
 @Builder
 @Data
@@ -20,12 +21,8 @@ public class LogDTO {
     @Column(name = "nome")
     private String nome;
 
-    @Column(name = "estado")
-    private String estado;
+    private TipoLog tipoLog;
 
-    @Column(name = "cidade")
-    private String cidade;
-
-    private String data;
+    private LocalDate data;
 
 }

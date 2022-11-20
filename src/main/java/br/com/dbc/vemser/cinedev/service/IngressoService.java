@@ -4,8 +4,11 @@ import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCompradoDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoDTO;
+import br.com.dbc.vemser.cinedev.dto.log.LogCreateDTO;
+import br.com.dbc.vemser.cinedev.dto.log.LogDTO;
 import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
+import br.com.dbc.vemser.cinedev.entity.enums.TipoLog;
 import br.com.dbc.vemser.cinedev.enums.TipoEmails;
 import br.com.dbc.vemser.cinedev.entity.CinemaEntity;
 import br.com.dbc.vemser.cinedev.entity.ClienteEntity;
@@ -20,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -31,6 +35,7 @@ public class IngressoService {
     private final ClienteService clienteService;
     private final EmailService emailService;
     private final ObjectMapper objectMapper;
+    private final LogService logService;
 
 
     public IngressoEntity findById(Integer id) throws RegraDeNegocioException {
@@ -91,6 +96,10 @@ public class IngressoService {
         ingressoDTO.setNomeCliente(ingressoRecuperado.getCliente().getPrimeiroNome());
         ingressoDTO.setNomeFilme(ingressoRecuperado.getFilme().getNome());
         emailService.sendEmail(usuarioDTO, TipoEmails.ING_COMPRADO, null);
+
+        LogCreateDTO logCreateDTO = new LogCreateDTO(ingressoDTO.getNomeCliente(), TipoLog.INGRESSOS,  LocalDate.now());
+        LogDTO logDTO = objectMapper.convertValue(logCreateDTO, LogDTO.class);
+        logService.salvarLog(logDTO);
         return ingressoDTO;
     }
 

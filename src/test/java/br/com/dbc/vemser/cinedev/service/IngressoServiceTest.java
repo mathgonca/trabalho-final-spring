@@ -51,6 +51,8 @@ public class IngressoServiceTest {
     private ClienteService clienteService;
     @Mock
     private EmailService emailService;
+    @Mock
+    private LogService logService;
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Before

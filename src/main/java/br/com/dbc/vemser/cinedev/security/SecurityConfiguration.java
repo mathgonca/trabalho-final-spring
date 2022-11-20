@@ -49,6 +49,7 @@ public class SecurityConfiguration {
                                         //autorizações - administrador
                                         .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
                                         .antMatchers("/**").hasRole("ADMIN")
+                                        .antMatchers("/log/**").hasRole("ADMIN")
 //
                                         .anyRequest().authenticated()
                 );
