@@ -47,7 +47,7 @@ public class SecurityConfiguration {
                                         .antMatchers("/filme/**").hasRole("CINEMA")
                                         .antMatchers("/cinema/**").hasRole("CINEMA")
                                         //autorizações - administrador
-                                        .antMatchers( "/avaliacoes/**").hasRole("AVALIADOR")
+                                        .antMatchers( "/avaliacoes/**").hasAnyRole("AVALIADOR","ADMIN")
                                         .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
                                         .antMatchers("/auth/novo-admin").hasRole("ADMIN")
                                         .antMatchers("/**").hasRole("ADMIN")
