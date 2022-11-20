@@ -23,7 +23,6 @@ public class LogService {
     private final LogRepository logRepository;
     private final ObjectMapper objectMapper;
 
-    SimpleDateFormat sdfComplete = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     SimpleDateFormat sdfDayMonthYear = new SimpleDateFormat("dd-MM-yyyy");
 
     public void salvarLog(LogCreateDTO logDTO) {

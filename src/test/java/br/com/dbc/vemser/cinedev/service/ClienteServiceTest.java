@@ -53,7 +53,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void retornaClienteQuandoIdEstiverCadastradoNoBanco() throws RegraDeNegocioException {
+    public void DeveRetornaClienteQuandoIdEstiverCadastradoNoBancoComSucesso() throws RegraDeNegocioException {
         final int ID_CLIENTE = 1;
         ClienteEntity clienteEsperado = new ClienteEntity();
         clienteEsperado.setIdCliente(ID_CLIENTE);
@@ -65,14 +65,14 @@ public class ClienteServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void retornaUmaExceptionQuandoIdNaoEstiverCadastradoNoBanco() throws RegraDeNegocioException {
+    public void DeveRetornarUmaExceptionQuandoIdNaoEstiverCadastradoNoBanco() throws RegraDeNegocioException {
         final int ID_CLIENTE = 1;
         when(clienteRepository.findById(ID_CLIENTE)).thenReturn(Optional.empty());
         clienteService.findById(ID_CLIENTE);
     }
 
     @Test
-    public void converteCorretamenteClienteEntityParaClienteDTO() {
+    public void DeveConverterCorretamenteClienteEntityParaClienteDTO() {
         ClienteEntity cliente = getClienteEntity();
         ClienteDTO clienteDTOResponse = clienteService.converterParaClienteDTO(cliente);
 
@@ -85,7 +85,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void retornaListaDeClienteDTOCorretamente() {
+    public void DeveRetornarListaDeClienteDTOCorretamente() {
         ClienteEntity cliente = getClienteEntity();
 
         when(clienteRepository.findAll()).thenReturn(List.of(cliente));
@@ -95,7 +95,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void retornaClienteEntityQuandoInformadoIdUsuarioCorretamente() throws RegraDeNegocioException {
+    public void DeveRetornarClienteEntityQuandoInformadoIdUsuarioCorretamente() throws RegraDeNegocioException {
         final int idUsuario = 1;
         ClienteEntity cliente = getClienteEntity();
 
@@ -107,7 +107,7 @@ public class ClienteServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void retornaUmaExcecaoQuandoIdUsuarioInformadoNaoEstiverCadastradoNoBanco() throws RegraDeNegocioException {
+    public void DeveRetornarUmaExcecaoQuandoIdUsuarioInformadoNaoEstiverCadastradoNoBanco() throws RegraDeNegocioException {
         final int idUsuario = 1;
         ClienteEntity cliente = getClienteEntity();
 
@@ -117,7 +117,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void retornaClienteDTOCorretamenteQuandoIdClienteCadastradoNoBanco() throws RegraDeNegocioException {
+    public void DeveRetornarClienteDTOCorretamenteQuandoIdClienteCadastradoNoBancoComSucesso() throws RegraDeNegocioException {
         final int idCliente = 1;
         ClienteEntity cliente = getClienteEntity();
 
@@ -133,14 +133,14 @@ public class ClienteServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void retornaUmaExcecaoQuandoIdClienteNaoEstivercadatradoNoBanco() throws RegraDeNegocioException {
+    public void DeveRetornarUmaExcecaoQuandoIdClienteNaoEstivercadatradoNoBanco() throws RegraDeNegocioException {
         final int idCliente = 1;
         when(clienteRepository.findById(idCliente)).thenReturn(Optional.empty());
         clienteService.listarClienteDTOPeloId(idCliente);
     }
 
     @Test
-    public void cadastraClienteCorretamente() throws RegraDeNegocioException {
+    public void DeveCadastrarClienteCorretamente() throws RegraDeNegocioException {
         ClienteCreateDTO clienteCreateDTO = getClienteCreateDTO();
         UsuarioEntity usuarioEsperado = getUsuarioEntity();
         usuarioEsperado.setIdUsuario(1);
@@ -165,7 +165,7 @@ public class ClienteServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void retornaUmaExcecaoQuandoClienteJaCadastradoComOmesmoCPF() throws RegraDeNegocioException {
+    public void DeveRetornarUmaExcecaoQuandoClienteJaCadastradoComOmesmoCPF() throws RegraDeNegocioException {
         final String cpf = "12345678900";
 
         ClienteCreateDTO clienteCreateDTO = new ClienteCreateDTO();
@@ -178,7 +178,7 @@ public class ClienteServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void retornaUmaExcecaoQuandoClienteJaCadstradoComOmesmoEmail() throws RegraDeNegocioException {
+    public void DeveRetornarUmaExcecaoQuandoClienteJaCadstradoComOmesmoEmail() throws RegraDeNegocioException {
         final String email = "vinicius@teste.com.br";
 
         ClienteCreateDTO clienteCreateDTO = new ClienteCreateDTO();
@@ -191,7 +191,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void quandoAtualizaClienteLogadoMetodoComunicaoComAtualizarClienteEListarClienteUsuario() throws RegraDeNegocioException {
+    public void DeveAtualizaClienteLogadoMetodoComunicaoComAtualizarClienteEListarClienteUsuarioComSucesso() throws RegraDeNegocioException {
         final int idCliente = 1;
         ClienteCreateDTO clienteCreateDTO = getClienteCreateDTO();
         ClienteEntity cliente = getClienteEntity();
@@ -206,7 +206,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void atualizarClienteCorretamente() throws RegraDeNegocioException {
+    public void DeveAtualizarClienteCorretamente() throws RegraDeNegocioException {
         final int idCliente = 1;
         final String cpf = "98765432100";
         final String email = "vinicius@gmail.com";
@@ -233,7 +233,7 @@ public class ClienteServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void naoAtualizaClienteQuandoIdNaoCadastradoNoBanco() throws RegraDeNegocioException {
+    public void DeveRetornarExcecaoQuandoAtualizaClienteQuandoIdNaoEstiverCadastradoNoBanco() throws RegraDeNegocioException {
         final int idCliente = 1;
         ClienteCreateDTO clienteCreateDTO = getClienteCreateDTO();
 
@@ -242,7 +242,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void deletarClienteLogadoCorretamente() throws RegraDeNegocioException {
+    public void DeveDeletarClienteLogadoCorretamente() throws RegraDeNegocioException {
         final int idCliente = 1;
         ClienteEntity cliente = getClienteEntity();
 
@@ -255,7 +255,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void quandoDeletarUsuarioClienteUtilizaMetodosUsuarioServiceEClienteRepository() throws RegraDeNegocioException {
+    public void DeveDeletarUsuarioClienteUtilizaMetodosUsuarioServiceEClienteRepositoryComSucesso() throws RegraDeNegocioException {
         final int idCliente = 1;
         ClienteEntity cliente = getClienteEntity();
         cliente.setIdCliente(idCliente);
@@ -267,14 +267,14 @@ public class ClienteServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void retornaUmaExcecaoQuandoIdClienteNaoEncontradoNoBanco() throws RegraDeNegocioException {
+    public void DeveRetornarExcecaoQuandoIdClienteNaoEncontradoNoBanco() throws RegraDeNegocioException {
         final int idCliente = 1;
         when(clienteRepository.findById(idCliente)).thenReturn(Optional.empty());
         clienteService.deletarUsuarioCliente(idCliente);
     }
 
     @Test
-    public void retornaListaRelatorioPersonalizadaCorretamente() {
+    public void DeveRetornarListaRelatorioPersonalizadaCorretamente() {
         final int idCliente = 1;
         RelatorioCadastroIngressoClienteDTO relatorioCadastroIngressoClienteDTO = new RelatorioCadastroIngressoClienteDTO();
 

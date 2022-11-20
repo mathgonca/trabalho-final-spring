@@ -22,7 +22,7 @@ public class CargoServiceTest {
     private CargoRepository cargoRepository;
 
     @Test
-    public void retornaCargoQuandoCargoEstiverCadastradoNoBanco() throws RegraDeNegocioException {
+    public void deveRetornaCargoQuandoCargoEstiverCadastradoNoBancoComSucesso() throws RegraDeNegocioException {
         final int ID_CARGO_ESPERADO = 2;
         final String NOME_ROLE = "ROLE_CIENTE_ID";
 
@@ -38,7 +38,7 @@ public class CargoServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void geraUmRegraDeNegocioExceptionQuandoIdNaoEstiverNoBanco() throws RegraDeNegocioException {
+    public void deveGerarUmRegraDeNegocioExceptionQuandoIdNaoEstiverNoBanco() throws RegraDeNegocioException {
         final int ID_CARGO_ESPERADO = 2;
 
         when(cargoRepository.findById(ID_CARGO_ESPERADO)).thenReturn(Optional.empty());

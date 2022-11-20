@@ -59,7 +59,7 @@ public class CinemaServiceTest {
     }
 
     @Test
-    public void retornaCinemaQuandoIdEstiverCadastradoNoBancoComSucesso() throws RegraDeNegocioException {
+    public void deveRetornaCinemaQuandoIdEstiverCadastradoNoBancoComSucesso() throws RegraDeNegocioException {
         final int ID_CINEMA = 1;
         CinemaEntity cinemaEsperado = new CinemaEntity();
         cinemaEsperado.setIdCinema(ID_CINEMA);
@@ -71,14 +71,14 @@ public class CinemaServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void retornaUmaExceptionQuandoIdNaoEstiverCadastradoNoBanco() throws RegraDeNegocioException {
+    public void deveRetornaUmaExceptionQuandoIdNaoEstiverCadastradoNoBancoComSucesso() throws RegraDeNegocioException {
         final int ID_CINEMA = 1;
         when(cinemaRepository.findById(ID_CINEMA)).thenReturn(Optional.empty());
         cinemaService.findById(ID_CINEMA);
     }
 
     @Test
-    public void retornaCinemaPorUsuarioQuandoUsuarioEstiverCadastradoNoBanco() throws RegraDeNegocioException {
+    public void deveRetornaCinemaPorUsuarioQuandoUsuarioEstiverCadastradoNoBancoComSucesso() throws RegraDeNegocioException {
         final int ID_USUARIO = 1;
         CinemaEntity cinemaEsperado = new CinemaEntity();
         cinemaEsperado.setIdCinema(ID_USUARIO);
@@ -90,14 +90,14 @@ public class CinemaServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void retornaUmaExceptionQuandoIdUsuarioNaoEstiverCadastradoNoBanco() throws RegraDeNegocioException {
+    public void deveRetornarUmaExceptionQuandoIdUsuarioNaoEstiverCadastradoNoBancoComSucesso() throws RegraDeNegocioException {
         final int ID_USUARIO = 1;
         when(cinemaRepository.findByIdUsuario(ID_USUARIO)).thenReturn(Optional.empty());
         cinemaService.listarCinemaIdUsuario(ID_USUARIO);
     }
 
     @Test
-    public void converteCorretamenteCinemaEntityParaCinemaDTO() {
+    public void deveConverterCorretamenteCinemaEntityParaCinemaDTOComSucesso() {
         CinemaEntity cinema = getCinemaEntity();
         CinemaDTO cinemaDTOResponse = cinemaService.converterParaCinemaDTO(cinema);
 
@@ -109,7 +109,7 @@ public class CinemaServiceTest {
     }
 
     @Test
-    public void retornaListaDeCinemaDTOCorretamente() {
+    public void retornaListaDeCinemaDTOCorretamenteComSucesso() {
         CinemaEntity cinema = getCinemaEntity();
 
         when(cinemaRepository.findAll()).thenReturn(List.of(cinema));
@@ -119,7 +119,7 @@ public class CinemaServiceTest {
     }
 
     @Test
-    public void retornaCinemaDTOCorretamenteQuandoIdCinemaCadastradoNoBanco() throws RegraDeNegocioException {
+    public void DeveRetornarCinemaDTOCorretamenteQuandoIdCinemaCadastradoNoBancoComSucesso() throws RegraDeNegocioException {
         final int idCinema = 1;
         CinemaEntity cinema = getCinemaEntity();
 
@@ -134,14 +134,14 @@ public class CinemaServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void retornaUmaExcecaoQuandoIdCinemaNaoEstivercadatradoNoBanco() throws RegraDeNegocioException {
+    public void DeveRetornarUmaExcecaoQuandoIdCinemaNaoEstivercadatradoNoBanco() throws RegraDeNegocioException {
         final int idCinema = 1;
         when(cinemaRepository.findById(idCinema)).thenReturn(Optional.empty());
         cinemaService.listarCinemaPorId(idCinema);
     }
 
     @Test
-    public void cadastrarUmCinemaCorretamente() throws RegraDeNegocioException {
+    public void DeveCadastrarUmCinemaCorretamenteComSucesso() throws RegraDeNegocioException {
         CinemaCreateDTO cinemaCreateDTO = getCinemaCreateDTO();
         UsuarioEntity usuarioEsperado = getUsuarioEntity();
         usuarioEsperado.setIdUsuario(1);
@@ -164,7 +164,7 @@ public class CinemaServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void retornaUmaExcecaoQuandoCinemaJaCadastradoComOmesmoNome() throws RegraDeNegocioException {
+    public void DeveRetornarUmaExcecaoQuandoCinemaJaCadastradoComOmesmoNomeComSucesso() throws RegraDeNegocioException {
         final String nome = "cinemark";
 
         CinemaCreateDTO cinemaCreateDTO = new CinemaCreateDTO();
@@ -177,7 +177,7 @@ public class CinemaServiceTest {
     }
 
     @Test
-    public void atualizarDadosDoCinemaUsandoMetodosAtualizarCinemaEAtualizarCinemaLogado() throws RegraDeNegocioException {
+    public void DeveAtualizarDadosDoCinemaUsandoMetodosAtualizarCinemaEAtualizarCinemaLogadoComSucesso() throws RegraDeNegocioException {
         final int idCinema = 1;
         CinemaCreateDTO cinemaCreateDTO = getCinemaCreateDTO();
         CinemaEntity cinema = getCinemaEntity();
@@ -191,7 +191,7 @@ public class CinemaServiceTest {
     }
 
     @Test
-    public void atualizarCinemaComDadosCorretos() throws RegraDeNegocioException {
+    public void DeveAtualizarCinemaComDadosCorretosComSucesso() throws RegraDeNegocioException {
         final int idCinema = 1;
         final String nome = "cinemark";
         final String cidade = "Ceilandia";
@@ -218,7 +218,7 @@ public class CinemaServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void naoAtualizaCinemaQuandoIdNaoCadastradoNoBanco() throws RegraDeNegocioException {
+    public void DeveRetornarUmaExcecaoQuandoAtualizarCinemaQuandoIdNaoCadastradoNoBanco() throws RegraDeNegocioException {
         final int idCinema = 1;
         CinemaCreateDTO cinemaCreateDTO = getCinemaCreateDTO();
 
@@ -227,7 +227,7 @@ public class CinemaServiceTest {
     }
 
     @Test
-    public void deletarCinemaLogadoDeFormaCorreta() throws RegraDeNegocioException {
+    public void DeveDeletarCinemaLogadoDeFormaCorretaComSucesso() throws RegraDeNegocioException {
         final int idCinema = 1;
         CinemaEntity cinema = getCinemaEntity();
 
@@ -240,7 +240,7 @@ public class CinemaServiceTest {
     }
 
     @Test
-    public void quandoDeletarUsuarioCinemaUtilizaMetodosUsuarioServiceECinemaRepository() throws RegraDeNegocioException {
+    public void DeveDeletarUsuarioCinemaUtilizaMetodosUsuarioServiceECinemaRepositoryComSucesso() throws RegraDeNegocioException {
         final int idCinema = 1;
         CinemaEntity cinema = getCinemaEntity();
         cinema.setIdCinema(idCinema);
@@ -252,14 +252,14 @@ public class CinemaServiceTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void retornaUmaExcecaoQuandoIdClienteNaoEncontradoNoBanco() throws RegraDeNegocioException {
+    public void DeveRetornaUmaExcecaoQuandoIdClienteNaoEncontradoNoBanco() throws RegraDeNegocioException {
         final int idCinema = 1;
         when(cinemaRepository.findById(idCinema)).thenReturn(Optional.empty());
         cinemaService.deletarCinemaPorUsuario(idCinema);
     }
 
     @Test
-    public void retornaListaRelatorioPersonalizadaCorretamente() throws RegraDeNegocioException {
+    public void DeveRetornaListaRelatorioPersonalizadaCorretamente() throws RegraDeNegocioException {
         final int idCinema = 1;
         RelatorioCadastroCinemaFilmeDTO relatorioCadastroCinemaFilmeDTO = getRelatorioCadastroCinemaFilmeDTO();
         CinemaEntity cinema = getCinemaEntity();
@@ -274,7 +274,7 @@ public class CinemaServiceTest {
     }
 
     @Test
-    public void retornaRelatorioPersonalizadoComSucesso() {
+    public void DeveRetornaRelatorioPersonalizadoComSucesso() {
         RelatorioCadastroCinemaFilmeDTO relatorioCadastroCinemaFilmeDTO = getRelatorioCadastroCinemaFilmeDTO();
         final int idCinema = 1;
 
@@ -287,7 +287,7 @@ public class CinemaServiceTest {
     }
 
     @Test
-    public void listarCinemaPaginadoCorretamente() {
+    public void DeveListarCinemaPaginadoCorretamente() {
         final int numeroPagina = 0;
         final int tamanho = 3;
 
