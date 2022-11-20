@@ -92,6 +92,7 @@ public class IngressoService {
 
         IngressoCompradoDTO ingressoDTO = objectMapper.convertValue(ingressoRecuperado, IngressoCompradoDTO.class);
         UsuarioDTO usuarioDTO = objectMapper.convertValue(clienteRecuperado, UsuarioDTO.class);
+        usuarioDTO.setEmail(clienteRecuperado.getUsuario().getEmail());
         ingressoDTO.setNomeCinema(ingressoRecuperado.getCinema().getNome());
         ingressoDTO.setNomeCliente(ingressoRecuperado.getCliente().getPrimeiroNome());
         ingressoDTO.setNomeFilme(ingressoRecuperado.getFilme().getNome());
