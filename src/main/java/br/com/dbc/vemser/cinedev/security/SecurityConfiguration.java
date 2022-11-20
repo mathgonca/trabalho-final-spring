@@ -30,7 +30,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authz) ->
                                 //autorizações -> auth
                                 authz.antMatchers("/auth/fazer-login", "/auth/novo-cliente",
-                                                "/auth/novo-cinema", "/auth/novo-admin", "/auth/usuario-logado", "/avaliacoes/**").permitAll()
+                                                "/auth/novo-cinema", "/auth/usuario-logado").permitAll()
                                         //autorizações -> cliente
                                         .antMatchers("/auth/atualizar-senha-cliente").hasRole("CLIENTE")
                                         .antMatchers("/auth/recuperar-senha-cliente").hasRole("CLIENTE")
@@ -47,7 +47,9 @@ public class SecurityConfiguration {
                                         .antMatchers("/filme/**").hasRole("CINEMA")
                                         .antMatchers("/cinema/**").hasRole("CINEMA")
                                         //autorizações - administrador
+                                        .antMatchers( "/avaliacoes/**").hasRole("AVALIADOR")
                                         .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
+                                        .antMatchers("/auth/novo-admin").hasRole("ADMIN")
                                         .antMatchers("/**").hasRole("ADMIN")
                                         .antMatchers("/log/**").hasRole("ADMIN")
 //
