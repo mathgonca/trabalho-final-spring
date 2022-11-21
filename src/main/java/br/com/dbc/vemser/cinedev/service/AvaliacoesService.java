@@ -8,7 +8,6 @@ import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.AvaliacoesRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

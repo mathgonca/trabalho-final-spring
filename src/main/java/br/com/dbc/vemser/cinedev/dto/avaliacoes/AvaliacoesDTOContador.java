@@ -1,6 +1,6 @@
 package br.com.dbc.vemser.cinedev.dto.avaliacoes;
 
-import lombok.*;
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 

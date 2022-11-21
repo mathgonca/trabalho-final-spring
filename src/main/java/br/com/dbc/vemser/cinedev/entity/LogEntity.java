@@ -9,9 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.persistence.Column;
 import java.time.LocalDate;
 
-//import javax.persistence.EnumType;
-//import javax.persistence.Enumerated;
-
 @Document(collection = "log")
 @Getter
 @Setter

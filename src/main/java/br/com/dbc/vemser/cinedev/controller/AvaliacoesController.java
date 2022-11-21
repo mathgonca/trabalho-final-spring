@@ -3,7 +3,6 @@ package br.com.dbc.vemser.cinedev.controller;
 import br.com.dbc.vemser.cinedev.dto.avaliacoes.AvaliacoesCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.avaliacoes.AvaliacoesDTO;
 import br.com.dbc.vemser.cinedev.dto.avaliacoes.AvaliacoesDTOContador;
-import br.com.dbc.vemser.cinedev.dto.avaliacoes.AvaliacoesNotaDTO;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.AvaliacoesService;
 import lombok.RequiredArgsConstructor;
