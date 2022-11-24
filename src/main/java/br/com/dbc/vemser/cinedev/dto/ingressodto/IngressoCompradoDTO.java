@@ -18,39 +18,18 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class IngressoCompradoDTO {
 
-    @Schema(description = "Id do ingresso", example = "1")
     private Integer idIngresso;
-
-    @Schema(description = "Id do filme", example = "1")
     private Integer idFilme;
-
-    @Schema(description = "Id do cinema", example = "1")
     private Integer idCinema;
-
-    @Schema(description = "Id do cliente", example = "1")
     private Integer idCliente;
-    @NotNull
-    @NotEmpty
-    @Schema(description = "Nome do cliente ", example = "Pablo Horacio Guiñazú")
+    @JsonIgnore
+    private String cpf;
     private String nomeCliente;
-    @NotNull
-    @NotEmpty
-    @Schema(description = "FilmeEntity escolhido", example = "Adão Negro")
     private String nomeFilme;
-    @NotNull
-    @NotEmpty
-    @Schema(description = "Cinema escolhido ", example = "GNC Iguatemi")
     private String nomeCinema;
-    @NotNull
-    @NotEmpty
-    @Schema(description = " horario e a data escolhido ", example = "'21/10/2022 21:30")
     private LocalDateTime dataHora;
-
-    @Schema(description = "Disponibilidade", example = "S")
     private Disponibilidade disponibilidade;
-
     private Double preco;
-
     private String ativo;
 
 }

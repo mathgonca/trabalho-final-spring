@@ -25,15 +25,8 @@ public class ProdutorService {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
-    //${spring.kafka.consumer.client-id}
-    @Value(value = "cinedev")
-    private String usuario;
-
-    @Value(value = "inahzhoc-notafiscal")
+    @Value(value = "${spring.kafka.topic}")
     private String topico;
-
-    @Value(value = "0")
-    private Integer particao;
 
 
     public void enviarMensagem(IngressoCompradoDTO ingresso) throws JsonProcessingException {
@@ -44,14 +37,15 @@ public class ProdutorService {
             notasFiscaisCinemaDTO.setIdCliente(ingresso.getIdCliente());
             notasFiscaisCinemaDTO.setNomeFilme(ingresso.getNomeFilme());
             notasFiscaisCinemaDTO.setNomeCinema(ingresso.getNomeCinema());
+            notasFiscaisCinemaDTO.setNomeCliente(ingresso.getNomeCliente());
             notasFiscaisCinemaDTO.setDataHora(ingresso.getDataHora());
             notasFiscaisCinemaDTO.setPreco(ingresso.getPreco());
+            notasFiscaisCinemaDTO.setCpf(ingresso.getCpf());
             String msg = objectMapper.writeValueAsString(notasFiscaisCinemaDTO);
             // mensagem, chave, topico
             MessageBuilder<String> stringMessageBuilder = MessageBuilder.withPayload(msg)
                     .setHeader(KafkaHeaders.TOPIC, topico)
                     .setHeader(KafkaHeaders.MESSAGE_KEY, UUID.randomUUID().toString())
-                    .setHeader(KafkaHeaders.PARTITION_ID, (Integer) particao)
                     ;
 
             ListenableFuture<SendResult<String, String>> enviadoParaTopico = kafkaTemplate.send(stringMessageBuilder.build());

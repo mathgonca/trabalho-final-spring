@@ -99,7 +99,8 @@ public class IngressoService {
         UsuarioDTO usuarioDTO = objectMapper.convertValue(clienteRecuperado, UsuarioDTO.class);
         usuarioDTO.setEmail(clienteRecuperado.getUsuario().getEmail());
         ingressoDTO.setNomeCinema(ingressoRecuperado.getCinema().getNome());
-        ingressoDTO.setNomeCliente(ingressoRecuperado.getCliente().getPrimeiroNome());
+        ingressoDTO.setNomeCliente((clienteRecuperado.getPrimeiroNome() + " " + clienteRecuperado.getUltimoNome()));
+        ingressoDTO.setCpf(clienteRecuperado.getCpf());
         ingressoDTO.setIdCliente(ingressoRecuperado.getIdCliente());
         ingressoDTO.setNomeFilme(ingressoRecuperado.getFilme().getNome());
         ingressoDTO.setDataHora(LocalDateTime.now());
