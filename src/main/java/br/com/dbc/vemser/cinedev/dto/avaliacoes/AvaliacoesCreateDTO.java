@@ -1,18 +1,17 @@
 package br.com.dbc.vemser.cinedev.dto.avaliacoes;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-
-import javax.persistence.Column;
 
 @Data
 public class AvaliacoesCreateDTO {
 
-    @Column(name = "Nome Filme")
+    @Schema(example = "Nome Filme")
     private String nome;
 
-    @Column(name = "nota")
+    @Schema(example = "nota")
     private Double nota;
 
-    @Column(name = "comentario")
+    @Schema(example = "comentario")
     private String comentario;
 }

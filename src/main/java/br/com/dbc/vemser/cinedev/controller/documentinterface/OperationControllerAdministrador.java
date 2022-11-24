@@ -1,4 +1,4 @@
-package br.com.dbc.vemser.cinedev.controller.documentInterface;
+package br.com.dbc.vemser.cinedev.controller.documentinterface;
 
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;
