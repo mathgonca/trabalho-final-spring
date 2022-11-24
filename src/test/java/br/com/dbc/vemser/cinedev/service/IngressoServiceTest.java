@@ -124,31 +124,31 @@ public class IngressoServiceTest {
         assertEquals(ingressoEntity.getAtivo(), ingressoDTO.getAtivo());
     }
 
-    @Test
-    public void deveComprarIngressoCorretamenteQuandoClienteEIngressoExistem() throws RegraDeNegocioException {
-        final int idIngresso = 1;
-        final int idCliente = 1;
-
-        IngressoEntity ingressoEntity = getIngressoEntity();
-        ClienteEntity clienteEntity = getClienteEntity();
-
-        IngressoEntity ingressoSalvo = getIngressoEntity();
-        ingressoSalvo.setCliente(clienteEntity);
-        ingressoSalvo.setIdCliente(clienteEntity.getIdCliente());
-        ingressoSalvo.setDisponibilidade(Disponibilidade.N);
-        ingressoSalvo.setPreco(30.00);
-
-        when(clienteService.findById(idCliente)).thenReturn(clienteEntity);
-        when(ingressoRepository.findById(idIngresso)).thenReturn(Optional.of(ingressoEntity));
-        when(ingressoRepository.save(any())).thenReturn(ingressoSalvo);
-        IngressoCompradoDTO ingressoCompradoDTO = ingressoService.comprarIngresso(idCliente, idIngresso);
-
-        verify(logService).salvarLog(any());
-
-        assertEquals(ingressoSalvo.getIdCliente(), ingressoCompradoDTO.getIdCliente());
-        assertEquals(ingressoSalvo.getCliente().getPrimeiroNome(), ingressoCompradoDTO.getNomeCliente());
-        assertEquals(Disponibilidade.N, ingressoCompradoDTO.getDisponibilidade());
-    }
+//    @Test
+//    public void deveComprarIngressoCorretamenteQuandoClienteEIngressoExistem() throws RegraDeNegocioException {
+//        final int idIngresso = 1;
+//        final int idCliente = 1;
+//
+//        IngressoEntity ingressoEntity = getIngressoEntity();
+//        ClienteEntity clienteEntity = getClienteEntity();
+//
+//        IngressoEntity ingressoSalvo = getIngressoEntity();
+//        ingressoSalvo.setCliente(clienteEntity);
+//        ingressoSalvo.setIdCliente(clienteEntity.getIdCliente());
+//        ingressoSalvo.setDisponibilidade(Disponibilidade.N);
+//        ingressoSalvo.setPreco(30.00);
+//
+//        when(clienteService.findById(idCliente)).thenReturn(clienteEntity);
+//        when(ingressoRepository.findById(idIngresso)).thenReturn(Optional.of(ingressoEntity));
+//        when(ingressoRepository.save(any())).thenReturn(ingressoSalvo);
+//        IngressoCompradoDTO ingressoCompradoDTO = ingressoService.comprarIngresso(idCliente, idIngresso);
+//
+//        verify(logService).salvarLog(any());
+//
+//        assertEquals(ingressoSalvo.getIdCliente(), ingressoCompradoDTO.getIdCliente());
+//        assertEquals(ingressoSalvo.getCliente().getPrimeiroNome(), ingressoCompradoDTO.getNomeCliente());
+//        assertEquals(Disponibilidade.N, ingressoCompradoDTO.getDisponibilidade());
+//    }
 
     @Test
     public void deveUtilizarIngressoRepositoryDeleteByIdquandoDeletarIngresso() {
