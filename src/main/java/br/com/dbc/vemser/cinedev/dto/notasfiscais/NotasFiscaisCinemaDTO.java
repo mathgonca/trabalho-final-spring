@@ -1,17 +1,23 @@
 package br.com.dbc.vemser.cinedev.dto.notasfiscais;
 
-import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoCompradoDTO;
-import br.com.dbc.vemser.cinedev.entity.IngressoEntity;
+import br.com.dbc.vemser.cinedev.entity.enums.Disponibilidade;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 public class NotasFiscaisCinemaDTO {
 
     private String usuario;
     private String mensagem;
-    private LocalDateTime dataCriacao;
-    private IngressoCompradoDTO ingressoCompradoDTOS;
+    private Integer idIngresso;
+    private Integer idFilme;
+    private Integer idCinema;
+    private Integer idCliente;
+    private String nomeCliente;
+    private String nomeFilme;
+    private String nomeCinema;
+    private LocalDateTime dataHora;
+    private Double preco;
+    private String ativo;
 }

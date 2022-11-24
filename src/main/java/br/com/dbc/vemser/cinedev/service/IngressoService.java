@@ -24,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,7 +100,9 @@ public class IngressoService {
         usuarioDTO.setEmail(clienteRecuperado.getUsuario().getEmail());
         ingressoDTO.setNomeCinema(ingressoRecuperado.getCinema().getNome());
         ingressoDTO.setNomeCliente(ingressoRecuperado.getCliente().getPrimeiroNome());
+        ingressoDTO.setIdCliente(ingressoRecuperado.getIdCliente());
         ingressoDTO.setNomeFilme(ingressoRecuperado.getFilme().getNome());
+        ingressoDTO.setDataHora(LocalDateTime.now());
         emailService.sendEmail(usuarioDTO, TipoEmails.ING_COMPRADO, null);
         ingressoDTO.setPreco(ingressoRecuperado.getPreco());
         produtorService.enviarMensagem(ingressoDTO);

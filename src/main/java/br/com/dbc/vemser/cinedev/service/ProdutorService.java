@@ -38,9 +38,14 @@ public class ProdutorService {
 
     public void enviarMensagem(IngressoCompradoDTO ingresso) throws JsonProcessingException {
             NotasFiscaisCinemaDTO notasFiscaisCinemaDTO = new NotasFiscaisCinemaDTO();
-            notasFiscaisCinemaDTO.setDataCriacao(LocalDateTime.now());
-            notasFiscaisCinemaDTO.setUsuario(usuario);
-            notasFiscaisCinemaDTO.setIngressoCompradoDTOS(ingresso);
+            notasFiscaisCinemaDTO.setIdFilme(ingresso.getIdFilme());
+            notasFiscaisCinemaDTO.setIdIngresso(ingresso.getIdIngresso());
+            notasFiscaisCinemaDTO.setIdCinema(ingresso.getIdCinema());
+            notasFiscaisCinemaDTO.setIdCliente(ingresso.getIdCliente());
+            notasFiscaisCinemaDTO.setNomeFilme(ingresso.getNomeFilme());
+            notasFiscaisCinemaDTO.setNomeCinema(ingresso.getNomeCinema());
+            notasFiscaisCinemaDTO.setDataHora(ingresso.getDataHora());
+            notasFiscaisCinemaDTO.setPreco(ingresso.getPreco());
             String msg = objectMapper.writeValueAsString(notasFiscaisCinemaDTO);
             // mensagem, chave, topico
             MessageBuilder<String> stringMessageBuilder = MessageBuilder.withPayload(msg)
