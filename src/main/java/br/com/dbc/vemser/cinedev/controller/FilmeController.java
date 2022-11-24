@@ -1,7 +1,7 @@
 package br.com.dbc.vemser.cinedev.controller;
 
 
-import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerFilme;
+import br.com.dbc.vemser.cinedev.controller.documentinterface.OperationControllerFilme;
 import br.com.dbc.vemser.cinedev.dto.filmedto.FilmeCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.filmedto.FilmeDTO;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;

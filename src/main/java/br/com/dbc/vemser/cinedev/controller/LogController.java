@@ -3,7 +3,6 @@ package br.com.dbc.vemser.cinedev.controller;
 import br.com.dbc.vemser.cinedev.dto.log.LogDTO;
 import br.com.dbc.vemser.cinedev.dto.log.LogDTOContador;
 import br.com.dbc.vemser.cinedev.entity.enums.TipoLog;
-import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.LogService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -22,9 +21,7 @@ import java.util.List;
 @Log4j2
 @RequiredArgsConstructor
 @RequestMapping("/log")
-//@Api(value = "Log API", produces = MediaType.APPLICATION_JSON_VALUE, tags = {"Log API"})
-public class LogController { //implements LogAPI{
-
+public class LogController {
     private final LogService logService;
 
     @GetMapping("/list")
@@ -34,9 +31,9 @@ public class LogController { //implements LogAPI{
 
     @GetMapping("/list-by-tipo-log/")
     public ResponseEntity<List<LogDTO>> listByTipoLog(@RequestParam(required = false) TipoLog tipoLog,
-                                                      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) throws RegraDeNegocioException {
+                                                      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
         log.info("Listando Logs");
-        List<LogDTO> lista =  logService.listLogsByTipoLog(tipoLog, data);
+        List<LogDTO> lista = logService.listLogsByTipoLog(tipoLog, data);
         log.info("Logs listados com sucesso!");
         return new ResponseEntity<>(lista, HttpStatus.OK);
     }
@@ -47,7 +44,7 @@ public class LogController { //implements LogAPI{
     }
 
     @GetMapping("/count-logs-by-tipo")
-    public ResponseEntity<LogDTOContador> getCountByTipoLog(TipoLog tipoLog){
+    public ResponseEntity<LogDTOContador> getCountByTipoLog(TipoLog tipoLog) {
         return new ResponseEntity<>(logService.countLogsByTipo(tipoLog), HttpStatus.OK);
     }
 
@@ -55,5 +52,4 @@ public class LogController { //implements LogAPI{
     public ResponseEntity<List<LogDTO>> getByData(String data) throws Exception {
         return new ResponseEntity<>(logService.listAllByData(data), HttpStatus.OK);
     }
-
 }

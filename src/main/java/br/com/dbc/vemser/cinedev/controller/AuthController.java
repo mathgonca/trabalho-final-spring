@@ -1,6 +1,6 @@
 package br.com.dbc.vemser.cinedev.controller;
 
-import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerAuth;
+import br.com.dbc.vemser.cinedev.controller.documentinterface.OperationControllerAuth;
 import br.com.dbc.vemser.cinedev.dto.UsuarioDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.cinemadto.CinemaDTO;

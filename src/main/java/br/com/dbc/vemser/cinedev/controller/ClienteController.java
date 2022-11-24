@@ -1,6 +1,6 @@
 package br.com.dbc.vemser.cinedev.controller;
 
-import br.com.dbc.vemser.cinedev.controller.documentInterface.OperationControllerCliente;
+import br.com.dbc.vemser.cinedev.controller.documentinterface.OperationControllerCliente;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteCreateDTO;
 import br.com.dbc.vemser.cinedev.dto.clientedto.ClienteDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;

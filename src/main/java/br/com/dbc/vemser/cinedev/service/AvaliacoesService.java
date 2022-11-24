@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class AvaliacoesService {
@@ -20,12 +20,6 @@ public class AvaliacoesService {
     private final AvaliacoesRepository avaliacoesRepository;
 
     private final ObjectMapper objectMapper;
-
-//    public void salvarAvaliacoes(AvaliacoesDTO avaliacoesDTO) {
-//        var avaliacao = new AvaliacoesEntity();
-//        BeanUtils.copyProperties(avaliacoesDTO, avaliacao);
-//        avaliacoesRepository.save(avaliacao);
-//    }
 
     public AvaliacoesDTO adicionarAvaliacao(AvaliacoesCreateDTO avaliacoesCreateDTO) throws RegraDeNegocioException {
         String avaliacaoNome = avaliacoesCreateDTO.getNome();
@@ -47,13 +41,14 @@ public class AvaliacoesService {
         return avaliacoesDTO;
     }
 
-    public List<AvaliacoesDTOContador> groupByNotaAndCount() throws RegraDeNegocioException{
+    public List<AvaliacoesDTOContador> groupByNotaAndCount() {
         return avaliacoesRepository.groupByNota();
     }
 
-    public List<AvaliacoesDTO> listByNotaContains(Double nota) throws RegraDeNegocioException {
-        return avaliacoesRepository.findAllByNota(nota).stream().map(avaliacoesEntity -> objectMapper.convertValue(avaliacoesEntity, AvaliacoesDTO.class)).collect(Collectors.toList());
+    public List<AvaliacoesDTO> listByNotaContains(Double nota) {
+        return avaliacoesRepository.findAllByNota(nota).stream()
+                .map(avaliacoesEntity -> objectMapper.convertValue(avaliacoesEntity, AvaliacoesDTO.class))
+                .toList();
     }
-
 
 }
