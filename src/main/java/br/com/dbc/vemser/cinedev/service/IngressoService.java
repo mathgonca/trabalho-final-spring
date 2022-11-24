@@ -16,6 +16,7 @@ import br.com.dbc.vemser.cinedev.entity.enums.TipoLog;
 import br.com.dbc.vemser.cinedev.enums.TipoEmails;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.repository.IngressoRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,7 +36,10 @@ public class IngressoService {
     private final ClienteService clienteService;
     private final EmailService emailService;
     private final ObjectMapper objectMapper;
+
     private final LogService logService;
+
+    private final ProdutorService produtorService;
 
 
     public IngressoEntity findById(Integer id) throws RegraDeNegocioException {
@@ -79,7 +84,7 @@ public class IngressoService {
         return objectMapper.convertValue(ingressoEntitySalvo, IngressoDTO.class);
     }
 
-    public IngressoCompradoDTO comprarIngresso(Integer idCliente, Integer idIngresso) throws RegraDeNegocioException {
+    public IngressoCompradoDTO comprarIngresso(Integer idCliente, Integer idIngresso) throws RegraDeNegocioException, JsonProcessingException {
         IngressoEntity ingressoRecuperado = findById(idIngresso);
 
         ClienteEntity clienteRecuperado = clienteService.findById(idCliente);
@@ -96,10 +101,11 @@ public class IngressoService {
         ingressoDTO.setNomeCliente(ingressoRecuperado.getCliente().getPrimeiroNome());
         ingressoDTO.setNomeFilme(ingressoRecuperado.getFilme().getNome());
         emailService.sendEmail(usuarioDTO, TipoEmails.ING_COMPRADO, null);
-
+        ingressoDTO.setPreco(ingressoRecuperado.getPreco());
+        produtorService.enviarMensagem(ingressoDTO);
         LogCreateDTO logCreateDTO = new LogCreateDTO(ingressoDTO.getNomeCliente(), TipoLog.INGRESSOS,  LocalDate.now());
 //        LogDTO logDTO = objectMapper.convertValue(logCreateDTO, LogDTO.class);
-        logService.salvarLog(logCreateDTO);
+
         return ingressoDTO;
     }
 

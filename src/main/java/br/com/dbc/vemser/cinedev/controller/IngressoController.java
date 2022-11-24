@@ -8,6 +8,7 @@ import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
 import br.com.dbc.vemser.cinedev.service.IngressoService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,7 +64,7 @@ public class IngressoController implements OperationControllerIngresso {
     @Override
     @PutMapping("/comprar/{idCliente}/ingresso/{idIngresso}")
     public ResponseEntity<IngressoCompradoDTO> comprarIngresso(@PathVariable("idCliente") Integer idCliente,
-                                                               @PathVariable("idIngresso") Integer idIngresso) throws RegraDeNegocioException {
+                                                               @PathVariable("idIngresso") Integer idIngresso) throws RegraDeNegocioException, JsonProcessingException {
         return new ResponseEntity<>(ingressoService.comprarIngresso(idCliente, idIngresso), HttpStatus.OK);
     }
 

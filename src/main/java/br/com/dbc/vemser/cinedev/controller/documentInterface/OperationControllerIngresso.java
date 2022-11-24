@@ -6,6 +6,7 @@ import br.com.dbc.vemser.cinedev.dto.ingressodto.IngressoDTO;
 import br.com.dbc.vemser.cinedev.dto.paginacaodto.PageDTO;
 import br.com.dbc.vemser.cinedev.dto.relatorios.RelatorioCadastroIngressoClienteDTO;
 import br.com.dbc.vemser.cinedev.exception.RegraDeNegocioException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -53,7 +54,7 @@ public interface OperationControllerIngresso {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Atualização de IngressoEntity realizada com sucesso!"),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso!!"),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")})
-    ResponseEntity<IngressoCompradoDTO> comprarIngresso(@PathVariable("idCliente") Integer idCliente, @PathVariable("idIngresso") Integer idIngresso) throws RegraDeNegocioException;
+    ResponseEntity<IngressoCompradoDTO> comprarIngresso(@PathVariable("idCliente") Integer idCliente, @PathVariable("idIngresso") Integer idIngresso) throws RegraDeNegocioException, JsonProcessingException;
 
     @Operation(summary = "Remoção de Ingressos por ID. ", description = "Remoção do IngressoEntity  partir do 'id'!")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remoção do IngressoEntity realizada com sucesso!"),
