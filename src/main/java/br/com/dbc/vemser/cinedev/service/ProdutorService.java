@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -27,7 +26,6 @@ public class ProdutorService {
 
     @Value(value = "${spring.kafka.topic}")
     private String topico;
-
 
     public void enviarMensagem(IngressoCompradoDTO ingresso) throws JsonProcessingException {
             NotasFiscaisCinemaDTO notasFiscaisCinemaDTO = new NotasFiscaisCinemaDTO();
